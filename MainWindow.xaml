@@ -51,7 +51,7 @@
 
                     </Grid>
                 </TabItem>
-                <TabItem Header="TabItem" Width="120" Height="30" Margin="-8,-2.7,-2,0" />
+                <TabItem Header="Сравнение списков" Width="120" Height="30" Margin="-8,-2.7,-2,0" />
             </TabControl>
 
         </Grid>
