@@ -1,0 +1,10 @@
+﻿<Application x:Class="HM.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:HM"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+         
+        <Color x:Key="SberGreenColor">#FF1FA740</Color>
+    </Application.Resources>
+</Application>

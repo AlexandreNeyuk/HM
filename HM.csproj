@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
+    <SignAssembly>False</SignAssembly>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\close_EnterM.png" />
+    <None Remove="Assets\close_LeaveM.png" />
+    <None Remove="Assets\Settings.png" />
+    <None Remove="Assets\win_max.png" />
+    <None Remove="Assets\WIn_Min.png" />
+    <None Remove="Dock_Left_Black.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\close_EnterM.png" />
+    <Resource Include="Assets\close_LeaveM.png" />
+    <Resource Include="Assets\Settings.png" />
+    <Resource Include="Assets\win_max.png" />
+    <Resource Include="Assets\WIn_Min.png" />
+    <Resource Include="Dock_Left_Black.png" />
+  </ItemGroup>
+
+</Project>
