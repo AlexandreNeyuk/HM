@@ -238,5 +238,27 @@ namespace HM
             MessageBox.Show("Здесь кода-нибудь чтото будет !))");
 
         }
+
+        /// <summary>
+        /// Сохранение данных пользователя
+        /// </summary>
+       async private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (UserName.Text != "" && UserPass.Password != "")
+            {
+                using RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM\Settings");
+                {
+                    key?.SetValue("Имя пользователя", UserName.Text);
+                    key?.SetValue("Пароль", UserPass.Password);
+                }
+                SussessLabel.Content = "Успешно";
+
+            }
+            else SussessLabel.Content = "Не заполнено поле";
+
+            await Task.Delay(1000);
+            SussessLabel.Content = "";
+
+        }
     }
 }

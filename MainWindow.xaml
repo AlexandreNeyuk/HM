@@ -81,7 +81,7 @@
 
         </Grid>
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" IsEnabled="False" Visibility="Hidden" >
 
             <Border x:Name="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="350" Background="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border.Effect>
@@ -91,7 +91,7 @@
                     <StackPanel ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" CanVerticallyScroll="True" ScrollViewer.CanContentScroll="True">
                         <Grid>
                             <Label FontFamily="72" BorderThickness="1,1,1,1" FontWeight="Bold" BorderBrush="Black" Margin="10,7,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="38" Padding="6,5,5,5">ESC</Label>
-                            <Label Content="Настройки подключеий"  FontFamily="72" FontSize="16" FontWeight="Bold" Margin="0,-1,0,0" Height="36" VerticalAlignment="Top" HorizontalAlignment="Center" Width="212" Padding="17,8,5,0"/>
+                            <Label Content="Настройки подключеий"  FontFamily="72" FontSize="16" FontWeight="Bold" Margin="0,-1,0,0" Height="36" VerticalAlignment="Top" HorizontalAlignment="Center" Width="212" Padding="17,8,5,0" ToolTip="Все настройки в ветке реестра: HKEY_CURRENT_USER\Software\HM\Settings"/>
 
                         </Grid>
                         <Label Content="Настройки пользователя БД" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
@@ -99,8 +99,10 @@
                             <Label Content="Имя пользователя" FontFamily="72" Padding="10,0,0,0" Margin="38,9,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
                             <TextBox x:Name="UserName" HorizontalAlignment="Left" Margin="184,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="184" FontFamily="Bahnschrift" ToolTip="Имя пользователя"/>
                             <Label Content="Пароль" FontFamily="72" Padding="10,0,0,0" Margin="38,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"/>
-                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="297,62,129,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True"/>
+                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="297,62,129,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click"/>
                             <PasswordBox x:Name="UserPass" Margin="184,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184" FontFamily="Bahnschrift" ToolTip="Пароль"/>
+                            <Label x:Name="SussessLabel" FontFamily="72" Padding="10,0,0,0" Margin="146,62,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="146" FlowDirection="RightToLeft"/>
+
                         </Grid>
                         <Label Content="Подключенные БД" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
                         <Grid x:Name="DataBaseData" Height="100" >
