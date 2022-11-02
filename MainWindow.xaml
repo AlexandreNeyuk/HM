@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="HM" x:Class="HM.MainWindow"
         mc:Ignorable="d"
-        Title="Help Manager" Height="465" Width="800" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True">
+        Title="Help Manager" Height="465" Width="800" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown">
 
     <Grid>
         <Grid.Background>
@@ -27,11 +27,11 @@
                     <ImageBrush ImageSource="/Assets/Settings.png"/>
                 </Image.OpacityMask>
             </Image>
-            <Label Content="Настройки" HorizontalAlignment="Center" VerticalAlignment="Top" Width="107" Foreground="White" FontFamily="72" Canvas.Left="35" Canvas.Top="5" FontSize="11" />
+            <Label Content="Настройки" HorizontalAlignment="Center" VerticalAlignment="Top" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="25,10,5,5" />
         </Canvas>
 
 
-        <Grid>
+        <Grid x:Name="TabControGrid">
             <TabControl x:Name="TB" BorderThickness="1,1,1,0" SelectionChanged="TB_SelectionChanged" Padding="-1,-1,2,2">
                 <TabItem Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
                     <Grid Background="White" Height="NaN">
@@ -42,12 +42,12 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Button x:Name="ListProcess" Content="Обработка" Margin="0,118,18,0" VerticalAlignment="Top" Height="20" HorizontalAlignment="Right" Width="76" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0"/>
-                        <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="0,0,116,22"/>
-                        
+                        <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="0,0,116,22" FontFamily="Bahnschrift" FontSize="14"/>
+
                         <CheckBox x:Name="comma" Content="Запятые" HorizontalAlignment="Right" Margin="0,81,23,0" VerticalAlignment="Top" FontFamily="Bahnschrift" IsChecked="True"/>
                         <RadioButton x:Name="ContextRP" Content="RP" Margin="0,31,9,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="96" ToolTip="Обработка текста в рамках RP списка." IsChecked="True" FontFamily="Bahnschrift" Checked="ContextRP_Checked"/>
                         <RadioButton x:Name="ConrextUpper" Content="Upper (' _ ')" Margin="0,51,6,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="99" IsChecked="True" FontFamily="Bahnschrift" ToolTip="Обработка списка с добавлением UPPER -контекста. " Checked="ConrextUpper_Checked"/>
-                        <Label Content="Параметры" HorizontalAlignment="Left" Margin="704,0,0,0" VerticalAlignment="Top" FontFamily="Bahnschrift"/>
+                        <Label Content="Параметры" HorizontalAlignment="Right" Margin="0,0,21,0" VerticalAlignment="Top" FontFamily="Bahnschrift"/>
 
                     </Grid>
                 </TabItem>
@@ -56,6 +56,60 @@
                 </TabItem>
             </TabControl>
 
+        </Grid>
+
+        <Grid x:Name="SettingsGrid" Background="#CC000000" >
+
+            <Border x:Name="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="350" Background="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <Border.Effect>
+                    <DropShadowEffect Direction="300" BlurRadius="10" RenderingBias="Performance" ShadowDepth="2"/>
+                </Border.Effect>
+                <ScrollViewer x:Name="panel" VerticalScrollBarVisibility="Hidden">
+                    <StackPanel ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" CanVerticallyScroll="True" ScrollViewer.CanContentScroll="True">
+                        <Grid>
+                            <Label FontFamily="72" BorderThickness="1,1,1,1" FontWeight="Bold" BorderBrush="Black" Margin="10,7,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="38" Padding="6,5,5,5">ESC</Label>
+                            <Label Content="Настройки подключеий"  FontFamily="72" FontSize="16" FontWeight="Bold" Margin="0,-1,0,0" Height="36" VerticalAlignment="Top" HorizontalAlignment="Center" Width="212" Padding="17,8,5,0"/>
+
+                        </Grid>
+                        <Label Content="Настройки пользователя БД" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
+                        <Grid x:Name="UserData" Height="86">
+                            <Label Content="Имя пользователя" FontFamily="72" Padding="10,0,0,0" Margin="38,9,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
+                            <TextBox HorizontalAlignment="Left" Margin="184,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="184" FontFamily="Bahnschrift" ToolTip="Имя пользователя"/>
+                            <Label Content="Пароль" FontFamily="72" Padding="10,0,0,0" Margin="38,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"/>
+                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="297,62,129,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True"/>
+                            <PasswordBox Margin="184,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184" FontFamily="Bahnschrift" ToolTip="Пароль"/>
+                        </Grid>
+                        <Label Content="Подключенные БД" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
+                        <Grid x:Name="DataBaseData" Height="100" >
+                            <Label Content="Shiptor" FontFamily="72" Padding="10,0,0,0" Margin="43,9,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
+                            <TextBox HorizontalAlignment="Left" Margin="189,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" AutomationProperties.HelpText="Хост" ToolTip="Хост"/>
+                            <Label Content="Postamats" FontFamily="72" Padding="10,0,0,0" Margin="43,30,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
+                            <TextBox HorizontalAlignment="Left" Margin="189,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" ToolTip="Хост"/>
+                            <Label Content="PVZ" FontFamily="72" Padding="10,0,0,0" Margin="43,51,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
+                            <TextBox HorizontalAlignment="Left" Margin="189,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" ToolTip="Хост"/>
+                            <TextBox HorizontalAlignment="Left" Margin="329,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
+                            <TextBox HorizontalAlignment="Left" Margin="329,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
+                            <TextBox HorizontalAlignment="Left" Margin="329,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
+                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="357,75,69,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True"/>
+
+                        </Grid>
+                        <Label Content="Горячие клавиши" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
+                        <Grid x:Name="HotKeys" Height="100" >
+                            <Label Content="Switch-Панель" FontFamily="72" Padding="10,0,0,0" Margin="43,9,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
+                            <TextBox HorizontalAlignment="Left" Margin="189,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="55" FontFamily="Bahnschrift" AutomationProperties.HelpText="Хост" ToolTip="Хост"/>
+                            <Label Content="***" FontFamily="72" Padding="10,0,0,0" Margin="43,30,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
+                            <TextBox HorizontalAlignment="Left" Margin="189,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="55" FontFamily="Bahnschrift" ToolTip="Хост"/>
+                            <Label Content="***" FontFamily="72" Padding="10,0,0,0" Margin="43,51,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
+                            <TextBox HorizontalAlignment="Left" Margin="189,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" ToolTip="Хост"/>
+                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="357,75,69,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True"/>
+
+                        </Grid>
+
+
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
         </Grid>
 
         <!--Верхняя панель-->
