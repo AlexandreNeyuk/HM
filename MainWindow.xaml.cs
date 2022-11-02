@@ -1,23 +1,12 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Windows;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
-using System.Drawing.Printing;
+﻿using Microsoft.Win32;
 using System.Threading.Tasks;
-using System.Reflection.Emit;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
-using Brushes = System.Drawing.Brushes;
 using System.Windows.Input;
-using MessageBox = System.Windows.Forms.MessageBox;
-using System.Windows.Forms.VisualStyles;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using MessageBox = System.Windows.Forms.MessageBox;
 using Window = System.Windows.Window;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace HM
 {
@@ -30,11 +19,29 @@ namespace HM
         {
             InitializeComponent();
             TB.Margin = new Thickness(0, 0, 0, 0); //выравниванеи TableControl 
-            //--отключение панели настроек при иницииализации 
+            ///отключение панели настроек при иницииализации --
             SettingsGrid.IsEnabled = false;
             SettingsGrid.Visibility = Visibility.Hidden;
-            //--
-            
+            ///--
+
+            ///Пересоздание корня настроек в реестре + синхрон с реестром настроек--
+            using RegistryKey registry = Registry.CurrentUser.CreateSubKey(@"Software\HM\Settings");
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Settings"))
+            {
+                if (key != null)
+                {
+                    UserName.Text = key.GetValue("Имя пользователя")?.ToString();
+                    UserPass.Password = key.GetValue("Пароль")?.ToString();
+                    ShiptorHost.Text = key.GetValue("Shiptor Host")?.ToString();
+                    ShiptorDB.Text = key.GetValue("Shiptor DB")?.ToString();
+                    PostHost.Text = key.GetValue("Postamat Host")?.ToString();
+                    PostDB.Text = key.GetValue("Postamat DB")?.ToString();
+                    PVZHost.Text = key.GetValue("PVZ Host")?.ToString();
+                    PVZDB.Text = key.GetValue("PVZ DB")?.ToString();
+                    SP_HotKey.Text = key.GetValue("Switch Panel HotKey")?.ToString();
+                }
+            }
+            ///--
 
         }
         //Обьявление классов / глобальных переменных        
@@ -79,20 +86,20 @@ namespace HM
         {
             const int marginLeftMin = 0;
             const int marginLeftMax = 150;
-           double  CurrentVarginLeft  = TB.Margin.Left; 
+            double CurrentVarginLeft = TB.Margin.Left;
 
             ///анимация боковой панели  
             if (SetPanel == true)
             {
-                
 
-                while (TB.Margin.Left - TB.Margin.Left/8 > marginLeftMin)
+
+                while (TB.Margin.Left - TB.Margin.Left / 8 > marginLeftMin)
                 {
                     CurrentVarginLeft = TB.Margin.Left;
                     await Task.Delay(1);
-                        TB.Margin = new Thickness(CurrentVarginLeft - CurrentVarginLeft/8, 0, 0, 0);
+                    TB.Margin = new Thickness(CurrentVarginLeft - CurrentVarginLeft / 8, 0, 0, 0);
                     if (TB.Margin.Left < 1)
-                    { 
+                    {
                         TB.Margin = new Thickness(0, 0, 0, 0);
                         break;
                     }
@@ -102,12 +109,12 @@ namespace HM
             }
             else
             {
-               
-                while (CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 8  < marginLeftMax)
+
+                while (CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 8 < marginLeftMax)
                 {
                     CurrentVarginLeft = TB.Margin.Left;
                     await Task.Delay(1);
-                    TB.Margin = new Thickness(CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 8 , 0, 0, 0);
+                    TB.Margin = new Thickness(CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 8, 0, 0, 0);
                     if (TB.Margin.Left > 149)
                     {
                         TB.Margin = new Thickness(150, 0, 0, 0);
@@ -118,13 +125,13 @@ namespace HM
 
 
             }
-            
+
 
 
 
         }
 
-      
+
         private void TB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //TB.SelectedIndex = 1; MessageBox.Show(TB.SelectedIndex.ToString());      
@@ -136,7 +143,7 @@ namespace HM
         /// </summary>
         private void SettingCanvas_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-           
+
             SettingsGrid.Visibility = Visibility.Visible;
             SettingsGrid.IsEnabled = true;
             Image_MouseLeftButtonDown(sender, e);
@@ -150,15 +157,15 @@ namespace HM
         /// <param name="e"></param>
         private void ListProcess_Click(object sender, RoutedEventArgs e)
         {
-            List<string> str = new List<string>();
+
 
             if (ContextRP.IsChecked == true)
             {
                 //по сенарию RP (simple_List)
-                TextBox.Text = TextBox.Text.Replace("RP","");
-           
-            
-                            //###_refer_###
+                TextBox.Text = TextBox.Text.Replace("RP", "");
+
+
+                //###_refer_###
                 //TextBox.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)[TextBox.LineCount-1] + "," ; //отсавляю все что до символа? с указанием номера строки  - по сути сама RP
                 ////TextBox.GetLineText(3); // получаю саму строку по номеру 
                 //for (int i = 0; i < TextBox.LineCount - 1; i++) str.Add(TextBox.GetLineText(i) + ",");
@@ -170,12 +177,12 @@ namespace HM
                 //по сценарию с UPPER`S
 
                 TextBox.Text = TextBox.Text.Replace("\r\n", "')," + "\rUPPER ('") + "')";
-                TextBox.Text =  "UPPER ('" + TextBox.Text;
+                TextBox.Text = "UPPER ('" + TextBox.Text;
 
             }
 
             //______________работа с запятыми______________
-            if ( comma.IsEnabled == true && comma.IsChecked == true)
+            if (comma.IsEnabled == true && comma.IsChecked == true)
             {
                 TextBox.Text = TextBox.Text.Replace("\r\n", ",\n"); // - работает
             }
@@ -183,10 +190,10 @@ namespace HM
             {
                 TextBox.Text = TextBox.Text.Replace(",", "\r");
             }
-            
-            
 
-            
+
+
+
         }
 
         /// <summary>
@@ -206,7 +213,7 @@ namespace HM
         }
 
 
-    
+
         /// <summary>
         /// Быстрые клавиши
         /// </summary>

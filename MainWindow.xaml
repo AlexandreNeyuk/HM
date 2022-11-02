@@ -69,7 +69,7 @@
                         <TextBox x:Name="ListTwo" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="348,26,0,21" HorizontalAlignment="Left" Width="230"/>
                         <Label HorizontalAlignment="Left" Margin="415,2,0,0" VerticalAlignment="Top" FontFamily="72" Content="Второй стписок"/>
                         <TextBlock x:Name="FidCount" Margin="244,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Background="#FFDDDDDD" Height="18" HorizontalAlignment="Left" Width="89"/>
-                        <Button x:Name="FidCopy" Content="Button" Margin="244,115,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="89"/>
+                        <Button x:Name="FidCopy" Margin="244,115,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="89" Content="Сравнить"/>
                         <Label Content="Совпадений" Margin="250,53,0,0" VerticalAlignment="Top" FontFamily="72" HorizontalAlignment="Left" Width="78"/>
                         <TextBox x:Name="ListCopyElm" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="588,26,0,21" HorizontalAlignment="Left" Width="199"/>
                         <Label HorizontalAlignment="Left" Margin="614,2,0,0" VerticalAlignment="Top" FontFamily="72" Width="148" Content="Совпавшие елементы"/>
@@ -81,7 +81,7 @@
 
         </Grid>
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" Visibility="Hidden" IsEnabled="False" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" >
 
             <Border x:Name="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="350" Background="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border.Effect>
@@ -97,29 +97,29 @@
                         <Label Content="Настройки пользователя БД" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
                         <Grid x:Name="UserData" Height="86">
                             <Label Content="Имя пользователя" FontFamily="72" Padding="10,0,0,0" Margin="38,9,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
-                            <TextBox HorizontalAlignment="Left" Margin="184,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="184" FontFamily="Bahnschrift" ToolTip="Имя пользователя"/>
+                            <TextBox x:Name="UserName" HorizontalAlignment="Left" Margin="184,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="184" FontFamily="Bahnschrift" ToolTip="Имя пользователя"/>
                             <Label Content="Пароль" FontFamily="72" Padding="10,0,0,0" Margin="38,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"/>
                             <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="297,62,129,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True"/>
-                            <PasswordBox Margin="184,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184" FontFamily="Bahnschrift" ToolTip="Пароль"/>
+                            <PasswordBox x:Name="UserPass" Margin="184,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184" FontFamily="Bahnschrift" ToolTip="Пароль"/>
                         </Grid>
                         <Label Content="Подключенные БД" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
                         <Grid x:Name="DataBaseData" Height="100" >
                             <Label Content="Shiptor" FontFamily="72" Padding="10,0,0,0" Margin="43,9,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
-                            <TextBox HorizontalAlignment="Left" Margin="189,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" AutomationProperties.HelpText="Хост" ToolTip="Хост"/>
+                            <TextBox x:Name="ShiptorHost" HorizontalAlignment="Left" Margin="189,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" AutomationProperties.HelpText="Хост" ToolTip="Хост"/>
                             <Label Content="Postamats" FontFamily="72" Padding="10,0,0,0" Margin="43,30,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
-                            <TextBox HorizontalAlignment="Left" Margin="189,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" ToolTip="Хост"/>
+                            <TextBox x:Name="PostHost" HorizontalAlignment="Left" Margin="189,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" ToolTip="Хост"/>
                             <Label Content="PVZ" FontFamily="72" Padding="10,0,0,0" Margin="43,51,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
-                            <TextBox HorizontalAlignment="Left" Margin="189,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" ToolTip="Хост"/>
-                            <TextBox HorizontalAlignment="Left" Margin="329,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
-                            <TextBox HorizontalAlignment="Left" Margin="329,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
-                            <TextBox HorizontalAlignment="Left" Margin="329,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
+                            <TextBox x:Name="PVZHost" HorizontalAlignment="Left" Margin="189,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" ToolTip="Хост"/>
+                            <TextBox x:Name="ShiptorDB" HorizontalAlignment="Left" Margin="329,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
+                            <TextBox x:Name="PostDB" HorizontalAlignment="Left" Margin="329,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
+                            <TextBox x:Name="PVZDB" HorizontalAlignment="Left" Margin="329,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
                             <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="357,75,69,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True"/>
 
                         </Grid>
                         <Label Content="Горячие клавиши" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
                         <Grid x:Name="HotKeys" Height="100" >
                             <Label Content="Switch-Панель" FontFamily="72" Padding="10,0,0,0" Margin="43,9,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
-                            <TextBox HorizontalAlignment="Left" Margin="189,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="55" FontFamily="Bahnschrift" AutomationProperties.HelpText="Хост" ToolTip="Хост"/>
+                            <TextBox x:Name="SP_HotKey" HorizontalAlignment="Left" Margin="189,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="55" FontFamily="Bahnschrift" AutomationProperties.HelpText="Хост" ToolTip="Хост"/>
                             <Label Content="***" FontFamily="72" Padding="10,0,0,0" Margin="43,30,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
                             <TextBox HorizontalAlignment="Left" Margin="189,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="55" FontFamily="Bahnschrift" ToolTip="Хост"/>
                             <Label Content="***" FontFamily="72" Padding="10,0,0,0" Margin="43,51,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
