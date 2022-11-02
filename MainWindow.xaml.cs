@@ -221,5 +221,15 @@ namespace HM
 
             }
         }
+
+        /// <summary>
+        /// Постоматы
+        /// </summary>
+        private void PostomatsCanvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+            MessageBox.Show("Здесь кода-нибудь чтото будет !))");
+
+        }
     }
 }

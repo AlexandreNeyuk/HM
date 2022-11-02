@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="HM" x:Class="HM.MainWindow"
         mc:Ignorable="d"
-        Title="Help Manager" Height="465" Width="800" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown">
+        Title="Help Manager v. 0.2.03" Height="465" Width="800" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown">
 
     <Grid>
         <Grid.Background>
@@ -20,18 +20,29 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
+        <Grid Margin="0,0,650,0">
 
-        <Canvas x:Name="SettingCanvas" MouseDown="SettingCanvas_MouseDown" Width="146" HorizontalAlignment="Left" Canvas.Top="417" Margin="0,0,0,35" Height="32" VerticalAlignment="Bottom">
-            <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Source="/Assets/Settings.png" Stretch="Fill" Canvas.Left="10" Canvas.Top="6">
-                <Image.OpacityMask>
-                    <ImageBrush ImageSource="/Assets/Settings.png"/>
-                </Image.OpacityMask>
-            </Image>
-            <Label Content="Настройки" HorizontalAlignment="Center" VerticalAlignment="Top" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="25,10,5,5" />
-        </Canvas>
+            <Label HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="72" Foreground="White" Content="Меню" FontSize="16"/>
+            <Canvas x:Name="PostomatsCanvas"  Width="146" HorizontalAlignment="Left" Margin="0,120,0,0" MouseDown="PostomatsCanvas_MouseDown" Height="32" VerticalAlignment="Top">
+                <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Canvas.Left="10" Stretch="Fill" Source="/Assets/Postamats.png" Canvas.Top="6">
+                    <Image.OpacityMask>
+                        <ImageBrush ImageSource="/Assets/Postamats.png"/>
+                    </Image.OpacityMask>
+                </Image>
+                <Label HorizontalAlignment="Left" VerticalAlignment="Center" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="22,10,5,5" Content="Постоматы" />
+            </Canvas>
+            <Canvas x:Name="SettingCanvas" MouseDown="SettingCanvas_MouseDown" Width="146" HorizontalAlignment="Left" Canvas.Top="417" Margin="0,0,0,35" Height="32" VerticalAlignment="Bottom">
+                <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Source="/Assets/Settings.png" Stretch="Fill" Canvas.Left="10" Canvas.Top="6">
+                    <Image.OpacityMask>
+                        <ImageBrush ImageSource="/Assets/Settings.png"/>
+                    </Image.OpacityMask>
+                </Image>
+                <Label Content="Настройки" HorizontalAlignment="Center" VerticalAlignment="Top" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="25,10,5,5" />
+            </Canvas>
+        </Grid>
 
         <!--TabControl -->
-        <Grid x:Name="TabControGrid" Visibility="Hidden" IsEnabled="False">
+        <Grid x:Name="TabControGrid">
             <TabControl x:Name="TB" BorderThickness="1,1,1,0" SelectionChanged="TB_SelectionChanged" Padding="-1,-1,2,2">
                 <TabItem Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
                     <Grid Background="White" Height="NaN">
@@ -42,7 +53,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Button x:Name="ListProcess" Content="Обработка" Margin="0,113,18,0" VerticalAlignment="Top" Height="25" HorizontalAlignment="Right" Width="87" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0"/>
-                        <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="0,0,116,22" FontFamily="Bahnschrift" FontSize="14"/>
+                        <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="0,0,116,22" FontFamily="Bahnschrift" FontSize="14" Foreground="White" Background="White"/>
 
                         <CheckBox x:Name="comma" Content="Запятые" HorizontalAlignment="Right" Margin="0,81,23,0" VerticalAlignment="Top" FontFamily="Bahnschrift" IsChecked="True"/>
                         <RadioButton x:Name="ContextRP" Content="RP" Margin="0,31,9,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="96" ToolTip="Обработка текста в рамках RP списка." IsChecked="True" FontFamily="Bahnschrift" Checked="ContextRP_Checked"/>
@@ -53,14 +64,14 @@
                 </TabItem>
                 <TabItem Header="Сравнение списков" Width="120" Height="30" Margin="-8,-2.7,-2,0" >
                     <Grid>
-                        <TextBox x:Name="ListOne" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="0,26,568,21"/>
+                        <TextBox x:Name="ListOne" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="0,26,0,21" HorizontalAlignment="Left" Width="229"/>
                         <Label Content="Первый список" HorizontalAlignment="Left" Margin="68,2,0,0" VerticalAlignment="Top" FontFamily="72"/>
-                        <TextBox x:Name="ListTwo" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="348,26,219,21"/>
+                        <TextBox x:Name="ListTwo" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="348,26,0,21" HorizontalAlignment="Left" Width="230"/>
                         <Label HorizontalAlignment="Left" Margin="415,2,0,0" VerticalAlignment="Top" FontFamily="72" Content="Второй стписок"/>
-                        <TextBlock x:Name="FidCount" HorizontalAlignment="Left" Margin="244,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Background="#FFDDDDDD" Width="89" Height="18"/>
-                        <Button x:Name="FidCopy" Content="Button" HorizontalAlignment="Left" Margin="244,115,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Width="89" Height="23"/>
-                        <Label Content="Совпадений" HorizontalAlignment="Left" Margin="250,53,0,0" VerticalAlignment="Top" FontFamily="72"/>
-                        <TextBox x:Name="ListCopyElm" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="588,26,10,21"/>
+                        <TextBlock x:Name="FidCount" Margin="244,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Background="#FFDDDDDD" Height="18" HorizontalAlignment="Left" Width="89"/>
+                        <Button x:Name="FidCopy" Content="Button" Margin="244,115,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="89"/>
+                        <Label Content="Совпадений" Margin="250,53,0,0" VerticalAlignment="Top" FontFamily="72" HorizontalAlignment="Left" Width="78"/>
+                        <TextBox x:Name="ListCopyElm" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="588,26,0,21" HorizontalAlignment="Left" Width="199"/>
                         <Label HorizontalAlignment="Left" Margin="614,2,0,0" VerticalAlignment="Top" FontFamily="72" Width="148" Content="Совпавшие елементы"/>
 
 
@@ -136,7 +147,7 @@
 
         <!-- Нижняя док панель со статус бар -->
         <DockPanel LastChildFill="False" Height="38" VerticalAlignment="Bottom" >
-            <StatusBar DockPanel.Dock="Bottom" Background="#FF1FA740" >
+            <StatusBar DockPanel.Dock="Bottom" Background="#FF5B4EBB" >
 
                 <StatusBarItem VerticalAlignment="Bottom">
                     <Image x:Name="Left_Switch_panel" Stretch="Fill" Height="18" Width="23"  MouseLeftButtonDown="Image_MouseLeftButtonDown" OpacityMask="Black" Source="/Dock_Left_Black.png"/>
@@ -144,14 +155,7 @@
             </StatusBar>
 
         </DockPanel>
-        <Canvas x:Name="SettingCanvas_Copy" MouseDown="SettingCanvas_MouseDown" Width="146" HorizontalAlignment="Left" Margin="0,0,0,335" Height="32" VerticalAlignment="Bottom">
-            <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Stretch="Fill" Canvas.Left="10" Canvas.Top="6" Source="/Assets/Postamats.png">
-                <Image.OpacityMask>
-                    <ImageBrush ImageSource="/Assets/Settings.png"/>
-                </Image.OpacityMask>
-            </Image>
-            <Label HorizontalAlignment="Center" VerticalAlignment="Top" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="25,10,5,5" Content="Постоматы" />
-        </Canvas>
+
 
 
 
