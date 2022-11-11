@@ -95,62 +95,89 @@ namespace HM
         //    Close_Butt.Background = null;
         //}
 #endif
+        #region Боковая панель
 
-        /// <summary>
-        ///Кнопка боковой панели 
-        /// </summary>
-        private async void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
-            const int marginLeftMin = 0;
-            const int marginLeftMax = 150;
-            double CurrentVarginLeft = TB.Margin.Left;
-            string BF = TextBox.Text;
-            TextBox.Text = null;
-
-
-            ///анимация боковой панели  
-            if (SetPanel == true)
+            /// <summary>
+            ///Кнопка боковой панели 
+            /// </summary>
+            private async void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) { SwitchPanel(); }
+           async public void SwitchPanel()
             {
+                const int marginLeftMin = 0;
+                const int marginLeftMax = 150;
+                double CurrentVarginLeft = TB.Margin.Left;
+                string BF = TextBox.Text;
+                TextBox.Text = null;
 
 
-                while (TB.Margin.Left - TB.Margin.Left / 6 > marginLeftMin)
+                ///анимация боковой панели  
+                if (SetPanel == true)
                 {
-                    CurrentVarginLeft = TB.Margin.Left;
-                    await Task.Delay(1);
-                    TB.Margin = new Thickness(CurrentVarginLeft - CurrentVarginLeft / 6, 0, 0, 0);
-                    if (TB.Margin.Left < 2)
+
+
+                    while (TB.Margin.Left - TB.Margin.Left / 6 > marginLeftMin)
                     {
-                        TB.Margin = new Thickness(0, 0, 0, 0);
-                        break;
+                        CurrentVarginLeft = TB.Margin.Left;
+                        await Task.Delay(1);
+                        TB.Margin = new Thickness(CurrentVarginLeft - CurrentVarginLeft / 6, 0, 0, 0);
+                        if (TB.Margin.Left < 2)
+                        {
+                            TB.Margin = new Thickness(0, 0, 0, 0);
+                            break;
+                        }
                     }
+                    SetPanel = !SetPanel;
+
                 }
-                SetPanel = !SetPanel;
+                else
+                {
+
+                    while (CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 6 < marginLeftMax)
+                    {
+                        CurrentVarginLeft = TB.Margin.Left;
+                        await Task.Delay(1);
+                        TB.Margin = new Thickness(CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 6, 0, 0, 0);
+                        if (TB.Margin.Left > 147)
+                        {
+                            TB.Margin = new Thickness(150, 0, 0, 0);
+                            break;
+                        }
+                    }
+                    SetPanel = !SetPanel;
+                }
+                TextBox.Text = BF;
+
 
             }
-            else
+
+        #endregion
+
+        #region Элементы бокоовой панели 
+
+            /// <summary>
+            /// Постоматы
+            /// </summary>
+            private void PostomatsCanvas_MouseDown(object sender, MouseButtonEventArgs e)
             {
 
-                while (CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 6 < marginLeftMax)
-                {
-                    CurrentVarginLeft = TB.Margin.Left;
-                    await Task.Delay(1);
-                    TB.Margin = new Thickness(CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 6, 0, 0, 0);
-                    if (TB.Margin.Left > 147)
-                    {
-                        TB.Margin = new Thickness(150, 0, 0, 0);
-                        break;
-                    }
-                }
-                SetPanel = !SetPanel;
+                MessageBox.Show("Здесь кода-нибудь чтото будет !))");
+
             }
-            TextBox.Text = BF;
+
+            /// <summary>
+            /// Открыть панель настроек 
+            /// </summary>
+            private void SettingCanvas_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+                {
+
+                    SettingsGrid.Visibility = Visibility.Visible;
+                    SettingsGrid.IsEnabled = true;
+                    Image_MouseLeftButtonDown(sender, e);
 
 
+                }
 
-
-        }
-
+        #endregion
 
         private void TB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -158,18 +185,6 @@ namespace HM
 
         }
 
-        /// <summary>
-        /// Открыть панель настроек 
-        /// </summary>
-        private void SettingCanvas_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
-            SettingsGrid.Visibility = Visibility.Visible;
-            SettingsGrid.IsEnabled = true;
-            Image_MouseLeftButtonDown(sender, e);
-
-
-        }
 
         #region Table Item 1       
         /// <summary>
@@ -250,19 +265,11 @@ namespace HM
                 SettingsGrid.Visibility = Visibility.Hidden;
 
             }
+            if (e.Key.ToString() == SP_HotKey.Text) SwitchPanel(); // открытие боковой панели по кнопке 
+           
         }
 
         #region Settings      
-
-            /// <summary>
-            /// Постоматы
-            /// </summary>
-            private void PostomatsCanvas_MouseDown(object sender, MouseButtonEventArgs e)
-            {
-
-                MessageBox.Show("Здесь кода-нибудь чтото будет !))");
-
-            }
 
             /// <summary>
             /// Сохранение данных пользователя
