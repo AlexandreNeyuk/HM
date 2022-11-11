@@ -194,62 +194,65 @@ namespace HM
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param> 
-        private void ListProcess_Click(object sender, RoutedEventArgs e)
-        {
-
-
-            if (ContextRP.IsChecked == true)
+            private void ListProcess_Click(object sender, RoutedEventArgs e)
             {
-                //по сенарию RP (simple_List)
-                TextBox.Text = TextBox.Text.Replace("RP", "");
 
 
-                //###_refer_###
-                //TextBox.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)[TextBox.LineCount-1] + "," ; //отсавляю все что до символа? с указанием номера строки  - по сути сама RP
-                ////TextBox.GetLineText(3); // получаю саму строку по номеру 
-                //for (int i = 0; i < TextBox.LineCount - 1; i++) str.Add(TextBox.GetLineText(i) + ",");
-                //TextBox.Text = null;
-                //for (int i = 0; i < str.Count; i++) TextBox.Text += str[i];
+                if (ContextRP.IsChecked == true)
+                {
+                    //по сенарию RP (simple_List)
+                    TextBox.Text = TextBox.Text.Replace("RP", "");
+
+
+                    //###_refer_###
+                    //TextBox.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)[TextBox.LineCount-1] + "," ; //отсавляю все что до символа? с указанием номера строки  - по сути сама RP
+                    ////TextBox.GetLineText(3); // получаю саму строку по номеру 
+                    //for (int i = 0; i < TextBox.LineCount - 1; i++) str.Add(TextBox.GetLineText(i) + ",");
+                    //TextBox.Text = null;
+                    //for (int i = 0; i < str.Count; i++) TextBox.Text += str[i];
+                }
+                else
+                {
+                    //по сценарию с UPPER`S
+                    if (!TextBox.Text.Contains("UPPER") )
+                    {
+                        TextBox.Text = TextBox.Text.Replace("\r\n", "')," + "\rUPPER ('") + "')";
+                        TextBox.Text = "UPPER ('" + TextBox.Text;
+                    }
+     
+
+                }
+
+                //______________работа с запятыми______________
+                if (comma.IsEnabled == true && comma.IsChecked == true)
+                {
+                    TextBox.Text = TextBox.Text.Replace("\r\n", ",\n"); // - работает
+                }
+                if (comma.IsEnabled == true && comma.IsChecked == false)
+                {
+                    TextBox.Text = TextBox.Text.Replace(",", "\r");
+                }
+
+                Clipboard.SetText(TextBox.Text);
+
+
             }
-            else
+
+            /// <summary>
+            /// радио ботон 1 -RP
+            /// </summary>
+            private void ConrextUpper_Checked(object sender, RoutedEventArgs e)
             {
-                //по сценарию с UPPER`S
-
-                TextBox.Text = TextBox.Text.Replace("\r\n", "')," + "\rUPPER ('") + "')";
-                TextBox.Text = "UPPER ('" + TextBox.Text;
-
+                comma.IsEnabled = false;
             }
 
-            //______________работа с запятыми______________
-            if (comma.IsEnabled == true && comma.IsChecked == true)
+            /// <summary>
+            ///Радио батон 2 - UPPER
+            /// </summary>
+            private void ContextRP_Checked(object sender, RoutedEventArgs e)
             {
-                TextBox.Text = TextBox.Text.Replace("\r\n", ",\n"); // - работает
+                comma.IsEnabled = true;
             }
-            if (comma.IsEnabled == true && comma.IsChecked == false)
-            {
-                TextBox.Text = TextBox.Text.Replace(",", "\r");
-            }
-
-            Clipboard.SetText(TextBox.Text);
-
-
-        }
-
-        /// <summary>
-        /// радио ботон 1 -RP
-        /// </summary>
-        private void ConrextUpper_Checked(object sender, RoutedEventArgs e)
-        {
-            comma.IsEnabled = false;
-        }
-
-        /// <summary>
-        ///Радио батон 2 - UPPER
-        /// </summary>
-        private void ContextRP_Checked(object sender, RoutedEventArgs e)
-        {
-            comma.IsEnabled = true;
-        }
         #endregion
 
 
