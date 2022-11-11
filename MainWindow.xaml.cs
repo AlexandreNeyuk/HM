@@ -5,6 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
+using Clipboard = System.Windows.Forms.Clipboard;
 using Label = System.Windows.Controls.Label;
 using MessageBox = System.Windows.Forms.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
@@ -228,7 +230,7 @@ namespace HM
                 TextBox.Text = TextBox.Text.Replace(",", "\r");
             }
 
-
+            Clipboard.SetText(TextBox.Text);
 
 
         }
@@ -265,7 +267,7 @@ namespace HM
                 SettingsGrid.Visibility = Visibility.Hidden;
 
             }
-            if (e.Key.ToString() == SP_HotKey.Text) SwitchPanel(); // открытие боковой панели по кнопке 
+            if (e.Key.ToString() ==  SP_HotKey.Text) SwitchPanel(); // открытие боковой панели по кнопке 
            
         }
 
