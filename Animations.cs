@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Media.Animation;
 
 namespace HM
 {
-    internal  class Animations
+    internal class Animations
     {
         /// <summary>
         /// Линейная анимация 
@@ -20,14 +13,14 @@ namespace HM
         /// <param name="marginA"> Начальнапя точка 0</param>
         /// <param name="marginB"> Конечная точка 1</param>
         /// <param name="t"> Время (миллисекунды)</param>
-        public void LinearAnimation(System.Windows.Controls.TabControl b, int marginA, int marginB, double t )
-        {   
+        public void LinearAnimation(System.Windows.Controls.TabControl b, int marginA, int marginB, double t)
+        {
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = marginA;
             animation.To = marginB;
-            animation.Duration = TimeSpan.FromMilliseconds( t );
-          b.BeginAnimation(System.Windows.Controls.TabControl.MarginProperty, animation);           
-    
+            animation.Duration = TimeSpan.FromMilliseconds(t);
+            b.BeginAnimation(System.Windows.Controls.TabControl.MarginProperty, animation);
+
         }
         /// <summary>
         ///  Плавная анимация числа 
@@ -44,7 +37,7 @@ namespace HM
                 {
                     TimerZ(1);
                     s = s + (max - s) / 8 + 2;
-                    if (s > max - 1 )
+                    if (s > max - 1)
                     {
                         s = max;
                         break;
@@ -58,7 +51,7 @@ namespace HM
                 {
 
                     TimerZ(1);
-                    s =s - s / 8;
+                    s = s - s / 8;
                     if (s < min + 1)
                     {
                         s = min;
@@ -77,6 +70,6 @@ namespace HM
         {
             await Task.Delay(sec);
         }
-        
+
     }
 }
