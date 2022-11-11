@@ -129,14 +129,14 @@
                             <TextBox x:Name="Settings_HotKey" HorizontalAlignment="Left" Margin="189,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="86" FontFamily="Bahnschrift" ToolTip="Хост"/>
                             <Label Content="***" FontFamily="72" Padding="10,0,0,0" Margin="43,51,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
                             <TextBox HorizontalAlignment="Left" Margin="189,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" ToolTip="Хост"/>
-                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="357,75,69,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click_2"/>
-                            <Label x:Name="SussessHotKeysLabel"  FontFamily="72" Padding="10,0,0,0" Margin="135,78,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200" FlowDirection="RightToLeft"/>
+                            <Button Content="Сохранить" Height="20" VerticalAlignment="Bottom" Margin="0,0,69,11" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click_2" HorizontalAlignment="Right" Width="72"/>
+                            <Label x:Name="SussessHotKeysLabel"  FontFamily="72" Padding="10,0,0,0" Margin="135,0,0,10" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="200" FlowDirection="RightToLeft"/>
 
                         </Grid>
                         <Label Content="Базы данных складов" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
                         <Grid x:Name="Warehouses" Height="67">
-                            <Label  Content="Добавить склад" FontFamily="72" Padding="10,0,0,0" Margin="55,22,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="151" />
-                            <Button Content="Добавить" Height="20" VerticalAlignment="Top" Margin="230,22,178,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" />
+                            <Label  Content="Редактирование складов" FontFamily="72" Padding="10,0,0,0" Margin="26,22,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="199" />
+                            <Button Content="Клик" Height="20" VerticalAlignment="Top" Margin="230,19,178,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" />
 
 
                         </Grid>
