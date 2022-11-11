@@ -21,12 +21,14 @@ namespace HM
         public MainWindow()
         {
             InitializeComponent();
+            #region Начальные накстройки
             TB.Margin = new Thickness(0, 0, 0, 0); //выравниванеи TableControl 
             ///отключение панели настроек при иницииализации --
             SettingsGrid.IsEnabled = false;
             SettingsGrid.Visibility = Visibility.Hidden;
-            ///--
+            #endregion
 
+            #region Regisrty Staff           
             ///Пересоздание корня настроек в реестре + синхрон с реестром настроек--
             using RegistryKey registry = Registry.CurrentUser.CreateSubKey(@"Software\HM\Settings");
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Settings"))
@@ -44,7 +46,8 @@ namespace HM
                     SP_HotKey.Text = key.GetValue(SP_HotKey.Name)?.ToString();
                 }
             }
-            ///--
+            #endregion
+          
 
         }
         //Обьявление классов / глобальных переменных        
@@ -156,68 +159,70 @@ namespace HM
 
 
         }
-        /// <summary>
-        /// Кнопка RP/UPPER
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param> 
-        private void ListProcess_Click(object sender, RoutedEventArgs e)
-        {
 
-
-            if (ContextRP.IsChecked == true)
+    #region Table Item 1       
+            /// <summary>
+            /// Кнопка RP/UPPER
+            /// </summary>
+            /// <param name="sender"></param>
+            /// <param name="e"></param> 
+            private void ListProcess_Click(object sender, RoutedEventArgs e)
             {
-                //по сенарию RP (simple_List)
-                TextBox.Text = TextBox.Text.Replace("RP", "");
 
 
-                //###_refer_###
-                //TextBox.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)[TextBox.LineCount-1] + "," ; //отсавляю все что до символа? с указанием номера строки  - по сути сама RP
-                ////TextBox.GetLineText(3); // получаю саму строку по номеру 
-                //for (int i = 0; i < TextBox.LineCount - 1; i++) str.Add(TextBox.GetLineText(i) + ",");
-                //TextBox.Text = null;
-                //for (int i = 0; i < str.Count; i++) TextBox.Text += str[i];
+                if (ContextRP.IsChecked == true)
+                {
+                    //по сенарию RP (simple_List)
+                    TextBox.Text = TextBox.Text.Replace("RP", "");
+
+
+                    //###_refer_###
+                    //TextBox.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)[TextBox.LineCount-1] + "," ; //отсавляю все что до символа? с указанием номера строки  - по сути сама RP
+                    ////TextBox.GetLineText(3); // получаю саму строку по номеру 
+                    //for (int i = 0; i < TextBox.LineCount - 1; i++) str.Add(TextBox.GetLineText(i) + ",");
+                    //TextBox.Text = null;
+                    //for (int i = 0; i < str.Count; i++) TextBox.Text += str[i];
+                }
+                else
+                {
+                    //по сценарию с UPPER`S
+
+                    TextBox.Text = TextBox.Text.Replace("\r\n", "')," + "\rUPPER ('") + "')";
+                    TextBox.Text = "UPPER ('" + TextBox.Text;
+
+                }
+
+                //______________работа с запятыми______________
+                if (comma.IsEnabled == true && comma.IsChecked == true)
+                {
+                    TextBox.Text = TextBox.Text.Replace("\r\n", ",\n"); // - работает
+                }
+                if (comma.IsEnabled == true && comma.IsChecked == false)
+                {
+                    TextBox.Text = TextBox.Text.Replace(",", "\r");
+                }
+
+
+
+
             }
-            else
+
+            /// <summary>
+            /// радио ботон 1 -RP
+            /// </summary>
+            private void ConrextUpper_Checked(object sender, RoutedEventArgs e)
             {
-                //по сценарию с UPPER`S
-
-                TextBox.Text = TextBox.Text.Replace("\r\n", "')," + "\rUPPER ('") + "')";
-                TextBox.Text = "UPPER ('" + TextBox.Text;
-
+                comma.IsEnabled = false;
             }
 
-            //______________работа с запятыми______________
-            if (comma.IsEnabled == true && comma.IsChecked == true)
+            /// <summary>
+            ///Радио батон 2 - UPPER
+            /// </summary>
+            private void ContextRP_Checked(object sender, RoutedEventArgs e)
             {
-                TextBox.Text = TextBox.Text.Replace("\r\n", ",\n"); // - работает
+                comma.IsEnabled = true;
             }
-            if (comma.IsEnabled == true && comma.IsChecked == false)
-            {
-                TextBox.Text = TextBox.Text.Replace(",", "\r");
-            }
-
-
-
-
-        }
-
-        /// <summary>
-        /// радио ботон 1 -RP
-        /// </summary>
-        private void ConrextUpper_Checked(object sender, RoutedEventArgs e)
-        {
-            comma.IsEnabled = false;
-        }
-
-        /// <summary>
-        ///Радио батон 2 - UPPER
-        /// </summary>
-        private void ContextRP_Checked(object sender, RoutedEventArgs e)
-        {
-            comma.IsEnabled = true;
-        }
-
+        #endregion
 
 
 
@@ -235,6 +240,8 @@ namespace HM
 
             }
         }
+
+    #region Settings      
 
         /// <summary>
         /// Постоматы
@@ -271,7 +278,7 @@ namespace HM
         /// <summary>
         ///Сохранение Хостов/БД
         /// </summary>
-        async private void Button_Click_1(object sender, RoutedEventArgs e)
+         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             ///Шиптор 
             
@@ -283,7 +290,12 @@ namespace HM
 
         }
 
-
+        /// <summary>
+        /// функйция проверки полей и записи в реестр
+        /// </summary>
+        /// <param name="L1">Поле для хостов</param>
+        /// <param name="L2">Поле для имени БД </param>
+        /// <param name="suslabel">Лейбл статусов</param>
         async public void SaveProtected( TextBox L1, TextBox L2, Label suslabel)
         {
             if (L1.Text != "" && L2.Text != "")
@@ -300,6 +312,7 @@ namespace HM
             await Task.Delay(1000);
             suslabel.Content = "";
         }
+    #endregion
 
     }
 }
