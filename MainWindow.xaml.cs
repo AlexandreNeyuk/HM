@@ -367,7 +367,7 @@ namespace HM
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            dataBases.TestConnect();
+            dataBases.TestConnect(ShiptorHost, UserName, UserPass, ShiptorDB);
         }
     }
 }
