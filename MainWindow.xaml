@@ -52,7 +52,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="ListProcess" Content="Обработка" Margin="0,113,18,0" VerticalAlignment="Top" Height="25" HorizontalAlignment="Right" Width="87" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0"/>
+                        <Button x:Name="ListProcess" Content="Обработка" Margin="0,113,18,0" VerticalAlignment="Top" Height="25" HorizontalAlignment="Right" Width="87" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0" ToolTip="Копирую сам!"/>
                         <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="0,0,116,22" FontFamily="Bahnschrift" FontSize="14" Foreground="Black" Background="White"/>
 
                         <CheckBox x:Name="comma" Content="Запятые" HorizontalAlignment="Right" Margin="0,81,23,0" VerticalAlignment="Top" FontFamily="Bahnschrift" IsChecked="True"/>
@@ -81,7 +81,7 @@
 
         </Grid>
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" Visibility="Hidden" IsEnabled="False" >
 
             <Border x:Name="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="350" Background="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border.Effect>
