@@ -1,29 +1,32 @@
-﻿using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-
-namespace HM
+﻿namespace HM
 {
+
     internal class DataBaseAsset
     {
 
         private string con;
 
 
-         public void TestConnect( TextBox Host, TextBox Username, PasswordBox Password, TextBox Database)
-        {  
+        public void ConnectDB(string db, string query)
+        {
+            ///загрузка из реестра данных об складе через поиск по переменной db
+            ///формирование конечной строрки соединений con
+
+
             string con = "Host={0};Username={1};Password={2};Database={3}";
 
-        con = String.Format(con, Host.Text, Username.Text, Password.Password, Database.Text); 
+            switch (db)
+            {
+                case "shiptor":
+                    // con = 
+                    // default:
+                    break;
+            }
+            // con = String.Format(con, Host.Text, Username.Text, Password.Password, Database.Text); 
 
-            MessageBox.Show(con);
+
+
+
             //NpgsqlConnection nc = new NpgsqlConnection(con);
             //try
             //{
@@ -46,6 +49,8 @@ namespace HM
             //    //Код обработки ошибок
             //}
         }
+
+
 
 
 
