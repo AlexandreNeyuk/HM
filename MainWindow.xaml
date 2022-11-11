@@ -81,7 +81,7 @@
 
         </Grid>
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" IsEnabled="False" Visibility="Hidden" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" Visibility="Hidden" IsEnabled="False" >
 
             <Border x:Name="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="350" Background="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border.Effect>
@@ -101,7 +101,7 @@
                             <Label Content="Пароль" FontFamily="72" Padding="10,0,0,0" Margin="38,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"/>
                             <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="297,62,129,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click"/>
                             <PasswordBox x:Name="UserPass" Margin="184,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184" FontFamily="Bahnschrift" ToolTip="Пароль"/>
-                            <Label x:Name="SussessLabel" FontFamily="72" Padding="10,0,0,0" Margin="146,62,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="146" FlowDirection="RightToLeft"/>
+                            <Label x:Name="SussessLabel" FontFamily="72" Padding="10,0,0,0" Margin="130,62,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="162" FlowDirection="RightToLeft"/>
 
                         </Grid>
                         <Label Content="Подключенные БД" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
@@ -115,7 +115,9 @@
                             <TextBox x:Name="ShiptorDB" HorizontalAlignment="Left" Margin="329,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
                             <TextBox x:Name="PostDB" HorizontalAlignment="Left" Margin="329,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
                             <TextBox x:Name="PVZDB" HorizontalAlignment="Left" Margin="329,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
-                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="357,75,69,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True"/>
+                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="357,75,69,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click_1"/>
+                            <Label x:Name="SussessHostLabel"  FontFamily="72" Padding="10,0,0,0" Margin="135,78,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200" FlowDirection="RightToLeft"/>
+
 
                         </Grid>
                         <Label Content="Горячие клавиши" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>

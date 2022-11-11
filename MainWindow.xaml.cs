@@ -5,7 +5,10 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Control = System.Windows.Controls.Control;
+using Label = System.Windows.Controls.Label;
 using MessageBox = System.Windows.Forms.MessageBox;
+using TextBox = System.Windows.Controls.TextBox;
 using Window = System.Windows.Window;
 
 namespace HM
@@ -32,13 +35,13 @@ namespace HM
                 {
                     UserName.Text = key.GetValue("Имя пользователя")?.ToString();
                     UserPass.Password = key.GetValue("Пароль")?.ToString();
-                    ShiptorHost.Text = key.GetValue("Shiptor Host")?.ToString();
-                    ShiptorDB.Text = key.GetValue("Shiptor DB")?.ToString();
-                    PostHost.Text = key.GetValue("Postamat Host")?.ToString();
-                    PostDB.Text = key.GetValue("Postamat DB")?.ToString();
-                    PVZHost.Text = key.GetValue("PVZ Host")?.ToString();
-                    PVZDB.Text = key.GetValue("PVZ DB")?.ToString();
-                    SP_HotKey.Text = key.GetValue("Switch Panel HotKey")?.ToString();
+                    ShiptorHost.Text = key.GetValue(ShiptorHost.Name)?.ToString();
+                    ShiptorDB.Text = key.GetValue(ShiptorDB.Name)?.ToString();
+                    PostHost.Text = key.GetValue(PostHost.Name)?.ToString();
+                    PostDB.Text = key.GetValue(PostDB.Name)?.ToString();
+                    PVZHost.Text = key.GetValue(PVZHost.Name)?.ToString();
+                    PVZDB.Text = key.GetValue(PVZDB.Name)?.ToString();
+                    SP_HotKey.Text = key.GetValue(SP_HotKey.Name)?.ToString();
                 }
             }
             ///--
@@ -83,50 +86,53 @@ namespace HM
         ///Кнопка боковой панели 
         /// </summary>
         private async void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
+        {  
+            
             const int marginLeftMin = 0;
             const int marginLeftMax = 150;
             double CurrentVarginLeft = TB.Margin.Left;
-
-            ///анимация боковой панели  
-            if (SetPanel == true)
-            {
-
-
-                while (TB.Margin.Left - TB.Margin.Left / 8 > marginLeftMin)
+            string BF = TextBox.Text;
+            TextBox.Text = null;  
+           
+                    
+                ///анимация боковой панели  
+                if (SetPanel == true)
                 {
-                    CurrentVarginLeft = TB.Margin.Left;
-                    await Task.Delay(1);
-                    TB.Margin = new Thickness(CurrentVarginLeft - CurrentVarginLeft / 8, 0, 0, 0);
-                    if (TB.Margin.Left < 1)
+
+                
+                    while (TB.Margin.Left - TB.Margin.Left / 6 > marginLeftMin)
                     {
-                        TB.Margin = new Thickness(0, 0, 0, 0);
-                        break;
+                        CurrentVarginLeft = TB.Margin.Left;
+                        await Task.Delay(1);
+                        TB.Margin = new Thickness(CurrentVarginLeft - CurrentVarginLeft / 6, 0, 0, 0);
+                        if (TB.Margin.Left < 2)
+                        {
+                            TB.Margin = new Thickness(0, 0, 0, 0);
+                            break;
+                        }
                     }
+                    SetPanel = !SetPanel;
+
                 }
-                SetPanel = !SetPanel;
-
-            }
-            else
-            {
-
-                while (CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 8 < marginLeftMax)
+                else
                 {
-                    CurrentVarginLeft = TB.Margin.Left;
-                    await Task.Delay(1);
-                    TB.Margin = new Thickness(CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 8, 0, 0, 0);
-                    if (TB.Margin.Left > 149)
+
+                    while (CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 6 < marginLeftMax)
                     {
-                        TB.Margin = new Thickness(150, 0, 0, 0);
-                        break;
+                        CurrentVarginLeft = TB.Margin.Left;
+                        await Task.Delay(1);
+                        TB.Margin = new Thickness(CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 6, 0, 0, 0);
+                        if (TB.Margin.Left > 147)
+                        {
+                            TB.Margin = new Thickness(150, 0, 0, 0);
+                            break;
+                        }
                     }
+                    SetPanel = !SetPanel;
                 }
-                SetPanel = !SetPanel;
-
-
-            }
-
-
+            TextBox.Text = BF;
+           
+           
 
 
         }
@@ -151,10 +157,10 @@ namespace HM
 
         }
         /// <summary>
-        /// Кнопка 
+        /// Кнопка RP/UPPER
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="e"></param> 
         private void ListProcess_Click(object sender, RoutedEventArgs e)
         {
 
@@ -261,5 +267,39 @@ namespace HM
             SussessLabel.Content = "";
 
         }
+       
+        /// <summary>
+        ///Сохранение Хостов/БД
+        /// </summary>
+        async private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            ///Шиптор 
+            
+            SaveProtected(ShiptorHost, ShiptorDB, SussessHostLabel);
+            //PVZ
+            SaveProtected(PVZHost, PVZDB, SussessHostLabel);
+            ///Post
+            SaveProtected(PostHost, PostDB, SussessHostLabel);
+
+        }
+
+
+        async public void SaveProtected( TextBox L1, TextBox L2, Label suslabel)
+        {
+            if (L1.Text != "" && L2.Text != "")
+            {
+                using RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM\Settings");
+                {
+                    key?.SetValue(L1.Name, L1.Text );
+                    key?.SetValue(L2.Name, L2.Text);
+
+                }
+                suslabel.Content = "Успешно";
+            }
+            else suslabel.Content = "Не запполено одно из полей";
+            await Task.Delay(1000);
+            suslabel.Content = "";
+        }
+
     }
 }

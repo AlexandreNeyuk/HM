@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Npgsql" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Assets\close_EnterM.png" />
     <Resource Include="Assets\close_LeaveM.png" />
     <Resource Include="Assets\Postamats.png" />
