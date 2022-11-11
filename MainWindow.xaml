@@ -81,7 +81,7 @@
 
         </Grid>
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" Visibility="Hidden" IsEnabled="False" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" >
 
             <Border x:Name="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="350" Background="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border.Effect>
@@ -117,6 +117,7 @@
                             <TextBox x:Name="PVZDB" HorizontalAlignment="Left" Margin="329,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
                             <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="357,75,69,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click_1"/>
                             <Label x:Name="SussessHostLabel"  FontFamily="72" Padding="10,0,0,0" Margin="135,78,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200" FlowDirection="RightToLeft"/>
+                            <Button Content="?" Height="17" VerticalAlignment="Top" Margin="441,9,36,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click_3" />
 
 
                         </Grid>

@@ -65,6 +65,7 @@ namespace HM
         //Обьявление классов / глобальных переменных
         List<TextBox> KeyTextBoxies; // ///все поля для которых нужно свойство введения HotKeys, через  ","
         //Animations Animations = new Animations();
+        DataBaseAsset dataBases = new DataBaseAsset();
         bool SetPanel = false; //false - закрытая панель, true - открытая панлеь
 
 #if Button_close
@@ -361,8 +362,12 @@ namespace HM
                 }
             }
 
+
         #endregion
 
-
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            dataBases.TestConnect();
+        }
     }
 }
