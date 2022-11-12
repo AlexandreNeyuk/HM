@@ -136,7 +136,7 @@
                         <Label Content="Базы данных складов" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
                         <Grid x:Name="Warehouses" Height="67">
                             <Label  Content="Редактирование складов" FontFamily="72" Padding="10,0,0,0" Margin="26,22,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="199" />
-                            <Button Content="Клик" Height="20" VerticalAlignment="Top" Margin="230,19,178,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" />
+                            <Button x:Name="WarhReg" Content="Клик" Height="20" VerticalAlignment="Top" Margin="230,19,178,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="WarhReg_Click" />
 
 
                         </Grid>

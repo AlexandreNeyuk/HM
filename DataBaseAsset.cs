@@ -1,4 +1,10 @@
-﻿namespace HM
+﻿using Npgsql;
+using System;
+using System.Data;
+using System.Security.Cryptography;
+using System.Windows;
+
+namespace HM
 {
 
     internal class DataBaseAsset
@@ -24,30 +30,32 @@
             }
             // con = String.Format(con, Host.Text, Username.Text, Password.Password, Database.Text); 
 
+            NpgsqlConnection nc = new NpgsqlConnection(con);
+            try
+            {
+                //Открываем соединение.
+                nc.Open();
+                if (nc.FullState == ConnectionState.Broken || nc.FullState == ConnectionState.Closed)
+                {
+                    Exception ex;
+                    MessageBox.Show("Нет подключения. Ошибка: ");
+                    return;
 
+                }
+                else MessageBox.Show("Есть коннект!!!");
 
-
-            //NpgsqlConnection nc = new NpgsqlConnection(con);
-            //try
-            //{
-            //    //Открываем соединение.
-            //    nc.Open();
-            //    if (nc.FullState == ConnectionState.Broken || nc.FullState == ConnectionState.Closed)
-            //    {
-
-            //        MessageBox.Show("Нет подключения");
-
-            //    }
-            //    else MessageBox.Show("Есть коннект!!!");
-
-            //    nc.Close();
-            //}
-            //catch (Exception ex)
-            //{
-            //    nc.Close();
-            //    MessageBox.Show(ex.Message);
-            //    //Код обработки ошибок
-            //}
+                query = @"select * ...";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, nc);
+                DataTable dt = new DataTable(); 
+                dt.Load(cmd.ExecuteReader());
+                nc.Close();
+            }
+            catch (Exception ex)
+            {
+                nc.Close();
+                MessageBox.Show(ex.Message);
+                //Код обработки ошибок
+            }
         }
 
 

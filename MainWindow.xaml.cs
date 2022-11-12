@@ -363,13 +363,30 @@ namespace HM
             }
         }
 
+        /// <summary>
+        /// Кнопка редактирования складов 
+        /// </summary>
+        private void WarhReg_Click(object sender, RoutedEventArgs e)
+        {
+            WarEdit wr = new WarEdit();
+            wr.Show();
+
+        }
 
         #endregion
 
+
+        /// <summary>
+        /// ?
+        /// </summary>
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            dataBases.ConnectDB("sha", @"select * ... ");
+
+            /* dataBases.ConnectDB("sha", @"select * ... ");*/
+
 
         }
+
+
     }
 }
