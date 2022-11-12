@@ -189,13 +189,16 @@ namespace HM
         }
 
 
-        #region Table Item 1       
+
+
+        #region Table Item 1   
+
         /// <summary>
         /// Кнопка RP/UPPER
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param> 
-        private void ListProcess_Click(object sender, RoutedEventArgs e)
+        async private void ListProcess_Click(object sender, RoutedEventArgs e)
         {
 
 
@@ -235,6 +238,11 @@ namespace HM
             }
 
             Clipboard.SetText(TextBox.Text);
+            BFcopy.Text = "Результат скопирован в буфер обмена";
+            await Task.Delay(1000);
+            BFcopy.Text = null;
+
+
 
 
         }
