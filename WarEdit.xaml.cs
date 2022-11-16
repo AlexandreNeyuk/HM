@@ -1,19 +1,20 @@
-﻿using System;
+﻿using Microsoft.Win32;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HM
 {
+    /// <summary>
+    ///Экземпляр Хоста
+    /// </summary>
+    public class Host
+    {
+        public string Host_name { get; set; }
+        string Host_ { get; set; }
+        string Port { get; set; }
+        string DataBase_ { get; set; }
+    }
+
     /// <summary>
     /// Логика взаимодействия для WarEdit.xaml
     /// </summary>
@@ -22,6 +23,31 @@ namespace HM
         public WarEdit()
         {
             InitializeComponent();
+            this.Loaded += (e, a) => { LoadHosts(); };
+
         }
+
+
+        /// <summary>
+        ///Загрузка бд в лист из реестра
+        /// </summary>
+        public void LoadHosts()
+        {
+
+            List<Host> hsts = new List<Host>();
+
+            List<string> Hosts = new List<string>();
+            using RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Hosts");
+            if (key != null)
+            {
+
+                MessageBox.Show(key.GetSubKeyNames().ToString());
+
+                //Hosts.Add(key.ToString());
+            }
+            // List_Hosts.Items.Add(Hosts);
+        }
+
+
     }
 }
