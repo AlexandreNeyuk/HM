@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="HM" x:Class="HM.MainWindow"
         mc:Ignorable="d"
-        Title="Help Manager v. 0.2.03" Height="465" Width="800" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown">
+        Title="Help Manager v. 0.2.03" Height="465" Width="829" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="NoResize">
 
     <Grid>
         <Grid.Background>
@@ -52,14 +52,16 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="ListProcess" Content="Обработка" Margin="0,113,18,0" VerticalAlignment="Top" Height="25" HorizontalAlignment="Right" Width="87" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0" ToolTip="Копирую сам!"/>
-                        <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="0,0,116,22" FontFamily="Bahnschrift" FontSize="14" Foreground="Black" Background="White"/>
-
-                        <CheckBox x:Name="comma" Content="Запятые" HorizontalAlignment="Right" Margin="0,81,23,0" VerticalAlignment="Top" FontFamily="Bahnschrift" IsChecked="True"/>
-                        <RadioButton x:Name="ContextRP" Content="RP" Margin="0,31,9,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="96" ToolTip="Обработка текста в рамках RP списка." IsChecked="True" FontFamily="Bahnschrift" Checked="ContextRP_Checked"/>
-                        <RadioButton x:Name="ConrextUpper" Content="Upper (' _ ')" Margin="0,51,6,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="99" IsChecked="True" FontFamily="Bahnschrift" ToolTip="Обработка списка с добавлением UPPER -контекста. " Checked="ConrextUpper_Checked"/>
-                        <Label Content="Параметры" HorizontalAlignment="Right" Margin="0,0,21,0" VerticalAlignment="Top" FontFamily="Bahnschrift"/>
-                        <TextBlock x:Name="BFcopy" Margin="0,150,18,0" Height="77" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right" Width="86"/>
+                        <Canvas x:Name="Left_Controls" Margin="677,0,0,22">
+                            <Button x:Name="ListProcess" Content="Обработка" VerticalAlignment="Center" Height="25" HorizontalAlignment="Left" Width="87" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0" ToolTip="Копирую сам!" Canvas.Left="8" Canvas.Top="113"/>
+                            <CheckBox x:Name="comma" Content="Запятые" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" IsChecked="True" Canvas.Left="25" Canvas.Top="85"/>
+                            <RadioButton x:Name="ContextRP" Content="RP" VerticalAlignment="Center" HorizontalAlignment="Left" Width="96" ToolTip="Обработка текста в рамках RP списка." IsChecked="True" FontFamily="Bahnschrift" Checked="ContextRP_Checked" Canvas.Left="25" Canvas.Top="35"/>
+                            <RadioButton x:Name="ConrextUpper" Content="Upper (' _ ')" VerticalAlignment="Center" HorizontalAlignment="Left" Width="99" IsChecked="True" FontFamily="Bahnschrift" ToolTip="Обработка списка с добавлением UPPER -контекста. " Checked="ConrextUpper_Checked" Canvas.Left="25" Canvas.Top="55"/>
+                            <Label Content="Параметры" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" Canvas.Left="25" Canvas.Top="4"/>
+                            <TextBlock x:Name="BFcopy" Height="77" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Width="117" Canvas.Left="10" Canvas.Top="325"/>
+                            <Button x:Name="Clear_all_textB" Content="X" Canvas.Left="102" Canvas.Top="114" BorderThickness="0,0,0,0" Width="31" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Clear_all_textB_Click"/>
+                        </Canvas>
+                        <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" HorizontalAlignment="Left" Width="677" Margin="0,0,0,22"/>
 
                     </Grid>
                 </TabItem>

@@ -109,15 +109,13 @@ namespace HM
             const int marginLeftMin = 0;
             const int marginLeftMax = 150;
             double CurrentVarginLeft = TB.Margin.Left;
-            string BF = TextBox.Text;
-            TextBox.Text = null;
+
+            TextBox.IsEnabled = false;
 
 
             ///анимация боковой панели  
             if (SetPanel == true)
             {
-
-
                 while (TB.Margin.Left - TB.Margin.Left / 6 > marginLeftMin)
                 {
                     CurrentVarginLeft = TB.Margin.Left;
@@ -148,7 +146,8 @@ namespace HM
                 }
                 SetPanel = !SetPanel;
             }
-            TextBox.Text = BF;
+
+            TextBox.IsEnabled = true;
 
 
         }
@@ -187,8 +186,6 @@ namespace HM
             //TB.SelectedIndex = 1; MessageBox.Show(TB.SelectedIndex.ToString());      
 
         }
-
-
 
 
         #region Table Item 1   
@@ -248,6 +245,14 @@ namespace HM
         }
 
         /// <summary>
+        ///очистка пвсего поля 
+        /// </summary>
+        private void Clear_all_textB_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox.Text = null;
+        }
+
+        /// <summary>
         /// радио ботон 1 -RP
         /// </summary>
         private void ConrextUpper_Checked(object sender, RoutedEventArgs e)
@@ -265,7 +270,6 @@ namespace HM
         #endregion
 
 
-
         /// <summary>
         /// Быстрые клавиши
         /// </summary>
@@ -273,12 +277,7 @@ namespace HM
         private void HM_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             ///Отключение ПАНЕЛИ НАСТРОЕК бысчрой клавишей 
-            if (e.Key == Key.Escape && SettingsGrid.IsEnabled == true)
-            {
-                SettingsGrid.IsEnabled = false;
-                SettingsGrid.Visibility = Visibility.Hidden;
-
-            }
+            if (e.Key == Key.Escape && SettingsGrid.IsEnabled == true) { SettingsGrid.IsEnabled = false; SettingsGrid.Visibility = Visibility.Hidden; }
             if (e.Key.ToString() == SP_HotKey.Text) SwitchPanel(); // открытие боковой панели по кнопке 
             if (e.Key.ToString() == Settings_HotKey.Text) OpenSettings();
 
