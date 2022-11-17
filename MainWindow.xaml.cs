@@ -198,7 +198,6 @@ namespace HM
         async private void ListProcess_Click(object sender, RoutedEventArgs e)
         {
 
-
             if (ContextRP.IsChecked == true)
             {
                 //по сенарию RP (simple_List)

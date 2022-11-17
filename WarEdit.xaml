@@ -16,8 +16,8 @@
         <TextBox x:Name="Text_DB" Margin="0,112,16,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="327" FontFamily="72"/>
         <Label Content="Порт" HorizontalAlignment="Right" Margin="0,75,95,0" VerticalAlignment="Top"/>
         <TextBox x:Name="Text_Port" HorizontalAlignment="Right" Margin="0,81,16,0" VerticalAlignment="Top" Width="78" FontFamily="72"/>
-        <Button Content="Добавить" Margin="0,158,95,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="214" FontFamily="72" BorderThickness="0,0,0,0" Height="18"/>
-        <Button Margin="0,187,134,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="133" Content="Удалить" FontFamily="72" BorderThickness="0,0,0,0" Height="18"/>
+        <Button x:Name="AddReg" Content="Добавить" Margin="0,158,95,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="214" FontFamily="72" BorderThickness="0,0,0,0" Height="18" Click="Button_Click"/>
+        <Button x:Name="RemoveReg" Margin="0,187,134,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="133" Content="Удалить" FontFamily="72" BorderThickness="0,0,0,0" Height="18" Click="RemoveReg_Click"/>
         <Label HorizontalAlignment="Right" Margin="0,43,289,0" VerticalAlignment="Top" Content="Имя БД"/>
         <TextBox x:Name="Text_NameHost" HorizontalAlignment="Right" Margin="0,48,79,0" VerticalAlignment="Top" Width="200" FontFamily="72"/>
 

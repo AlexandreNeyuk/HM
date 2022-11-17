@@ -1,7 +1,6 @@
 ﻿using Npgsql;
 using System;
 using System.Data;
-using System.Security.Cryptography;
 using System.Windows;
 
 namespace HM
@@ -46,7 +45,7 @@ namespace HM
 
                 query = @"select * ...";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, nc);
-                DataTable dt = new DataTable(); 
+                DataTable dt = new DataTable();
                 dt.Load(cmd.ExecuteReader());
                 nc.Close();
             }
