@@ -150,7 +150,7 @@ namespace HM
         private void Search_Lbd_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             foreach (var item in List_Hosts.Items)
-                if (item.ToString().Contains(Search_Lbd.Text))
+                if (item.ToString().ToUpper().Contains(Search_Lbd.Text.ToUpper()))
                 {
                     List_Hosts.SelectedItem = item;
 

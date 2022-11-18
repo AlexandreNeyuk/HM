@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="HM" x:Class="HM.MainWindow"
         mc:Ignorable="d"
-        Title="Help Manager v. 0.2.03" Height="465" Width="829" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="CanMinimize">
+        Title="Help Manager v. 0.2.03" Height="465" Width="836" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="CanMinimize">
 
     <Grid>
         <Grid.Background>
@@ -58,11 +58,15 @@
                             <RadioButton x:Name="ContextRP" Content="RP" VerticalAlignment="Center" HorizontalAlignment="Left" Width="96" ToolTip="Обработка текста в рамках RP списка." IsChecked="True" FontFamily="Bahnschrift" Checked="ContextRP_Checked" Canvas.Left="25" Canvas.Top="35"/>
                             <RadioButton x:Name="ConrextUpper" Content="Upper (' _ ')" VerticalAlignment="Center" HorizontalAlignment="Left" Width="99" IsChecked="True" FontFamily="Bahnschrift" ToolTip="Обработка списка с добавлением UPPER -контекста. " Checked="ConrextUpper_Checked" Canvas.Left="25" Canvas.Top="55"/>
                             <Label Content="Параметры" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" Canvas.Left="25" Canvas.Top="4"/>
-                            <TextBlock x:Name="BFcopy" Height="77" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Width="117" Canvas.Left="10" Canvas.Top="325"/>
+                            <TextBlock x:Name="BFcopy" Height="77" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Width="136" Canvas.Left="10" Canvas.Top="325"/>
                             <Button x:Name="Clear_all_textB" Content="X" Canvas.Left="102" Canvas.Top="114" BorderThickness="0,0,0,0" Width="31" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Clear_all_textB_Click"/>
-                            <CheckBox x:Name="comma_Copy" Content="Вся семья☝" FontFamily="Bahnschrift" IsChecked="True" Canvas.Left="25" Canvas.Top="153" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         </Canvas>
-                        <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" HorizontalAlignment="Left" Width="677" Margin="0,0,0,22"/>
+                        <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="0,0,0,22" HorizontalAlignment="Left" Width="677"/>
+                        <ListBox Margin="698,160,0,0" BorderThickness="0,0,0,0" Height="56" VerticalAlignment="Top" HorizontalAlignment="Left" Width="108">
+                            <CheckBox x:Name="AF_1" Content="Вся семья☝" Checked="AF_1_Checked"/>
+                            <CheckBox x:Name="AF_2" Content="Родитель" Checked="AF_2_Checked"/>
+                        </ListBox>
+
 
                     </Grid>
                 </TabItem>

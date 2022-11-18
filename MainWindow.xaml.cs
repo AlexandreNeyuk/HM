@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -50,7 +52,7 @@ namespace HM
 
             }
 
-            #endregion 
+            #endregion
 
 
 
@@ -195,12 +197,17 @@ namespace HM
             {
                 //по сенарию RP (simple_List)
                 TextBox.Text = TextBox.Text.Replace("RP", "");
+
+
+
+
                 ///###_refer_###
                 ///TextBox.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)[TextBox.LineCount-1] + "," ; //отсавляю все что до символа? с указанием номера строки  - по сути сама RP
                 ///TextBox.GetLineText(3); // получаю саму строку по номеру 
                 ///for (int i = 0; i < TextBox.LineCount - 1; i++) str.Add(TextBox.GetLineText(i) + ",");
                 ///TextBox.Text = null;
                 ///for (int i = 0; i < str.Count; i++) TextBox.Text += str[i];
+                ///
             }
             else
             {
@@ -216,14 +223,29 @@ namespace HM
             if (comma.IsEnabled == true && comma.IsChecked == true) TextBox.Text = TextBox.Text.Replace("\r\n", ",\n"); // - работает
             if (comma.IsEnabled == true && comma.IsChecked == false) TextBox.Text = TextBox.Text.Replace(",", "\r");
 
+            ///Работа с родителями
+            if (AF_1.IsChecked == true && ContextRP.IsChecked == true) //вся семья
+            {
+                List<string> ParrentsList = dataBases.ConnectDB("Шиптор", @"select id, parent_id from package p where id  in (" + TextBox.Text + ") or parent_id in (" + TextBox.Text + ")").AsEnumerable().Select(x => x[1].ToString()).ToList();
+                foreach (var Parrent in ParrentsList)
+                {
+                    if (Parrent != "") TextBox.Text += ",\n" + Parrent;
+
+                }
+                List<string> AllFaily = dataBases.ConnectDB("Шиптор", @"select id, parent_id from package p where id  in (" + TextBox.Text + ") or parent_id in (" + TextBox.Text + ")").AsEnumerable().Select(x => x[0].ToString()).ToList();
+                TextBox.Text = "";
+                foreach (var el in AllFaily)
+                {
+                    if (TextBox.Text == "") TextBox.Text += "\n" + el;
+                    if (el != "") TextBox.Text += ",\n" + el;
+
+                }
+            }
+
             if (TextBox.Text != "") Clipboard.SetText(TextBox.Text); //запись в  буфер
             BFcopy.Text = "Результат скопирован в буфер обмена";
             await Task.Delay(1000);
             BFcopy.Text = null;
-
-
-            //dataBases.ConnectDB("Шарапово", "");
-
         }
 
         /// <summary>
@@ -249,6 +271,16 @@ namespace HM
         {
             comma.IsEnabled = true;
         }
+
+        /// <summary>
+        /// Переключатель родителей - логика 1
+        /// </summary>
+        private void AF_1_Checked(object sender, RoutedEventArgs e) { AF_2.IsChecked = false; }
+
+        /// <summary>
+        /// Переключатель родителей - логика 2
+        /// </summary>
+        private void AF_2_Checked(object sender, RoutedEventArgs e) { AF_1.IsChecked = false; }
         #endregion
 
 
@@ -347,9 +379,8 @@ namespace HM
 
         }
 
+
         #endregion
-
-
 
     }
 }

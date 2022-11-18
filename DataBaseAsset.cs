@@ -9,6 +9,7 @@ namespace HM
 
     internal class DataBaseAsset
     {
+
         ///Если будут проблемы со скоростью впоследствии 
         ///то слздать класс с хастами и в фоне выгрузить все данные о бд из реестра в этот лист
 
@@ -17,7 +18,7 @@ namespace HM
         /// </summary>
         /// <param name="db">Имя БД на русском, мы же русские люди!</param>
         /// <param name="query">Запрос, что тебе надо</param>
-        public void ConnectDB(string db, string query)
+        public DataTable ConnectDB(string db, string query)
         {
             ///загрузка из реестра данных об складе через поиск по переменной db
             ///формирование конечной строрки соединений con
@@ -43,40 +44,30 @@ namespace HM
                 }
             }
             con = String.Format(con, Host, User, Pass, DataBase);
+            DataTable dt = new DataTable();
 
-
-            using NpgsqlConnection nc = new NpgsqlConnection(con);
+            NpgsqlConnection nc = new NpgsqlConnection(con);
             try
             {
                 //Открываем соединение.
                 nc.Open();
-                if (nc.FullState == ConnectionState.Broken || nc.FullState == ConnectionState.Closed)
-                {
-                    Exception ex;
-                    MessageBox.Show("Нет подключения. Ошибка: ");
-                    return;
-
-                }
-                else MessageBox.Show("Есть коннект!!!");
-
-                query = @"select * ...";
+                if (nc.FullState == ConnectionState.Broken || nc.FullState == ConnectionState.Closed) MessageBox.Show("Нет коннекта. Сломано или Соекдинение закрылось. Ксива коннекта, мб в нем чего: \n" + con);
                 NpgsqlCommand cmd = new NpgsqlCommand(query, nc);
-                DataTable dt = new DataTable();
                 dt.Load(cmd.ExecuteReader());
                 nc.Close();
+                // MessageBox.Show(dt.Rows[0][1].ToString());
+                return dt;
             }
             catch (Exception ex)
             {
                 nc.Close();
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Коннект точно пошел по пизде! - Ошибка : " + ex.Message);
                 //Код обработки ошибок
             }
+            return dt;
+
+
         }
-
-
-
-
-
 
 
     }
