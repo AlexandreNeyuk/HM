@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Clipboard = System.Windows.Forms.Clipboard;
 using Label = System.Windows.Controls.Label;
 using MessageBox = System.Windows.Forms.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
@@ -37,12 +36,6 @@ namespace HM
                 {
                     UserName.Text = key.GetValue("Имя пользователя")?.ToString();
                     UserPass.Password = key.GetValue("Пароль")?.ToString();
-                    ShiptorHost.Text = key.GetValue(ShiptorHost.Name)?.ToString();
-                    ShiptorDB.Text = key.GetValue(ShiptorDB.Name)?.ToString();
-                    PostHost.Text = key.GetValue(PostHost.Name)?.ToString();
-                    PostDB.Text = key.GetValue(PostDB.Name)?.ToString();
-                    PVZHost.Text = key.GetValue(PVZHost.Name)?.ToString();
-                    PVZDB.Text = key.GetValue(PVZDB.Name)?.ToString();
                     SP_HotKey.Text = key.GetValue(SP_HotKey.Name)?.ToString();
                     Settings_HotKey.Text = key.GetValue(Settings_HotKey.Name)?.ToString();
                 }
@@ -202,14 +195,12 @@ namespace HM
             {
                 //по сенарию RP (simple_List)
                 TextBox.Text = TextBox.Text.Replace("RP", "");
-
-
-                //###_refer_###
-                //TextBox.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)[TextBox.LineCount-1] + "," ; //отсавляю все что до символа? с указанием номера строки  - по сути сама RP
-                ////TextBox.GetLineText(3); // получаю саму строку по номеру 
-                //for (int i = 0; i < TextBox.LineCount - 1; i++) str.Add(TextBox.GetLineText(i) + ",");
-                //TextBox.Text = null;
-                //for (int i = 0; i < str.Count; i++) TextBox.Text += str[i];
+                ///###_refer_###
+                ///TextBox.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)[TextBox.LineCount-1] + "," ; //отсавляю все что до символа? с указанием номера строки  - по сути сама RP
+                ///TextBox.GetLineText(3); // получаю саму строку по номеру 
+                ///for (int i = 0; i < TextBox.LineCount - 1; i++) str.Add(TextBox.GetLineText(i) + ",");
+                ///TextBox.Text = null;
+                ///for (int i = 0; i < str.Count; i++) TextBox.Text += str[i];
             }
             else
             {
@@ -219,27 +210,19 @@ namespace HM
                     TextBox.Text = TextBox.Text.Replace("\r\n", "')," + "\rUPPER ('") + "')";
                     TextBox.Text = "UPPER ('" + TextBox.Text;
                 }
-
-
             }
 
             //______________работа с запятыми______________
-            if (comma.IsEnabled == true && comma.IsChecked == true)
-            {
-                TextBox.Text = TextBox.Text.Replace("\r\n", ",\n"); // - работает
-            }
-            if (comma.IsEnabled == true && comma.IsChecked == false)
-            {
-                TextBox.Text = TextBox.Text.Replace(",", "\r");
-            }
+            if (comma.IsEnabled == true && comma.IsChecked == true) TextBox.Text = TextBox.Text.Replace("\r\n", ",\n"); // - работает
+            if (comma.IsEnabled == true && comma.IsChecked == false) TextBox.Text = TextBox.Text.Replace(",", "\r");
 
-            Clipboard.SetText(TextBox.Text);
+            if (TextBox.Text != "") Clipboard.SetText(TextBox.Text); //запись в  буфер
             BFcopy.Text = "Результат скопирован в буфер обмена";
             await Task.Delay(1000);
             BFcopy.Text = null;
 
 
-
+            //dataBases.ConnectDB("Шарапово", "");
 
         }
 
@@ -307,21 +290,6 @@ namespace HM
         }
 
         /// <summary>
-        ///Сохранение Хостов/БД
-        /// </summary>
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            ///Шиптор 
-
-            SaveProtected(ShiptorHost, ShiptorDB, SussessHostLabel);
-            //PVZ
-            SaveProtected(PVZHost, PVZDB, SussessHostLabel);
-            ///Post
-            SaveProtected(PostHost, PostDB, SussessHostLabel);
-
-        }
-
-        /// <summary>
         /// функйция проверки полей и записи в реестр
         /// </summary>
         /// <param name="L1">Поле для хостов</param>
@@ -381,17 +349,6 @@ namespace HM
 
         #endregion
 
-
-        /// <summary>
-        /// ?
-        /// </summary>
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-
-            /* dataBases.ConnectDB("sha", @"select * ... ");*/
-
-
-        }
 
 
     }

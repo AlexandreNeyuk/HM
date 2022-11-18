@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="HM" x:Class="HM.MainWindow"
         mc:Ignorable="d"
-        Title="Help Manager v. 0.2.03" Height="465" Width="829" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="NoResize">
+        Title="Help Manager v. 0.2.03" Height="465" Width="829" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="CanMinimize">
 
     <Grid>
         <Grid.Background>
@@ -60,6 +60,7 @@
                             <Label Content="Параметры" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" Canvas.Left="25" Canvas.Top="4"/>
                             <TextBlock x:Name="BFcopy" Height="77" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Width="117" Canvas.Left="10" Canvas.Top="325"/>
                             <Button x:Name="Clear_all_textB" Content="X" Canvas.Left="102" Canvas.Top="114" BorderThickness="0,0,0,0" Width="31" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Clear_all_textB_Click"/>
+                            <CheckBox x:Name="comma_Copy" Content="Вся семья☝" FontFamily="Bahnschrift" IsChecked="True" Canvas.Left="25" Canvas.Top="153" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         </Canvas>
                         <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" HorizontalAlignment="Left" Width="677" Margin="0,0,0,22"/>
 
@@ -108,19 +109,9 @@
 
                         </Grid>
                         <Label Content="Подключенные БД" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
-                        <Grid x:Name="DataBaseData" Height="100" >
-                            <Label Content="Shiptor" FontFamily="72" Padding="10,0,0,0" Margin="43,9,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
-                            <TextBox x:Name="ShiptorHost" HorizontalAlignment="Left" Margin="189,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" AutomationProperties.HelpText="Хост" ToolTip="Хост"/>
-                            <Label Content="Postamats" FontFamily="72" Padding="10,0,0,0" Margin="43,30,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
-                            <TextBox x:Name="PostHost" HorizontalAlignment="Left" Margin="189,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" ToolTip="Хост"/>
-                            <Label Content="PVZ" FontFamily="72" Padding="10,0,0,0" Margin="43,51,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
-                            <TextBox x:Name="PVZHost" HorizontalAlignment="Left" Margin="189,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" ToolTip="Хост"/>
-                            <TextBox x:Name="ShiptorDB" HorizontalAlignment="Left" Margin="329,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
-                            <TextBox x:Name="PostDB" HorizontalAlignment="Left" Margin="329,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
-                            <TextBox x:Name="PVZDB" HorizontalAlignment="Left" Margin="329,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="100" FontFamily="Bahnschrift" ToolTip="БД"/>
-                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="357,75,69,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click_1"/>
-                            <Label x:Name="SussessHostLabel"  FontFamily="72" Padding="10,0,0,0" Margin="135,78,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200" FlowDirection="RightToLeft"/>
-                            <Button Content="?" Height="17" VerticalAlignment="Top" Margin="441,9,36,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click_3" />
+                        <Grid x:Name="Warehouses" Height="67">
+                            <Label  Content="Редактирование" FontFamily="72" Padding="10,0,0,0" Margin="26,22,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="199" />
+                            <Button x:Name="WarhReg" Content="Клик" Height="20" VerticalAlignment="Top" Margin="230,19,178,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="WarhReg_Click" />
 
 
                         </Grid>
@@ -136,17 +127,6 @@
                             <Label x:Name="SussessHotKeysLabel"  FontFamily="72" Padding="10,0,0,0" Margin="135,0,0,10" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="200" FlowDirection="RightToLeft"/>
 
                         </Grid>
-                        <Label Content="Базы данных складов" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
-                        <Grid x:Name="Warehouses" Height="67">
-                            <Label  Content="Редактирование складов" FontFamily="72" Padding="10,0,0,0" Margin="26,22,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="199" />
-                            <Button x:Name="WarhReg" Content="Клик" Height="20" VerticalAlignment="Top" Margin="230,19,178,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="WarhReg_Click" />
-
-
-                        </Grid>
-
-
-
-
                     </StackPanel>
                 </ScrollViewer>
             </Border>

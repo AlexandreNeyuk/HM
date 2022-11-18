@@ -143,5 +143,19 @@ namespace HM
             }
 
         }
+
+        /// <summary>
+        ///  Поиск БД в Листе
+        /// </summary>
+        private void Search_Lbd_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            foreach (var item in List_Hosts.Items)
+                if (item.ToString().Contains(Search_Lbd.Text))
+                {
+                    List_Hosts.SelectedItem = item;
+
+                }
+
+        }
     }
 }

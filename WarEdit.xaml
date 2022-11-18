@@ -8,8 +8,8 @@
         mc:Ignorable="d"
         Title="Редактирование складов" Height="445" Width="635" ResizeMode="NoResize" >
     <Grid>
-        <Label Content="Данные о сервере" Margin="169,0,0,0" VerticalAlignment="Top" Background="#FFE6E6E6" Padding="183,5,5,5"/>
-        <ListBox x:Name="List_Hosts" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,0,430,0" BorderThickness="0,0,0,0" Background="#FFF1F1F1"/>
+        <Label Content="Данные о сервере" VerticalAlignment="Top" Background="#FFE6E6E6" Padding="183,5,5,5" HorizontalAlignment="Right" Width="466"/>
+        <ListBox x:Name="List_Hosts" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,0,430,0" BorderThickness="0,0,0,0" Background="#FFF1F1F1" Height="403" VerticalAlignment="Bottom"/>
         <Label Content="Хост" HorizontalAlignment="Right" Margin="0,76,352,0" VerticalAlignment="Top"/>
         <TextBox x:Name="TextHost" HorizontalAlignment="Right" Margin="0,81,143,0" VerticalAlignment="Top" Width="200" FontFamily="72"/>
         <Label Content="База данных" HorizontalAlignment="Right" Margin="0,107,347,0" VerticalAlignment="Top"/>
@@ -20,6 +20,9 @@
         <Button x:Name="RemoveReg" Margin="0,187,134,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="133" Content="Удалить" FontFamily="72" BorderThickness="0,0,0,0" Height="18" Click="RemoveReg_Click"/>
         <Label HorizontalAlignment="Right" Margin="0,43,289,0" VerticalAlignment="Top" Content="Имя БД"/>
         <TextBox x:Name="Text_NameHost" HorizontalAlignment="Right" Margin="0,48,79,0" VerticalAlignment="Top" Width="200" FontFamily="72"/>
+        <Border BorderBrush="Black" Margin="0,0,430,403" Background="#FFF1F1F1"/>
+        <TextBox x:Name="Search_Lbd" TextWrapping="Wrap" TextChanged="Search_Lbd_TextChanged" Margin="0,3,0,408" Background="{x:Null}" HorizontalAlignment="Left" Width="205"/>
+
 
 
 
