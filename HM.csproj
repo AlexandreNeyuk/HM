@@ -8,7 +8,7 @@
     <UseWindowsForms>True</UseWindowsForms>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <SignAssembly>False</SignAssembly>
-    <ApplicationIcon>Assets\logo.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\48_48.ico</ApplicationIcon>
 
   </PropertyGroup>
 
@@ -31,7 +31,7 @@
   <ItemGroup>
     <Resource Include="Assets\close_EnterM.png" />
     <Resource Include="Assets\close_LeaveM.png" />
-    <Content Include="Assets\logo.ico" />
+    <Content Include="Assets\48_48.ico" />
     <Resource Include="Assets\Postamats.png" />
     <Resource Include="Assets\Settings.png" />
     <Resource Include="Assets\win_max.png" />
