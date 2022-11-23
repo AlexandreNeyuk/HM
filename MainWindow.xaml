@@ -65,7 +65,7 @@
 				                Name="TextBox"
 				                FontFamily="Consolas"
 				                FontSize="14"
-				                SyntaxHighlighting="C#" LineNumbersForeground="#FFFF8206" Background="White" Foreground="Black" WordWrap="True" Margin="0,0,0,47" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="672"/>
+				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="0,0,0,47" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="672"/>
 
 
 
@@ -84,7 +84,7 @@
 				                Name="ListOne"
 				                FontFamily="Consolas"
 				                FontSize="14"
-				                SyntaxHighlighting="C#" LineNumbersForeground="#FFFF8206" Background="White" Foreground="Black" WordWrap="True" Margin="3,26,0,21" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0" HorizontalAlignment="Left" Width="226"/>
+				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="3,26,0,21" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0" HorizontalAlignment="Left" Width="226"/>
 
                         <Label Content="Первый список" HorizontalAlignment="Left" Margin="68,2,0,0" VerticalAlignment="Top" FontFamily="72"/>
 
@@ -92,7 +92,7 @@
 				                Name="ListTwo"
 				                FontFamily="Consolas"
 				                FontSize="14"
-				                SyntaxHighlighting="C#" LineNumbersForeground="#FFFF8206" Background="White" Foreground="Black" WordWrap="True" Margin="348,26,0,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" BorderThickness="0,1,0,0" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="230"/>
+				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="348,26,0,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" BorderThickness="0,1,0,0" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="230"/>
 
                         <Label HorizontalAlignment="Left" Margin="415,2,0,0" VerticalAlignment="Top" FontFamily="72" Content="Второй стписок"/>
                         <TextBlock x:Name="FidCount" Margin="244,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Background="#FFDDDDDD" Height="18" HorizontalAlignment="Left" Width="89"/>
@@ -103,7 +103,7 @@
 				                Name="ListCopyElm"
 				                FontFamily="Consolas"
 				                FontSize="14"
-				                SyntaxHighlighting="C#" LineNumbersForeground="#FFFF8206" Background="White" Foreground="Black" WordWrap="True" Margin="588,26,0,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderThickness="0,1,0,0" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="213"/>
+				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="588,26,0,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderThickness="0,1,0,0" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="213"/>
 
 
                         <Label HorizontalAlignment="Left" Margin="614,2,0,0" VerticalAlignment="Top" FontFamily="72" Width="148" Content="Совпавшие елементы"/>
