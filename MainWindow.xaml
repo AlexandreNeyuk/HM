@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     x:Name="HM" x:Class="HM.MainWindow"
         mc:Ignorable="d"
-        Title="Help Manager v. 0.4.07" Height="465" Width="836" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="CanMinimize">
+        Title="Help Manager v. 0.4.05" Height="465" Width="836" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="CanMinimize">
 
     <Grid>
         <Grid.Background>
