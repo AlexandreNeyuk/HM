@@ -1,6 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using ICSharpCode.AvalonEdit;
+using Microsoft.Win32;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -185,6 +185,8 @@ namespace HM
 
         #region Table Item 1   
 
+
+
         /// <summary>
         /// Кнопка RP/UPPER
         /// </summary>
@@ -192,14 +194,10 @@ namespace HM
         /// <param name="e"></param> 
         async private void ListProcess_Click(object sender, RoutedEventArgs e)
         {
-
             if (ContextRP.IsChecked == true)
             {
                 //по сенарию RP (simple_List)
                 TextBox.Text = TextBox.Text.Replace("RP", "");
-
-
-
 
                 ///###_refer_###
                 ///TextBox.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)[TextBox.LineCount-1] + "," ; //отсавляю все что до символа? с указанием номера строки  - по сути сама RP
@@ -283,12 +281,7 @@ namespace HM
         private void AF_2_Checked(object sender, RoutedEventArgs e) { AF_1.IsChecked = false; }
         #endregion
 
-        #region Tab_Item 2
-
-        public void To_List()
-        {
-
-        }
+        #region Tab_Item 2      
 
         /// <summary>
         ///Очистка полей листов
@@ -298,6 +291,22 @@ namespace HM
             ListOne.Text = null;
             ListTwo.Text = null;
             ListCopyElm.Text = null;
+        }
+
+        #endregion
+
+        #region Tools
+
+        /// <summary>
+        /// Конвертер в лист строк из содержимого TextEditor
+        /// </summary>
+        /// <param name="tx">Поле для конвертации</param>
+        /// <returns></returns>
+        public List<string> To_List(TextEditor tx)
+        {
+            List<string> str = tx.Text.Split('\n').ToList();
+            return str;
+
         }
 
         #endregion

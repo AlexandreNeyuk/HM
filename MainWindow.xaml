@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     x:Name="HM" x:Class="HM.MainWindow"
         mc:Ignorable="d"
-        Title="Help Manager v. 0.3.02" Height="465" Width="836" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="CanMinimize">
+        Title="Help Manager v. 0.3.05" Height="465" Width="836" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="CanMinimize">
 
     <Grid>
         <Grid.Background>
@@ -65,7 +65,7 @@
 				                Name="TextBox"
 				                FontFamily="Consolas"
 				                FontSize="14"
-				                SyntaxHighlighting="C#" LineNumbersForeground="#FFFF8206" Background="White" Foreground="Black" WordWrap="True" Margin="0,0,161,22" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled"/>
+				                SyntaxHighlighting="C#" LineNumbersForeground="#FFFF8206" Background="White" Foreground="Black" WordWrap="True" Margin="0,0,161,47" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled"/>
 
 
 
@@ -79,15 +79,33 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Сравнение списков" Width="120" Height="30" Margin="-8,-2.7,-2,0" >
-                    <Grid>
-                        <TextBox x:Name="ListOne" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="0,26,0,21" HorizontalAlignment="Left" Width="229"/>
+                    <Grid>                        
+                        <avalonEdit:TextEditor
+				                Name="ListOne"
+				                FontFamily="Consolas"
+				                FontSize="14"
+				                SyntaxHighlighting="C#" LineNumbersForeground="#FFFF8206" Background="White" Foreground="Black" WordWrap="True" Margin="3,26,604,21" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0"/>
+
                         <Label Content="Первый список" HorizontalAlignment="Left" Margin="68,2,0,0" VerticalAlignment="Top" FontFamily="72"/>
-                        <TextBox x:Name="ListTwo" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="348,26,0,21" HorizontalAlignment="Left" Width="230"/>
+                        
+                        <avalonEdit:TextEditor
+				                Name="ListTwo"
+				                FontFamily="Consolas"
+				                FontSize="14"
+				                SyntaxHighlighting="C#" LineNumbersForeground="#FFFF8206" Background="White" Foreground="Black" WordWrap="True" Margin="348,26,255,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" BorderThickness="0,1,0,0" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
                         <Label HorizontalAlignment="Left" Margin="415,2,0,0" VerticalAlignment="Top" FontFamily="72" Content="Второй стписок"/>
                         <TextBlock x:Name="FidCount" Margin="244,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Background="#FFDDDDDD" Height="18" HorizontalAlignment="Left" Width="89"/>
                         <Button x:Name="FidCopy" Margin="244,115,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="89" Content="Сравнить"/>
                         <Label Content="Совпадений" Margin="250,53,0,0" VerticalAlignment="Top" FontFamily="72" HorizontalAlignment="Left" Width="78"/>
-                        <TextBox x:Name="ListCopyElm" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="588,26,0,21" HorizontalAlignment="Left" Width="199"/>
+                        
+                        <avalonEdit:TextEditor
+				                Name="ListCopyElm"
+				                FontFamily="Consolas"
+				                FontSize="14"
+				                SyntaxHighlighting="C#" LineNumbersForeground="#FFFF8206" Background="White" Foreground="Black" WordWrap="True" Margin="588,26,32,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderThickness="0,1,0,0" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+
                         <Label HorizontalAlignment="Left" Margin="614,2,0,0" VerticalAlignment="Top" FontFamily="72" Width="148" Content="Совпавшие елементы"/>
                         <Button x:Name="FidCopy_Copy" Margin="273,153,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="35" Content="X" Click="FidCopy_Copy_Click"/>
 
