@@ -1,5 +1,6 @@
 ﻿using ICSharpCode.AvalonEdit;
 using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -199,10 +200,29 @@ namespace HM
         /// <param name="e"></param> 
         async private void ListProcess_Click(object sender, RoutedEventArgs e)
         {
+
+            //TextBox.Text += TextBox.Text.Split("RP");
+
             if (ContextRP.IsChecked == true)
             {
                 //по сенарию RP (simple_List)
-                TextBox.Text = TextBox.Text.Replace("RP", "");
+                // TextBox.Text = TextBox.Text.Replace("RP", "");
+
+
+                //чуть сложнее
+                List<string> stringsRP = To_List(TextBox);
+                List<string> resilt = new List<string>();  //лист с цифрами от RP
+                foreach (var item in stringsRP)
+                {
+                    if (item.Contains("RP"))
+                    {
+                        resilt.Add(string.Join("", item.Where(c => char.IsDigit(c))));
+
+                    }
+
+                }
+                resilt.Distinct();
+                TextBox.Text = string.Join("\r\n", resilt);
 
                 ///###_refer_###
                 ///TextBox.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)[TextBox.LineCount-1] + "," ; //отсавляю все что до символа? с указанием номера строки  - по сути сама RP
@@ -249,6 +269,9 @@ namespace HM
             BFcopy.Text = "Результат скопирован в буфер обмена";
             await Task.Delay(1000);
             BFcopy.Text = null;
+
+            /*       // Преобразовать массив в строку
+                   string str = string.Join("\r\n", array);*/
         }
 
         /// <summary>
@@ -287,6 +310,8 @@ namespace HM
         #endregion
 
         #region Tab_Item 2      
+
+
 
         /// <summary>
         ///Очистка полей листов
