@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Shapes;
 using Label = System.Windows.Controls.Label;
 using MessageBox = System.Windows.Forms.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
@@ -216,13 +217,24 @@ namespace HM
                 {
                     if (item.Contains("RP"))
                     {
-                        resilt.Add(string.Join("", item.Where(c => char.IsDigit(c))));
+                        string[] valuesRP = item.Split("RP"); ///RP - 5656564
+                        if (valuesRP.Length >= 2)//в строке несколько RP
+                        {
+                            foreach (var item1 in valuesRP)
+                                if (string.Join("", item1.Where(c => char.IsDigit(c))) != "")
+                                    resilt.Add(string.Join("", item1.Where(c => char.IsDigit(c))));
+                        }
+                        else
+                            resilt.Add(string.Join("", item.Where(c => char.IsDigit(c))));
 
                     }
 
                 }
                 resilt.Distinct();
                 TextBox.Text = string.Join("\r\n", resilt);
+
+                ///Сплит и проверять на начилие > 2 частей разерза
+
 
                 ///###_refer_###
                 ///TextBox.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)[TextBox.LineCount-1] + "," ; //отсавляю все что до символа? с указанием номера строки  - по сути сама RP
