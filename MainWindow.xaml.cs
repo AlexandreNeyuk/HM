@@ -283,6 +283,25 @@ namespace HM
         private void AF_2_Checked(object sender, RoutedEventArgs e) { AF_1.IsChecked = false; }
         #endregion
 
+        #region Tab_Item 2
+
+        public void To_List()
+        {
+
+        }
+
+        /// <summary>
+        ///Очистка полей листов
+        /// </summary>
+        private void FidCopy_Copy_Click(object sender, RoutedEventArgs e)
+        {
+            ListOne.Text = null;
+            ListTwo.Text = null;
+            ListCopyElm.Text = null;
+        }
+
+        #endregion
+
 
         /// <summary>
         /// Быстрые клавиши
@@ -381,6 +400,7 @@ namespace HM
 
 
         #endregion
+
 
     }
 }

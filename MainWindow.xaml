@@ -4,7 +4,7 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     x:Name="HM" x:Class="HM.MainWindow"
         mc:Ignorable="d"
         Title="Help Manager v. 0.3.02" Height="465" Width="836" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="CanMinimize">
@@ -45,14 +45,14 @@
         <Grid x:Name="TabControGrid">
             <TabControl x:Name="TB" BorderThickness="1,1,1,0" SelectionChanged="TB_SelectionChanged" Padding="-1,-1,2,2">
                 <TabItem Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
-                    <Grid Background="White" Height="NaN">
+                    <Grid Background="White" Height="451">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Canvas x:Name="Left_Controls" Margin="677,0,0,22">
+                        <Canvas x:Name="Left_Controls" Margin="677,0,0,0">
                             <Button x:Name="ListProcess" Content="Обработка" VerticalAlignment="Center" Height="25" HorizontalAlignment="Left" Width="87" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0" ToolTip="Копирую сам!" Canvas.Left="8" Canvas.Top="113"/>
                             <CheckBox x:Name="comma" Content="Запятые" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" IsChecked="True" Canvas.Left="25" Canvas.Top="85"/>
                             <RadioButton x:Name="ContextRP" Content="RP" VerticalAlignment="Center" HorizontalAlignment="Left" Width="96" ToolTip="Обработка текста в рамках RP списка." IsChecked="True" FontFamily="Bahnschrift" Checked="ContextRP_Checked" Canvas.Left="25" Canvas.Top="35"/>
@@ -61,7 +61,15 @@
                             <TextBlock x:Name="BFcopy" Height="77" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Width="136" Canvas.Left="10" Canvas.Top="325"/>
                             <Button x:Name="Clear_all_textB" Content="X" Canvas.Left="102" Canvas.Top="114" BorderThickness="0,0,0,0" Width="31" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Clear_all_textB_Click"/>
                         </Canvas>
-                        <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="0,0,0,22" HorizontalAlignment="Left" Width="677"/>
+                        <avalonEdit:TextEditor
+				                Name="TextBox"
+				                FontFamily="Consolas"
+				                FontSize="14"
+				                SyntaxHighlighting="C#" LineNumbersForeground="#FFFF8206" Background="White" Foreground="Black" WordWrap="True" Margin="0,0,161,22" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled"/>
+
+
+
+
                         <ListBox Margin="698,160,0,0" BorderThickness="0,0,0,0" Height="56" VerticalAlignment="Top" HorizontalAlignment="Left" Width="108">
                             <CheckBox x:Name="AF_1" Content="Вся семья☝" Checked="AF_1_Checked"/>
                             <CheckBox x:Name="AF_2" Content="Родитель" Checked="AF_2_Checked"/>
@@ -81,6 +89,7 @@
                         <Label Content="Совпадений" Margin="250,53,0,0" VerticalAlignment="Top" FontFamily="72" HorizontalAlignment="Left" Width="78"/>
                         <TextBox x:Name="ListCopyElm" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" CharacterCasing="Upper" Margin="588,26,0,21" HorizontalAlignment="Left" Width="199"/>
                         <Label HorizontalAlignment="Left" Margin="614,2,0,0" VerticalAlignment="Top" FontFamily="72" Width="148" Content="Совпавшие елементы"/>
+                        <Button x:Name="FidCopy_Copy" Margin="273,153,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="35" Content="X" Click="FidCopy_Copy_Click"/>
 
 
                     </Grid>
