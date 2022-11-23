@@ -53,10 +53,16 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Canvas x:Name="Left_Controls" Margin="677,0,0,0">
+                            <ListBox x:Name="ListBox" Margin="15
+                                     ,160,0,0" BorderThickness="0,0,0,0" Height="74" VerticalAlignment="Top" HorizontalAlignment="Left" Width="108">
+                                <CheckBox x:Name="AF_1" Content="Вся семья☝" Checked="AF_1_Checked"/>
+                                <CheckBox x:Name="AF_2" Content="Родитель" Checked="AF_2_Checked" IsChecked="False"/>
+                                <CheckBox x:Name="UpperSearch" Content="Найти RP"/>
+                            </ListBox>
                             <Button x:Name="ListProcess" Content="Обработка" VerticalAlignment="Center" Height="25" HorizontalAlignment="Left" Width="87" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0" ToolTip="Копирую сам!" Canvas.Left="8" Canvas.Top="113"/>
                             <CheckBox x:Name="comma" Content="Запятые" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" IsChecked="True" Canvas.Left="25" Canvas.Top="85"/>
                             <RadioButton x:Name="ContextRP" Content="RP" VerticalAlignment="Center" HorizontalAlignment="Left" Width="96" ToolTip="Обработка текста в рамках RP списка." IsChecked="True" FontFamily="Bahnschrift" Checked="ContextRP_Checked" Canvas.Left="25" Canvas.Top="35"/>
-                            <RadioButton x:Name="ConrextUpper" Content="Upper (' _ ')" VerticalAlignment="Center" HorizontalAlignment="Left" Width="99" IsChecked="True" FontFamily="Bahnschrift" ToolTip="Обработка списка с добавлением UPPER -контекста. " Checked="ConrextUpper_Checked" Canvas.Left="25" Canvas.Top="55"/>
+                            <RadioButton x:Name="ConrextUpper" Content="Upper (' _ ')" VerticalAlignment="Center" HorizontalAlignment="Left" Width="99" IsChecked="False" FontFamily="Bahnschrift" ToolTip="Обработка списка с добавлением UPPER -контекста. " Checked="ConrextUpper_Checked" Canvas.Left="25" Canvas.Top="55"/>
                             <Label Content="Параметры" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" Canvas.Left="25" Canvas.Top="4"/>
                             <TextBlock x:Name="BFcopy" Height="77" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Width="136" Canvas.Left="10" Canvas.Top="325"/>
                             <Button x:Name="Clear_all_textB" Content="X" Canvas.Left="102" Canvas.Top="114" BorderThickness="0,0,0,0" Width="31" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Clear_all_textB_Click"/>
@@ -70,10 +76,7 @@
 
 
 
-                        <ListBox Margin="698,160,0,0" BorderThickness="0,0,0,0" Height="56" VerticalAlignment="Top" HorizontalAlignment="Left" Width="108">
-                            <CheckBox x:Name="AF_1" Content="Вся семья☝" Checked="AF_1_Checked"/>
-                            <CheckBox x:Name="AF_2" Content="Родитель" Checked="AF_2_Checked"/>
-                        </ListBox>
+                       
 
 
                     </Grid>

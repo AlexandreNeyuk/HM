@@ -202,13 +202,11 @@ namespace HM
         async private void ListProcess_Click(object sender, RoutedEventArgs e)
         {
 
-            //TextBox.Text += TextBox.Text.Split("RP");
 
             if (ContextRP.IsChecked == true)
             {
                 //по сенарию RP (simple_List)
                 // TextBox.Text = TextBox.Text.Replace("RP", "");
-
 
                 //чуть сложнее
                 List<string> stringsRP = To_List(TextBox);
@@ -230,19 +228,9 @@ namespace HM
                     }
 
                 }
-                resilt.Distinct();
+                resilt = resilt.Distinct().ToList();
                 TextBox.Text = string.Join("\r\n", resilt);
 
-                ///Сплит и проверять на начилие > 2 частей разерза
-
-
-                ///###_refer_###
-                ///TextBox.Text.Split('\n', StringSplitOptions.RemoveEmptyEntries)[TextBox.LineCount-1] + "," ; //отсавляю все что до символа? с указанием номера строки  - по сути сама RP
-                ///TextBox.GetLineText(3); // получаю саму строку по номеру 
-                ///for (int i = 0; i < TextBox.LineCount - 1; i++) str.Add(TextBox.GetLineText(i) + ",");
-                ///TextBox.Text = null;
-                ///for (int i = 0; i < str.Count; i++) TextBox.Text += str[i];
-                ///
             }
             else
             {
@@ -252,38 +240,54 @@ namespace HM
                     TextBox.Text = TextBox.Text.Replace("\r\n", "')," + "\rUPPER ('") + "')";
                     TextBox.Text = "UPPER ('" + TextBox.Text;
                 }
+                //ищу RP в БД из UPPER`s
+                if (UpperSearch.IsChecked == true)
+                {
+                    List<string> Upper_RP = dataBases.ConnectDB("Шиптор", $@"select id, external_id, * from public.package p where UPPER(p.external_id) in ({TextBox.Text})").AsEnumerable().Select(x => x[0].ToString()).ToList();
+                    TextBox.Text = string.Join("\r\n", Upper_RP);
+                    TextBox.Text = TextBox.Text.Replace("\r\n", ",\n");
+
+                }
             }
 
             //______________работа с запятыми______________
             if (comma.IsEnabled == true && comma.IsChecked == true) TextBox.Text = TextBox.Text.Replace("\r\n", ",\n"); // - работает
             if (comma.IsEnabled == true && comma.IsChecked == false) TextBox.Text = TextBox.Text.Replace(",", "\r");
 
-            ///Работа с родителями
+            ///Работа с родителями и всей семьей
             if (AF_1.IsChecked == true && ContextRP.IsChecked == true) //вся семья
             {
-                List<string> ParrentsList = dataBases.ConnectDB("Шиптор", @"select id, parent_id from package p where id  in (" + TextBox.Text + ") or parent_id in (" + TextBox.Text + ")").AsEnumerable().Select(x => x[1].ToString()).ToList();
+                List<string> ParrentsList = dataBases.ConnectDB("Шиптор", $@"select id, parent_id from package p where id  in ({TextBox.Text}) or parent_id in ({TextBox.Text})").AsEnumerable().Select(x => x[1].ToString()).ToList();
+                foreach (var Parrent in ParrentsList)
+                    if (Parrent != "") TextBox.Text += ",\n" + Parrent;
+
+                List<string> AllFamily = dataBases.ConnectDB("Шиптор", $@"select id, parent_id from package p where id  in ({TextBox.Text}) or parent_id in ({TextBox.Text})").AsEnumerable().Select(x => x[0].ToString()).ToList();
+                TextBox.Text = TextBox.Text.Replace(",", "");
+                List<string> text = To_List(TextBox);
+                foreach (var el in AllFamily)
+                    if (el != "") text.Add(el);
+                TextBox.Text = string.Join("\r\n", text.Distinct().ToList());
+                TextBox.Text = TextBox.Text.Replace("\r\n", ",\n");
+
+            }
+            //поиск родителей 
+            if (AF_2.IsChecked == true && ContextRP.IsChecked == true)
+            {
+                List<string> ParrentsList = dataBases.ConnectDB("Шиптор", $@"select id, parent_id from package p where id  in ({TextBox.Text}) or parent_id in ({TextBox.Text})").AsEnumerable().Select(x => x[1].ToString()).ToList();
                 foreach (var Parrent in ParrentsList)
                 {
                     if (Parrent != "") TextBox.Text += ",\n" + Parrent;
 
                 }
-                List<string> AllFaily = dataBases.ConnectDB("Шиптор", @"select id, parent_id from package p where id  in (" + TextBox.Text + ") or parent_id in (" + TextBox.Text + ")").AsEnumerable().Select(x => x[0].ToString()).ToList();
-                TextBox.Text = "";
-                foreach (var el in AllFaily)
-                {
-                    if (TextBox.Text == "") TextBox.Text += "\n" + el;
-                    if (el != "") TextBox.Text += ",\n" + el;
-
-                }
             }
+
+
 
             if (TextBox.Text != "") Clipboard.SetText(TextBox.Text); //запись в  буфер
             BFcopy.Text = "Результат скопирован в буфер обмена";
             await Task.Delay(1000);
             BFcopy.Text = null;
 
-            /*       // Преобразовать массив в строку
-                   string str = string.Join("\r\n", array);*/
         }
 
         /// <summary>
@@ -294,21 +298,7 @@ namespace HM
             TextBox.Text = null;
         }
 
-        /// <summary>
-        /// радио ботон 1 -RP
-        /// </summary>
-        private void ConrextUpper_Checked(object sender, RoutedEventArgs e)
-        {
-            comma.IsEnabled = false;
-        }
 
-        /// <summary>
-        ///Радио батон 2 - UPPER
-        /// </summary>
-        private void ContextRP_Checked(object sender, RoutedEventArgs e)
-        {
-            comma.IsEnabled = true;
-        }
 
         /// <summary>
         /// Переключатель родителей - логика 1
@@ -319,6 +309,32 @@ namespace HM
         /// Переключатель родителей - логика 2
         /// </summary>
         private void AF_2_Checked(object sender, RoutedEventArgs e) { AF_1.IsChecked = false; }
+        /// <summary>
+        /// радио ботон 1 -RP
+        /// </summary>
+        private void ConrextUpper_Checked(object sender, RoutedEventArgs e)
+        {
+            comma.IsEnabled = false;
+            AF_1.IsChecked = false;
+            AF_1.IsEnabled = false;
+            AF_2.IsChecked = false;
+            AF_2.IsEnabled = false;
+            UpperSearch.IsEnabled = true;
+
+        }
+
+        /// <summary>
+        ///Радио батон 2 - UPPER
+        /// </summary>
+        private void ContextRP_Checked(object sender, RoutedEventArgs e)
+        {
+            comma.IsEnabled = true;
+            AF_1.IsEnabled = true;
+            AF_2.IsEnabled = true;
+            UpperSearch.IsChecked = false;
+            UpperSearch.IsEnabled = false;
+
+        }
         #endregion
 
         #region Tab_Item 2      
