@@ -1,6 +1,7 @@
 ﻿using ICSharpCode.AvalonEdit;
 using Microsoft.Win32;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -106,6 +107,10 @@ namespace HM
             double CurrentVarginLeft = TB.Margin.Left;
 
             TextBox.IsEnabled = false;
+            ListOne.IsEnabled = false;
+            ListTwo.IsEnabled = false;
+            ListCopyElm.IsEnabled = false;
+
 
 
             ///анимация боковой панели  
@@ -143,7 +148,9 @@ namespace HM
             }
 
             TextBox.IsEnabled = true;
-
+            ListOne.IsEnabled = true;
+            ListTwo.IsEnabled = true;
+            ListCopyElm.IsEnabled = true;
 
         }
 
@@ -184,8 +191,6 @@ namespace HM
 
 
         #region Table Item 1   
-
-
 
         /// <summary>
         /// Кнопка RP/UPPER
