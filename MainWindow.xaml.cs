@@ -229,9 +229,7 @@ namespace HM
                 {
                     if (item.Contains("RP"))
                     {
-                        string h = item.Substring(item.IndexOf("RP"), 12);
-
-
+                        // string h = item.Substring(item.IndexOf("RP"), 12);
                         string[] valuesRP = item.Split("RP"); ///RP - 5656564
                         if (valuesRP.Length >= 2)//в строке несколько RP
                         {
