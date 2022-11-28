@@ -51,8 +51,17 @@ namespace HM
             KeyTextBoxies = new List<TextBox>() { SP_HotKey, Settings_HotKey }; ///все поля для которых нужно свойство HotKeys, через  ","
             foreach (var item in KeyTextBoxies)
             {
-                item.KeyDown += (s, a) => { item.IsReadOnly = true; item.Text = a.Key.ToString(); };
-
+                item.KeyDown += (s, a) =>
+                {
+                    if (a.Key == Key.Escape)
+                        item.Text = "";
+                    else
+                    {
+                        item.IsReadOnly = true; 
+                        item.Text = a.Key.ToString();
+                    }
+                };
+                
             }
 
             #endregion
@@ -377,7 +386,7 @@ namespace HM
         private void HM_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             ///Отключение ПАНЕЛИ НАСТРОЕК бысчрой клавишей 
-            if (e.Key == Key.Escape && SettingsGrid.IsEnabled == true) { SettingsGrid.IsEnabled = false; SettingsGrid.Visibility = Visibility.Hidden; }
+            //if (e.Key == Key.Escape && SettingsGrid.IsEnabled == true) { SettingsGrid.IsEnabled = false; SettingsGrid.Visibility = Visibility.Hidden; }
             if (e.Key.ToString() == SP_HotKey.Text) SwitchPanel(); // открытие боковой панели по кнопке 
             if (e.Key.ToString() == Settings_HotKey.Text) OpenSettings();
 
@@ -466,8 +475,16 @@ namespace HM
         }
 
 
+        /// <summary>
+        /// эта дичь закрывает окно настроек при нажатии на мышъ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Close_settings_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            SettingsGrid.IsEnabled = false; SettingsGrid.Visibility = Visibility.Hidden;
+        }
         #endregion
-
 
     }
 }

@@ -76,7 +76,7 @@
 
 
 
-                       
+
 
 
                     </Grid>
@@ -119,7 +119,7 @@
 
         </Grid>
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" Visibility="Hidden" IsEnabled="False" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" >
 
             <Border x:Name="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="350" Background="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border.Effect>
@@ -128,7 +128,7 @@
                 <ScrollViewer x:Name="panel" VerticalScrollBarVisibility="Hidden">
                     <StackPanel ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" CanVerticallyScroll="True" ScrollViewer.CanContentScroll="True">
                         <Grid>
-                            <Label FontFamily="72" BorderThickness="1,1,1,1" FontWeight="Bold" BorderBrush="Black" Margin="10,7,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="38" Padding="6,5,5,5">ESC</Label>
+                            <Label x:Name="Close_settings" FontFamily="72" BorderThickness="1,1,1,1" FontWeight="Bold" BorderBrush="Black" Margin="10,7,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="38" Padding="6,5,5,5" MouseDown="Close_settings_MouseDown">ESC</Label>
                             <Label Content="Настройки подключеий"  FontFamily="72" FontSize="16" FontWeight="Bold" Margin="0,-1,0,0" Height="36" VerticalAlignment="Top" HorizontalAlignment="Center" Width="212" Padding="17,8,5,0" ToolTip="Все настройки в ветке реестра: HKEY_CURRENT_USER\Software\HM\Settings"/>
 
                         </Grid>
