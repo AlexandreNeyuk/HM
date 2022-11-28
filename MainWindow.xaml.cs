@@ -75,7 +75,7 @@ namespace HM
         DataBaseAsset dataBases = new DataBaseAsset();
         bool SetPanel = false; //false - закрытая панель, true - открытая панлеь
 
-#if Button_close
+        #region Своя кнопка "Закрыть"
         ///// <summary>
         //////кнопка закрытия 
         ///// </summary>
@@ -104,7 +104,9 @@ namespace HM
 
         //    Close_Butt.Background = null;
         //}
-#endif
+        #endregion Button_close
+
+
         #region Боковая панель
 
         /// <summary>
