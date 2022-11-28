@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -57,11 +58,11 @@ namespace HM
                         item.Text = "";
                     else
                     {
-                        item.IsReadOnly = true; 
+                        item.IsReadOnly = true;
                         item.Text = a.Key.ToString();
                     }
                 };
-                
+
             }
 
             #endregion
@@ -74,6 +75,8 @@ namespace HM
         //Animations Animations = new Animations();
         DataBaseAsset dataBases = new DataBaseAsset();
         bool SetPanel = false; //false - закрытая панель, true - открытая панлеь
+
+
 
         #region Своя кнопка "Закрыть"
         ///// <summary>
@@ -226,6 +229,9 @@ namespace HM
                 {
                     if (item.Contains("RP"))
                     {
+                        string h = item.Substring(item.IndexOf("RP"), 12);
+
+
                         string[] valuesRP = item.Split("RP"); ///RP - 5656564
                         if (valuesRP.Length >= 2)//в строке несколько RP
                         {
@@ -348,9 +354,7 @@ namespace HM
         }
         #endregion
 
-        #region Tab_Item 2      
-
-
+        #region Tab_Item 2    
 
         /// <summary>
         ///Очистка полей листов
@@ -388,7 +392,6 @@ namespace HM
         private void HM_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             ///Отключение ПАНЕЛИ НАСТРОЕК бысчрой клавишей 
-            //if (e.Key == Key.Escape && SettingsGrid.IsEnabled == true) { SettingsGrid.IsEnabled = false; SettingsGrid.Visibility = Visibility.Hidden; }
             if (e.Key.ToString() == SP_HotKey.Text) SwitchPanel(); // открытие боковой панели по кнопке 
             if (e.Key.ToString() == Settings_HotKey.Text) OpenSettings();
 
@@ -476,12 +479,9 @@ namespace HM
 
         }
 
-
         /// <summary>
         /// эта дичь закрывает окно настроек при нажатии на мышъ
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void Close_settings_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SettingsGrid.IsEnabled = false; SettingsGrid.Visibility = Visibility.Hidden;
