@@ -15,7 +15,9 @@
   <ItemGroup>
     <None Remove="Assets\close_EnterM.png" />
     <None Remove="Assets\close_LeaveM.png" />
+    <None Remove="Assets\Home.png" />
     <None Remove="Assets\logo.ico" />
+    <None Remove="Assets\PartyLogo.png" />
     <None Remove="Assets\Postamats.png" />
     <None Remove="Assets\Settings.png" />
     <None Remove="Assets\win_max.png" />
@@ -33,6 +35,8 @@
     <Resource Include="Assets\close_EnterM.png" />
     <Resource Include="Assets\close_LeaveM.png" />
     <Content Include="Assets\48_48.ico" />
+    <Resource Include="Assets\Home.png" />
+    <Resource Include="Assets\PartyLogo.png" />
     <Resource Include="Assets\Postamats.png" />
     <Resource Include="Assets\Settings.png" />
     <Resource Include="Assets\win_max.png" />

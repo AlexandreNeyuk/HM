@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace HM
 {
@@ -38,7 +40,7 @@ namespace HM
         public WarEdit()
         {
             InitializeComponent();
-            this.Loaded += (e, a) => { LoadHosts(); };
+            this.Loaded += (e, a) => { LoadHosts(List_Hosts); };
             List_Hosts.SelectionChanged += (a, e) => { LoadTextB(); };
 
         }
@@ -47,7 +49,8 @@ namespace HM
         /// <summary>
         ///Загрузка имен бд в лист из реестра
         /// </summary>
-        public void LoadHosts()
+        /// <param name="ListHost">Имя ListBox для которого требуется выгрузить список бд</param>
+        public void LoadHosts(ListBox ListHost)
         {
             List<string> Hosts_Name = new List<string>();
             using RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Hosts");
@@ -61,7 +64,7 @@ namespace HM
 
             //Hosts.Add(key.ToString());
 
-            List_Hosts.ItemsSource = Hosts_Name;
+            ListHost.ItemsSource = Hosts_Name;
         }
         /// <summary>
         /// Сейв в реестр
@@ -82,7 +85,7 @@ namespace HM
 
             }
             ClearTextB();
-            LoadHosts();
+            LoadHosts(List_Hosts);
         }
         /// <summary>
         ///Удалаение Хоста
@@ -105,7 +108,7 @@ namespace HM
 
                 }
             }
-            LoadHosts();
+            LoadHosts(List_Hosts);
         }
         /// <summary>
         /// Очистка полей

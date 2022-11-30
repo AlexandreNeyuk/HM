@@ -1,15 +1,14 @@
 ﻿using ICSharpCode.AvalonEdit;
 using Microsoft.Win32;
-using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Shapes;
+using System.Windows.Media;
 using Label = System.Windows.Controls.Label;
 using MessageBox = System.Windows.Forms.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
@@ -17,19 +16,31 @@ using Window = System.Windows.Window;
 
 namespace HM
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        #region Global Переменные
+
+        List<TextBox> KeyTextBoxies; // ///все поля для которых нужно свойство введения HotKeys, через  ",
+        List<Canvas> MenuCanvas; // все элементы меню 
+        //Animations Animations = new Animations();
+        DataBaseAsset dataBases = new DataBaseAsset();
+        WarEdit wr = new WarEdit();
+
+        bool SetPanel = false; //false - закрытая панель, true - открытая панлеь
+        #endregion
+
+
         public MainWindow()
         {
             InitializeComponent();
+
             #region Начальные накстройки
             TB.Margin = new Thickness(0, 0, 0, 0); //выравниванеи TableControl 
             ///отключение панели настроек при иницииализации --
             SettingsGrid.IsEnabled = false;
             SettingsGrid.Visibility = Visibility.Hidden;
+            PartyGrid.IsEnabled = false;
+            PartyGrid.Visibility = Visibility.Hidden;
             #endregion
 
             #region Regisrty Staff           
@@ -67,17 +78,27 @@ namespace HM
 
             #endregion
 
+            #region Добавление обработки всех элементов меню (навердений мыши )
+            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home };
+            foreach (var item in MenuCanvas)
+            {
+                item.MouseEnter += (a, e) => { item.Background = new SolidColorBrush(Colors.Gray); };
+                item.MouseLeave += (a, e) => { item.Background = new SolidColorBrush(Colors.Transparent); };
+
+            }
+
+            ///обработка кликов на элементы меню
+            PartyCanvas.MouseDown += (a, e) => { PartyGrid.IsEnabled = true; PartyGrid.Visibility = Visibility.Visible; TB.IsEnabled = false; TB.Visibility = Visibility.Hidden; wr.LoadHosts(ListWarhouses); wr.Close(); };
+            Home.MouseDown += (a, e) => { PartyGrid.IsEnabled = false; PartyGrid.Visibility = Visibility.Hidden; TB.IsEnabled = true; TB.Visibility = Visibility.Visible; };
+            PostomatsCanvas.MouseDown += (a, e) => { MessageBox.Show("Здесь кода-нибудь чтото будет !))"); };
+            SettingCanvas.MouseDown += (a, e) => { OpenSettings(); };
+
+
+            #endregion
+
 
 
         }
-        //Обьявление классов / глобальных переменных
-        List<TextBox> KeyTextBoxies; // ///все поля для которых нужно свойство введения HotKeys, через  ","
-        //Animations Animations = new Animations();
-        DataBaseAsset dataBases = new DataBaseAsset();
-        bool SetPanel = false; //false - закрытая панель, true - открытая панлеь
-
-
-
         #region Своя кнопка "Закрыть"
         ///// <summary>
         //////кнопка закрытия 
@@ -95,7 +116,7 @@ namespace HM
         ///// <param name="e"></param>
         //private void Close_Butt_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         //{
-        //    Close_Butt.Background = new SolidColorBrush(Colors.Red);
+        //    Close_Butt.Background =
         //}
         ///// <summary>
         ///// смена цвета на = не цвет
@@ -120,7 +141,7 @@ namespace HM
         {
             const int marginLeftMin = 0;
             const int marginLeftMax = 150;
-            double CurrentVarginLeft = TB.Margin.Left;
+            double CurrentVarginLeft = TabControGrid.Margin.Left;
 
             TextBox.IsEnabled = false;
             ListOne.IsEnabled = false;
@@ -132,14 +153,14 @@ namespace HM
             ///анимация боковой панели  
             if (SetPanel == true)
             {
-                while (TB.Margin.Left - TB.Margin.Left / 6 > marginLeftMin)
+                while (TabControGrid.Margin.Left - TabControGrid.Margin.Left / 6 > marginLeftMin)
                 {
-                    CurrentVarginLeft = TB.Margin.Left;
+                    CurrentVarginLeft = TabControGrid.Margin.Left;
                     await Task.Delay(1);
-                    TB.Margin = new Thickness(CurrentVarginLeft - CurrentVarginLeft / 6, 0, 0, 0);
-                    if (TB.Margin.Left < 2)
+                    TabControGrid.Margin = new Thickness(CurrentVarginLeft - CurrentVarginLeft / 6, 0, 0, 0);
+                    if (TabControGrid.Margin.Left < 2)
                     {
-                        TB.Margin = new Thickness(0, 0, 0, 0);
+                        TabControGrid.Margin = new Thickness(0, 0, 0, 0);
                         break;
                     }
                 }
@@ -151,12 +172,12 @@ namespace HM
 
                 while (CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 6 < marginLeftMax)
                 {
-                    CurrentVarginLeft = TB.Margin.Left;
+                    CurrentVarginLeft = TabControGrid.Margin.Left;
                     await Task.Delay(1);
-                    TB.Margin = new Thickness(CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 6, 0, 0, 0);
-                    if (TB.Margin.Left > 147)
+                    TabControGrid.Margin = new Thickness(CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 6, 0, 0, 0);
+                    if (TabControGrid.Margin.Left > 147)
                     {
-                        TB.Margin = new Thickness(150, 0, 0, 0);
+                        TabControGrid.Margin = new Thickness(150, 0, 0, 0);
                         break;
                     }
                 }
@@ -172,22 +193,11 @@ namespace HM
 
         #endregion
 
-        #region Элементы бокоовой панели 
-
-        /// <summary>
-        /// Постоматы
-        /// </summary>
-        private void PostomatsCanvas_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-
-            MessageBox.Show("Здесь кода-нибудь чтото будет !))");
-
-        }
+        #region Сложные  функции элементов бокоовой панели 
 
         /// <summary>
         /// Открыть панель настроек 
         /// </summary>
-        private void SettingCanvas_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => OpenSettings();
         public void OpenSettings()
         {
             SettingsGrid.Visibility = Visibility.Visible;
@@ -199,20 +209,9 @@ namespace HM
 
         #endregion
 
-        private void TB_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //TB.SelectedIndex = 1; MessageBox.Show(TB.SelectedIndex.ToString());      
-
-        }
-
 
         #region Table Item 1   
 
-        /// <summary>
-        /// Кнопка RP/UPPER
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param> 
         async private void ListProcess_Click(object sender, RoutedEventArgs e)
         {
 
@@ -313,8 +312,6 @@ namespace HM
             TextBox.Text = null;
         }
 
-
-
         /// <summary>
         /// Переключатель родителей - логика 1
         /// </summary>
@@ -363,6 +360,47 @@ namespace HM
             ListTwo.Text = null;
             ListCopyElm.Text = null;
         }
+
+        #endregion
+
+        #region Party
+
+        /// <summary>
+        /// Кнопка обработки Партий
+        /// </summary>
+        private void PartyEx_Click(object sender, RoutedEventArgs e)
+        {
+            //проверить существование партии в шипторе  подтянуть склад
+
+
+            //добавить в шипторе
+            //узнать id посылок на склдае
+            //узнать id партиии на складе
+            //составить insert
+
+
+
+        }
+
+        /// <summary>
+        /// Посик в листе Склада
+        /// </summary>
+        private void Search_Warh_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            foreach (var item in ListWarhouses.Items)
+                if (item.ToString().ToUpper().Contains(Search_Warh.Text.ToUpper()))
+                {
+                    ListWarhouses.SelectedItem = item;
+
+                }
+            Name_War.Content = ListWarhouses.SelectedItem;
+        }
+
+        /// <summary>
+        /// Привязка выбора элемента к контрольному значению 
+        /// </summary>
+        private void ListWarhouses_SelectionChanged(object sender, SelectionChangedEventArgs e) { Name_War.Content = ListWarhouses.SelectedItem; }
+
 
         #endregion
 
@@ -472,7 +510,7 @@ namespace HM
         /// </summary>
         private void WarhReg_Click(object sender, RoutedEventArgs e)
         {
-            WarEdit wr = new WarEdit();
+            wr = new WarEdit();
             wr.Show();
 
         }
@@ -484,6 +522,11 @@ namespace HM
         {
             SettingsGrid.IsEnabled = false; SettingsGrid.Visibility = Visibility.Hidden;
         }
+
+
+
+
+
         #endregion
 
     }

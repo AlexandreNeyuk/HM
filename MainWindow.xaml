@@ -20,30 +20,70 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Grid Margin="0,0,650,0">
+        <Grid x:Name="SwitchPanelCanvas" Margin="0,0,674,0">
 
             <Label HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="72" Foreground="White" Content="Меню" FontSize="16"/>
-            <Canvas x:Name="PostomatsCanvas"  Width="146" HorizontalAlignment="Left" Margin="0,120,0,0" MouseDown="PostomatsCanvas_MouseDown" Height="32" VerticalAlignment="Top">
+            <Canvas x:Name="PostomatsCanvas"  Width="146" HorizontalAlignment="Left" Margin="0,120,0,0" Height="32" VerticalAlignment="Top">
                 <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Canvas.Left="10" Stretch="Fill" Source="/Assets/Postamats.png" Canvas.Top="6">
                     <Image.OpacityMask>
                         <ImageBrush ImageSource="/Assets/Postamats.png"/>
                     </Image.OpacityMask>
                 </Image>
-                <Label HorizontalAlignment="Left" VerticalAlignment="Center" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="22,10,5,5" Content="Постоматы" />
+                <Label HorizontalAlignment="Left" VerticalAlignment="Center" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="20,10,5,5" Content="Постоматы" />
             </Canvas>
-            <Canvas x:Name="SettingCanvas" MouseDown="SettingCanvas_MouseDown" Width="146" HorizontalAlignment="Left" Canvas.Top="417" Margin="0,0,0,35" Height="32" VerticalAlignment="Bottom">
+            <Canvas x:Name="PartyCanvas" Width="146" HorizontalAlignment="Left" Margin="0,153,0,0" Height="32" VerticalAlignment="Top">
+                <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Stretch="Fill" Canvas.Left="10" Canvas.Top="6" Source="/Assets/PartyLogo.png">
+                    <Image.OpacityMask>
+                        <ImageBrush ImageSource="/Assets/PartyLogo.png"/>
+                    </Image.OpacityMask>
+                </Image>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Top" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="20,10,5,5" Content="Партии" />
+            </Canvas>
+            <Canvas x:Name="SettingCanvas" Width="146" HorizontalAlignment="Left" Canvas.Top="417" Margin="0,0,0,35" Height="32" VerticalAlignment="Bottom">
                 <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Source="/Assets/Settings.png" Stretch="Fill" Canvas.Left="10" Canvas.Top="6">
                     <Image.OpacityMask>
                         <ImageBrush ImageSource="/Assets/Settings.png"/>
                     </Image.OpacityMask>
                 </Image>
-                <Label Content="Настройки" HorizontalAlignment="Center" VerticalAlignment="Top" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="25,10,5,5" />
+                <Label Content="Настройки" HorizontalAlignment="Center" VerticalAlignment="Top" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="23,10,5,5" />
+            </Canvas>
+            <Canvas x:Name="Home"  Width="146" HorizontalAlignment="Left" Margin="0,83,0,0" Height="32" VerticalAlignment="Top">
+                <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Canvas.Left="10" Stretch="Fill" Canvas.Top="6" Source="/Assets/Home.png">
+                    <Image.OpacityMask>
+                        <ImageBrush ImageSource="/Assets/Home.png"/>
+                    </Image.OpacityMask>
+                </Image>
+                <Label HorizontalAlignment="Left" VerticalAlignment="Center" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="20,10,5,5" Content="Home" />
             </Canvas>
         </Grid>
 
         <!--TabControl -->
         <Grid x:Name="TabControGrid">
-            <TabControl x:Name="TB" BorderThickness="1,1,1,0" SelectionChanged="TB_SelectionChanged" Padding="-1,-1,2,2">
+            <Grid x:Name="PartyGrid" Background="White">
+                <Label VerticalAlignment="Top" Content="Редактирование посылок в партии" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
+                <ComboBox x:Name="SelectAction" HorizontalAlignment="Left" Margin="670,125,0,0" VerticalAlignment="Top" Width="156">
+                    <ComboBoxItem Content="Добавить в партию"/>
+                    <ComboBoxItem Content="Удалить из партии"/>
+                </ComboBox>
+                <ListBox x:Name="ListWarhouses" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,55,0,24" HorizontalAlignment="Left" Width="246" SelectionMode="Extended" SelectionChanged="ListWarhouses_SelectionChanged" BorderThickness="0,0,0,0"/>
+                <Label HorizontalAlignment="Left" Margin="670,99,0,0" VerticalAlignment="Top" Content="Действие"/>
+                <Label HorizontalAlignment="Left" Margin="361,69,0,0" VerticalAlignment="Top" Content="Посылка (или -ки, номера без RP )"/>
+                <TextBox x:Name="Search_Warh" HorizontalAlignment="Left" Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="246" Height="22" TextChanged="Search_Warh_TextChanged"/>
+                <TextBox x:Name="Party" HorizontalAlignment="Left" Margin="670,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="156" Height="18"/>
+                <Label HorizontalAlignment="Left" Margin="670,44,0,0" VerticalAlignment="Top" Content="Партия" Width="61"/>
+                <Label HorizontalAlignment="Left" Margin="275,39,0,0" VerticalAlignment="Top" Content="Склад"/>
+                <Label x:Name="Name_War" HorizontalAlignment="Left" Margin="327,39,0,0" VerticalAlignment="Top" Width="268" Height="25" FontWeight="Bold"/>
+                <Button x:Name="PartyEx" HorizontalAlignment="Left" Margin="670,169,0,0" VerticalAlignment="Top" BorderThickness="0,0,0,0" FontFamily="72" Content="Сделать 👍" Height="22" Width="156" Click="PartyEx_Click"/>
+                <avalonEdit:TextEditor
+				                x:Name="RP_Party"
+				                FontFamily="Consolas"
+				                FontSize="14"
+				                SyntaxHighlighting="C#" LineNumbersForeground="#FF107142" Background="White" Foreground="Black" WordWrap="True" Margin="251,101,0,24" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="404" BorderBrush="#FF21CA78" BorderThickness="0,1,0,0"/>
+
+
+            </Grid>
+
+            <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2" d:IsHidden="True">
                 <TabItem Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
                     <Grid Background="White" Height="451">
                         <Grid.RowDefinitions>
@@ -53,8 +93,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Canvas x:Name="Left_Controls" Margin="677,0,0,0">
-                            <ListBox x:Name="ListBox" Margin="15
-                                     ,160,0,0" BorderThickness="0,0,0,0" Height="74" VerticalAlignment="Top" HorizontalAlignment="Left" Width="108">
+                            <ListBox x:Name="ListBox" Margin="15                                      ,160,0,0" BorderThickness="0,0,0,0" Height="74" VerticalAlignment="Top" HorizontalAlignment="Left" Width="108">
                                 <CheckBox x:Name="AF_1" Content="Вся семья☝" Checked="AF_1_Checked"/>
                                 <CheckBox x:Name="AF_2" Content="Родитель" Checked="AF_2_Checked" IsChecked="False"/>
                                 <CheckBox x:Name="UpperSearch" Content="Найти RP"/>
@@ -68,23 +107,17 @@
                             <Button x:Name="Clear_all_textB" Content="X" Canvas.Left="102" Canvas.Top="114" BorderThickness="0,0,0,0" Width="31" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Clear_all_textB_Click"/>
                         </Canvas>
                         <avalonEdit:TextEditor
-				                Name="TextBox"
+				                x:Name="TextBox"
 				                FontFamily="Consolas"
 				                FontSize="14"
 				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="0,0,0,47" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="672"/>
-
-
-
-
-
-
 
                     </Grid>
                 </TabItem>
                 <TabItem Header="Сравнение списков" Width="120" Height="30" Margin="-8,-2.7,-2,0" >
                     <Grid>
                         <avalonEdit:TextEditor
-				                Name="ListOne"
+				                x:Name="ListOne"
 				                FontFamily="Consolas"
 				                FontSize="14"
 				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="3,26,0,21" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0" HorizontalAlignment="Left" Width="226"/>
@@ -92,7 +125,7 @@
                         <Label Content="Первый список" HorizontalAlignment="Left" Margin="68,2,0,0" VerticalAlignment="Top" FontFamily="72"/>
 
                         <avalonEdit:TextEditor
-				                Name="ListTwo"
+				                x:Name="ListTwo"
 				                FontFamily="Consolas"
 				                FontSize="14"
 				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="348,26,0,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" BorderThickness="0,1,0,0" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="230"/>
@@ -103,7 +136,7 @@
                         <Label Content="Совпадений" Margin="250,53,0,0" VerticalAlignment="Top" FontFamily="72" HorizontalAlignment="Left" Width="78"/>
 
                         <avalonEdit:TextEditor
-				                Name="ListCopyElm"
+				                x:Name="ListCopyElm"
 				                FontFamily="Consolas"
 				                FontSize="14"
 				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="588,26,0,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderThickness="0,1,0,0" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="213"/>
@@ -119,7 +152,7 @@
 
         </Grid>
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" Visibility="Hidden" IsEnabled="False" >
 
             <Border x:Name="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="350" Background="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border.Effect>
@@ -180,7 +213,7 @@
         <DockPanel LastChildFill="False" Height="38" VerticalAlignment="Bottom" >
             <StatusBar DockPanel.Dock="Bottom" Background="#FF5B4EBB" >
 
-                <StatusBarItem VerticalAlignment="Bottom" Background="#FFFF8206">
+                <StatusBarItem VerticalAlignment="Bottom" Background="#FF21CA78">
                     <Image x:Name="Left_Switch_panel" Stretch="Fill" Height="18" Width="23"  MouseLeftButtonDown="Image_MouseLeftButtonDown" OpacityMask="Black" Source="/Dock_Left_Black.png"/>
                 </StatusBarItem>
             </StatusBar>
