@@ -132,7 +132,7 @@
 
                         <Label HorizontalAlignment="Left" Margin="415,2,0,0" VerticalAlignment="Top" FontFamily="72" Content="Второй стписок"/>
                         <TextBlock x:Name="FidCount" Margin="244,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Background="#FFDDDDDD" Height="18" HorizontalAlignment="Left" Width="89"/>
-                        <Button x:Name="FidCopy" Margin="244,115,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="89" Content="Сравнить"/>
+                        <Button x:Name="FidCopy" Margin="244,115,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="89" Content="Сравнить" Click="FidCopy_Click"/>
                         <Label Content="Совпадений" Margin="250,53,0,0" VerticalAlignment="Top" FontFamily="72" HorizontalAlignment="Left" Width="78"/>
 
                         <avalonEdit:TextEditor

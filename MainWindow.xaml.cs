@@ -1,5 +1,6 @@
 ﻿using ICSharpCode.AvalonEdit;
 using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -24,7 +25,6 @@ namespace HM
         List<Canvas> MenuCanvas; // все элементы меню 
         //Animations Animations = new Animations();
         DataBaseAsset dataBases = new DataBaseAsset();
-        WarEdit wr = new WarEdit();
 
         bool SetPanel = false; //false - закрытая панель, true - открытая панлеь
         #endregion
@@ -88,7 +88,7 @@ namespace HM
             }
 
             ///обработка кликов на элементы меню
-            PartyCanvas.MouseDown += (a, e) => { PartyGrid.IsEnabled = true; PartyGrid.Visibility = Visibility.Visible; TB.IsEnabled = false; TB.Visibility = Visibility.Hidden; wr.LoadHosts(ListWarhouses); wr.Close(); };
+            PartyCanvas.MouseDown += (a, e) => { PartyGrid.IsEnabled = true; PartyGrid.Visibility = Visibility.Visible; TB.IsEnabled = false; TB.Visibility = Visibility.Hidden; WarEdit wr = new WarEdit(); wr.LoadHosts(ListWarhouses); wr.Close(); };
             Home.MouseDown += (a, e) => { PartyGrid.IsEnabled = false; PartyGrid.Visibility = Visibility.Hidden; TB.IsEnabled = true; TB.Visibility = Visibility.Visible; };
             PostomatsCanvas.MouseDown += (a, e) => { MessageBox.Show("Здесь кода-нибудь чтото будет !))"); };
             SettingCanvas.MouseDown += (a, e) => { OpenSettings(); };
@@ -350,6 +350,20 @@ namespace HM
         #endregion
 
         #region Tab_Item 2    
+        /// <summary>
+        /// кнопка листов - выитание листов
+        /// </summary>
+        private void FidCopy_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> list1 = To_List(ListOne);
+            List<string> list2 = To_List(ListTwo);
+
+            List<string> result = list1.Except(list2).ToList();
+            ListOne.Text = string.Join(Environment.NewLine, result);
+
+
+
+        }
 
         /// <summary>
         ///Очистка полей листов
@@ -510,7 +524,7 @@ namespace HM
         /// </summary>
         private void WarhReg_Click(object sender, RoutedEventArgs e)
         {
-            wr = new WarEdit();
+            WarEdit wr = new WarEdit();
             wr.Show();
 
         }
@@ -528,6 +542,7 @@ namespace HM
 
 
         #endregion
+
 
     }
 }
