@@ -10,8 +10,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using Clipboard = System.Windows.Clipboard;
 using Label = System.Windows.Controls.Label;
 using MessageBox = System.Windows.Forms.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
@@ -394,6 +396,30 @@ namespace HM
         /// </summary>
         private void PartyEx_Click(object sender, RoutedEventArgs e)
         {
+            // todo  [Партии]
+            /*   •Добавление:
+        1 - проверка существования в шиптор
+                    select* from package_return pr where id in (53114);
+
+        2 - Подтверждение склада(по stock_id)
+                    SELECT id, "name"  FROM public.warehouse where id = 23;
+
+                    3 - Проверка существования в запсторе:
+                    (select id from package_return pr where return_fid = 54098) => забрать ID-party;
+
+                    4- Спрашивать подтверждение/предупреждать если партия в статусе отпарвлена  		
+
+                    5 - Получение списка посылок:
+                    (select id from package p where package_fid in(495471870) 		=> список в StrinG c добалением + ",(,ID-party)", с 1, (кроме 0);
+
+                    4 - добавление посылки в партию:
+                     INSERT into public.package_return_item(package_id, package_return_id)
+                        values(item[0], ID-party);
+        */
+            if (SelectAction.SelectedIndex == 0) //Добавление 
+            {
+
+            }
             /*            [Партии]
             •Удаление:
                         1 - проверка существования в шиптор;
@@ -406,27 +432,16 @@ namespace HM
                         select * from package_return pr where return_fid in(53114);
 
                         4 - Удаление из партии
-                        delete from package_return_item where package_id in (select id from package p where package_fid in(Список RP));		
+                        delete from package_return_item where package_id in (select id from package p where package_fid in(Список RP));		*/
 
-            •Добавление: 
-                        1 - проверка существования в шиптор
-                        select* from package_return pr where id in (53114);
+            if (SelectAction.SelectedIndex == 1) //Удаление
+            {
 
-                        2 - Подтверждение склада(по stock_id)
-                        SELECT id, "name"  FROM public.warehouse where id = 23;
+            }
 
-                        3 - Проверка существования в запсторе:
-                        (select id from package_return pr where return_fid = 54098) => забрать ID-party;
 
-                        4- Спрашивать подтверждение/предупреждать если партия в статусе отпарвлена  		
 
-                        5 - Получение списка посылок:
-                        (select id from package p where package_fid in(495471870) 		=> список в StrinG c добалением + ",(,ID-party)", с 1, (кроме 0);
 
-                        4 - добавление посылки в партию:
-                         INSERT into public.package_return_item(package_id, package_return_id)
-                            values(item[0], ID-party);
-            */
         }
 
         /// <summary>

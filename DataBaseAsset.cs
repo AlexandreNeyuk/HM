@@ -16,6 +16,10 @@ namespace HM
         ///
 
         bool ConnectBool = false;
+
+        /// <summary>
+        /// проверка подключения к БД (запускается при запуске программы)
+        /// </summary>
         async public void ProtectedConnection()
         {
             await Task.Run(() =>
@@ -53,7 +57,7 @@ namespace HM
                 catch (Exception ex)
                 {
                     nc.Close();
-                    MessageBox.Show("Нет соединения с Сервером. Проверьте Фортик! А после подключения перезапустите меня! \n" + ex.Message);
+                    MessageBox.Show("Нет соединения с Сервером. Проверьте FortiClient VPN! А после подключения перезапустите меня! \n" + ex.Message);
                     //Код обработки ошибок
                 }
 
@@ -93,7 +97,7 @@ namespace HM
             }
             con = String.Format(con, Host, User, Pass, DataBase);
             DataTable dt = new DataTable();
-            if (ConnectBool == false) MessageBox.Show("Нет коннекта! Проверьте Форточку!");
+            if (ConnectBool == false) MessageBox.Show("Нет коннекта! Проверьте FortiClient VPN!\n А затем перезапустите программу. ");
             else
             {
 
