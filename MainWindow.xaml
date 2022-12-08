@@ -131,9 +131,7 @@
 				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="348,26,0,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" BorderThickness="0,1,0,0" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="230"/>
 
                         <Label HorizontalAlignment="Left" Margin="415,2,0,0" VerticalAlignment="Top" FontFamily="72" Content="Второй стписок"/>
-                        <TextBlock x:Name="FidCount" Margin="244,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Background="#FFDDDDDD" Height="18" HorizontalAlignment="Left" Width="89"/>
-                        <Button x:Name="FidCopy" Margin="244,115,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="89" Content="Сравнить" Click="FidCopy_Click"/>
-                        <Label Content="Совпадений" Margin="250,53,0,0" VerticalAlignment="Top" FontFamily="72" HorizontalAlignment="Left" Width="78"/>
+                        <Button x:Name="FidCopy" Margin="248,65,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="88" Content="Сравнить" Click="FidCopy_Click"/>
 
                         <avalonEdit:TextEditor
 				                x:Name="ListCopyElm"
@@ -143,12 +141,11 @@
 
 
                         <Label HorizontalAlignment="Left" Margin="614,2,0,0" VerticalAlignment="Top" FontFamily="72" Width="148" Content="Совпавшие елементы"/>
-                        <Button x:Name="FidCopy_Copy" Margin="273,153,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="35" Content="X" Click="FidCopy_Copy_Click"/>
-
+                        <Button x:Name="FidCopy_Copy" Margin="276,103,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="36" Content="X" Click="FidCopy_Copy_Click"/>
 
                     </Grid>
                 </TabItem>
-                <TabItem Margin="-8,-3,0,1" Width="120" Header="Ошибки тек. склада">
+                <TabItem Margin="-4,-1,4,1" Width="120" Header="Ошибки тек. склада">
                     <Grid>
                         <avalonEdit:TextEditor
                             x:Name="ListOne1"

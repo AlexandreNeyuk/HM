@@ -80,7 +80,7 @@ namespace HM
 
             #endregion
 
-            #region Добавление обработки всех элементов меню (навердений мыши )
+            #region Добавление обработки всех элементов меню (навердений мыши  и клики)
             MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home };
             foreach (var item in MenuCanvas)
             {
@@ -90,9 +90,9 @@ namespace HM
             }
 
             ///обработка кликов на элементы меню
-            PartyCanvas.MouseDown += (a, e) => { PartyGrid.IsEnabled = true; PartyGrid.Visibility = Visibility.Visible; TB.IsEnabled = false; TB.Visibility = Visibility.Hidden; WarEdit wr = new WarEdit(); wr.LoadHosts(ListWarhouses); wr.Close(); };
-            Home.MouseDown += (a, e) => { PartyGrid.IsEnabled = false; PartyGrid.Visibility = Visibility.Hidden; TB.IsEnabled = true; TB.Visibility = Visibility.Visible; };
-            PostomatsCanvas.MouseDown += (a, e) => { MessageBox.Show("Здесь кода-нибудь чтото будет !))"); };
+            PartyCanvas.MouseDown += (a, e) => { PartyGrid.IsEnabled = true; PartyGrid.Visibility = Visibility.Visible; TB.IsEnabled = false; TB.Visibility = Visibility.Hidden; WarEdit wr = new WarEdit(); wr.LoadHosts(ListWarhouses); wr.Close(); SwitchPanel(); };
+            Home.MouseDown += (a, e) => { PartyGrid.IsEnabled = false; PartyGrid.Visibility = Visibility.Hidden; TB.IsEnabled = true; TB.Visibility = Visibility.Visible; SwitchPanel(); };
+            PostomatsCanvas.MouseDown += (a, e) => { MessageBox.Show("Здесь кода-нибудь чтото будет !))"); SwitchPanel(); };
             SettingCanvas.MouseDown += (a, e) => { OpenSettings(); };
 
 
@@ -361,11 +361,11 @@ namespace HM
             ListTwo.Text += "\r\n";
             List<string> list2 = To_List(ListTwo);
             list2 = list2.Distinct().ToList();
-            ListTwo.Text = string.Join("", list2);
+            ListTwo.Text = string.Join(Environment.NewLine, list2);
 
             List<string> result = list1.Except(list2).ToList();
             list1 = list1.Distinct().ToList();
-            ListOne.Text = string.Join("", result);
+            ListOne.Text = string.Join(Environment.NewLine, result);
 
 
 
@@ -456,7 +456,7 @@ namespace HM
         /// <returns></returns>
         public List<string> To_List(TextEditor tx)
         {
-            List<string> str = tx.Text.Split('\n').ToList();
+            List<string> str = tx.Text.Split("\r\n").ToList();
             return str;
 
         }
