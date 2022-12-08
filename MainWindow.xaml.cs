@@ -36,6 +36,10 @@ namespace HM
         {
             InitializeComponent();
 
+            #region Проверка соединения с сервером
+            dataBases.ProtectedConnection();
+            #endregion
+
             #region Начальные накстройки
             TB.Margin = new Thickness(0, 0, 0, 0); //выравниванеи TableControl 
             ///отключение панели настроек при иницииализации --
