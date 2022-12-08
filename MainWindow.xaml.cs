@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO.Packaging;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -396,52 +397,103 @@ namespace HM
         /// </summary>
         private void PartyEx_Click(object sender, RoutedEventArgs e)
         {
-            // todo  [Партии]
-            /*   •Добавление:
-        1 - проверка существования в шиптор
-                    select* from package_return pr where id in (53114);
-
-        2 - Подтверждение склада(по stock_id)
-                    SELECT id, "name"  FROM public.warehouse where id = 23;
-
-                    3 - Проверка существования в запсторе:
-                    (select id from package_return pr where return_fid = 54098) => забрать ID-party;
-
-                    4- Спрашивать подтверждение/предупреждать если партия в статусе отпарвлена  		
-
-                    5 - Получение списка посылок:
-                    (select id from package p where package_fid in(495471870) 		=> список в StrinG c добалением + ",(,ID-party)", с 1, (кроме 0);
-
-                    4 - добавление посылки в партию:
-                     INSERT into public.package_return_item(package_id, package_return_id)
-                        values(item[0], ID-party);
-        */
-            if (SelectAction.SelectedIndex == 0) //Добавление 
+            // todo  [Партии]: При добавлении предупреждать о дубликатах если такие посылки уже добавлены и обрабатывать так, чтобы тех которых нет - прокидывать в партию, а дубли - убирать из запроса
+            //Добавление 
+            if (SelectAction.SelectedIndex == 0)
             {
+                string paty = Party.Text; //партия 
+                if (paty.Contains("R_RET")) paty = paty.Replace("R_RET", "");
+                List<string> StockID = dataBases.ConnectDB("Шиптор", $@"select * from package_return pr where id in ({paty})").AsEnumerable().Select(x => x["stock_id"].ToString()).ToList();
+                if (StockID.Count == 1)//проверка существования в шипторе
+                {
+                    //ищем имя склада в Шипторе
+                    List<string> StockName = dataBases.ConnectDB("Шиптор", $@"SELECT id, ""name""  FROM public.warehouse where id = {StockID[0]}").AsEnumerable().Select(x => x[1].ToString()).ToList();
+                    if (Name_War.Content != StockName[0]) if (StockName[0] != null) Name_War.Content = StockName[0]; else MessageBox.Show($@"Склада с id {StockID[0]} не найдено в Шиптор!");//меняем имя склада на то что нашлось
 
+                    DataTable CurrentStock = dataBases.ConnectDB(StockName[0], $@"select id, status from package_return pr where return_fid = {paty}");
+                    List<string> ParyStockID = CurrentStock.AsEnumerable().Select(x => x["id"].ToString()).ToList();
+                    List<string> PartyStockStatus = CurrentStock.AsEnumerable().Select(x => x["status"].ToString()).ToList();
+                    if (ParyStockID[0] != null)
+                    {
+                        bool d = true;
+                        if (PartyStockStatus[0] == "sent" || PartyStockStatus[0] == "disbanded") if (MessageBox.Show($@"Паллета на складе имеет статус {PartyStockStatus[0].ToUpper()}. Все равно добавить в паллету?", "Добавить в паллету?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.No) d = false;
+                        if (d)
+                        {   //Добавляю в паллету
+
+
+                            if (RP_Party.Text != null)
+                            {
+                                string RPid = RP_Party.Text.Replace("\r\n", "");
+                                //добавляю в партию в шипторе, если она есть 
+                                dataBases.ConnectDB("Шиптор", $@"UPDATE public.package SET return_id = {paty} WHERE id in ({RPid})");
+
+                                //формирование списка 
+                                List<string> ListRPID = dataBases.ConnectDB(StockName[0], $@"select id from package p where package_fid in({RPid})").AsEnumerable().Select(x => x[0].ToString()).ToList();
+                                List<string> values = new List<string>();
+                                foreach (string RPID in ListRPID)
+                                {
+                                    values.Add($@"({RPID}, {ParyStockID[0]})");
+                                }
+                                string Cvalues = string.Join(",", values);
+                                //сама запись в партию в бд:
+                                dataBases.ConnectDB(StockName[0], $@"INSERT into public.package_return_item(package_id, package_return_id) values {Cvalues}");
+
+                                MessageBox.Show($@"В партию добалено!");
+                                RP_Party.Text = null;
+                                Party.Text = null;
+
+
+                            }
+                            else MessageBox.Show("Поле для отправлений пусто! Добавьте отправления");
+                        }
+                    }
+                    else MessageBox.Show($@"Партия не найдена на складе {StockName[0]}!");
+                }
+                else MessageBox.Show("Такая партия не одна (!) или ее не существует в Шипторе!");
             }
-            /*            [Партии]
-            •Удаление:
-                        1 - проверка существования в шиптор;
-                        select* from package_return pr where id in (53114);
 
-                        2 - Убрать из партии возврата в Шиптор:
-                        UPDATE public.package SET return_id = NULL WHERE id in (Список RP, без RP);
-
-                        3 - Проверка существования партии в заппе(нужного склада) ~Проверка статуса партии в Запп~
-                        select * from package_return pr where return_fid in(53114);
-
-                        4 - Удаление из партии
-                        delete from package_return_item where package_id in (select id from package p where package_fid in(Список RP));		*/
-
-            if (SelectAction.SelectedIndex == 1) //Удаление
+            //Удаление
+            if (SelectAction.SelectedIndex == 1)
             {
+                string paty = Party.Text; //партия 
+                if (paty.Contains("R_RET")) paty = paty.Replace("R_RET", "");
+                List<string> StockID = dataBases.ConnectDB("Шиптор", $@"select * from package_return pr where id in ({paty})").AsEnumerable().Select(x => x["stock_id"].ToString()).ToList();
+                if (StockID.Count == 1)//проверка существования в шипторе
+                {
+                    //ищем имя склада в Шипторе
+                    List<string> StockName = dataBases.ConnectDB("Шиптор", $@"SELECT id, ""name""  FROM public.warehouse where id = {StockID[0]}").AsEnumerable().Select(x => x[1].ToString()).ToList();
+                    if (Name_War.Content != StockName[0]) if (StockName[0] != null) Name_War.Content = StockName[0]; else MessageBox.Show($@"Склада с id {StockID[0]} не найдено в Шиптор!");//меняем имя склада на то что нашлось
 
+                    DataTable CurrentStock = dataBases.ConnectDB(StockName[0], $@"select id, status from package_return pr where return_fid = {paty}");
+                    List<string> ParyStockID = CurrentStock.AsEnumerable().Select(x => x["id"].ToString()).ToList();
+                    List<string> PartyStockStatus = CurrentStock.AsEnumerable().Select(x => x["status"].ToString()).ToList();
+                    if (ParyStockID[0] != null) //если партия существует на складе
+                    {
+                        //Удаление из паллеты
+
+                        if (RP_Party.Text != null)
+                        {
+                            string RPid = RP_Party.Text.Replace("\r\n", "");
+                            //удаляю из партии в шипторе
+                            dataBases.ConnectDB("Шиптор", $@"UPDATE public.package SET return_id = NULL WHERE id in ({RPid})");
+
+                            //формирование списка 
+
+                            dataBases.ConnectDB(StockName[0], $@"Delete from package_return_item where package_id in (select id from package p where package_fid in({RPid}))");
+
+                            MessageBox.Show($@"Из партии удалено!");
+                            RP_Party.Text = null;
+                            Party.Text = null;
+
+
+                        }
+                        else MessageBox.Show("Поле для отправлений пусто! Добавьте отправления");
+
+                    }
+                    else MessageBox.Show($@"Партия не найдена на складе {StockName[0]}!");
+                }
+                else MessageBox.Show("Такая партия не одна (!) или ее не существует в Шипторе!");
             }
-
-
-
-
         }
 
         /// <summary>
@@ -459,7 +511,7 @@ namespace HM
         }
 
         /// <summary>
-        /// Привязка выбора элемента к контрольному значению 
+        /// Вывод выбранного склада 
         /// </summary>
         private void ListWarhouses_SelectionChanged(object sender, SelectionChangedEventArgs e) { Name_War.Content = ListWarhouses.SelectedItem; }
 
