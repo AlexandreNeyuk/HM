@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     x:Name="HM" x:Class="HM.MainWindow"
         mc:Ignorable="d"
-        Title="Help Manager v. 0.4.12" Height="465" Width="836" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="CanMinimize">
+        Title="Help Manager v. 0.4.13" Height="465" Width="836" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="CanMinimize">
 
     <Grid>
         <Grid.Background>
@@ -59,7 +59,7 @@
 
         <!--TabControl -->
         <Grid x:Name="TabControGrid">
-            <Grid x:Name="PartyGrid" Background="White" d:IsHidden="True">
+            <Grid x:Name="PartyGrid" Background="White">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
                 <ComboBox x:Name="SelectAction" HorizontalAlignment="Left" Margin="670,125,0,0" VerticalAlignment="Top" Width="131">
                     <ComboBoxItem Content="Добавить в партию"/>
@@ -83,7 +83,7 @@
 
             </Grid>
 
-            <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
+            <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2" d:IsHidden="True">
                 <TabItem Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
                     <Grid Background="White" Height="451">
                         <Grid.RowDefinitions>
