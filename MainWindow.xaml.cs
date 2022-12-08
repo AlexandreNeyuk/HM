@@ -1,9 +1,11 @@
 ﻿using ICSharpCode.AvalonEdit;
+using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.IO.Packaging;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -358,7 +360,8 @@ namespace HM
             List<string> list1 = To_List(ListOne);
             ListTwo.Text += "\r\n";
             List<string> list2 = To_List(ListTwo);
-
+            list2 = list2.Distinct().ToList();
+            ListTwo.Text = string.Join("", list2);
 
             List<string> result = list1.Except(list2).ToList();
             list1 = list1.Distinct().ToList();
@@ -387,16 +390,39 @@ namespace HM
         /// </summary>
         private void PartyEx_Click(object sender, RoutedEventArgs e)
         {
-            //проверить существование партии в шипторе  подтянуть склад
+            /*            [Партии]
+            •Удаление:
+                        1 - проверка существования в шиптор;
+                        select* from package_return pr where id in (53114);
 
+                        2 - Убрать из партии возврата в Шиптор:
+                        UPDATE public.package SET return_id = NULL WHERE id in (Список RP, без RP);
 
-            //добавить в шипторе
-            //узнать id посылок на склдае
-            //узнать id партиии на складе
-            //составить insert
+                        3 - Проверка существования партии в заппе(нужного склада) ~Проверка статуса партии в Запп~
+                        select * from package_return pr where return_fid in(53114);
 
+                        4 - Удаление из партии
+                        delete from package_return_item where package_id in (select id from package p where package_fid in(Список RP));		
 
+            •Добавление: 
+                        1 - проверка существования в шиптор
+                        select* from package_return pr where id in (53114);
 
+                        2 - Подтверждение склада(по stock_id)
+                        SELECT id, "name"  FROM public.warehouse where id = 23;
+
+                        3 - Проверка существования в запсторе:
+                        (select id from package_return pr where return_fid = 54098) => забрать ID-party;
+
+                        4- Спрашивать подтверждение/предупреждать если партия в статусе отпарвлена  		
+
+                        5 - Получение списка посылок:
+                        (select id from package p where package_fid in(495471870) 		=> список в StrinG c добалением + ",(,ID-party)", с 1, (кроме 0);
+
+                        4 - добавление посылки в партию:
+                         INSERT into public.package_return_item(package_id, package_return_id)
+                            values(item[0], ID-party);
+            */
         }
 
         /// <summary>
