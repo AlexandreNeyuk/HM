@@ -66,7 +66,7 @@ namespace HM
                 item.KeyDown += (s, a) =>
                 {
                     if (a.Key == Key.Escape)
-                        item.Text = "";
+                        item.Text = " ";
                     else
                     {
                         item.IsReadOnly = true;
@@ -356,10 +356,13 @@ namespace HM
         private void FidCopy_Click(object sender, RoutedEventArgs e)
         {
             List<string> list1 = To_List(ListOne);
+            ListTwo.Text += "\r\n";
             List<string> list2 = To_List(ListTwo);
 
+
             List<string> result = list1.Except(list2).ToList();
-            ListOne.Text = string.Join(Environment.NewLine, result);
+            list1 = list1.Distinct().ToList();
+            ListOne.Text = string.Join("", result);
 
 
 
