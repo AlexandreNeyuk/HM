@@ -33,7 +33,6 @@ namespace HM
                     {
                         if (item.Contains("Шиптор") && item.Contains("Host_")) Host = key.GetValue(item).ToString();
                         if (item.Contains("Шиптор") && item.Contains("DataBase_")) DataBase = key.GetValue(item).ToString();
-
                     }
                 }
                 using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Settings"))
@@ -45,21 +44,25 @@ namespace HM
 
                     }
                 }
-                con = String.Format(con, Host, User, Pass, DataBase);
-                NpgsqlConnection nc = new NpgsqlConnection(con);
-                try
+                if (Host!="" && Pass!="" && DataBase!="" && User!="")
                 {
-                    //Открываем соединение.
-                    nc.Open();
-                    ConnectBool = true;
-                    nc.Close();
+                    con = String.Format(con, Host, User, Pass, DataBase);
+                    NpgsqlConnection nc = new NpgsqlConnection(con);
+                    try
+                    {
+                        //Открываем соединение.
+                        nc.Open();
+                        ConnectBool = true;
+                        nc.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        nc.Close();
+                        MessageBox.Show("Нет соединения с Сервером. Проверьте FortiClient VPN! А после подключения перезапустите меня! \n" + ex.Message);
+                        //Код обработки ошибок
+                    }
                 }
-                catch (Exception ex)
-                {
-                    nc.Close();
-                    MessageBox.Show("Нет соединения с Сервером. Проверьте FortiClient VPN! А после подключения перезапустите меня! \n" + ex.Message);
-                    //Код обработки ошибок
-                }
+                else MessageBox.Show("Засунь реестр в реестр. А после подключения перезапусти меня!");
 
             });
 
