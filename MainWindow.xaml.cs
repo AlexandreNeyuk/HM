@@ -303,16 +303,10 @@ namespace HM
 
                 }
             }
-            try
-            {
-                if (TextBox.Text != "") Clipboard.SetText(TextBox.Text); //запись в  буфер
-            }
-            catch
-            { 
+            try{if (TextBox.Text != "") Clipboard.SetText(TextBox.Text);}catch{}
             BFcopy.Text = "Результат скопирован в буфер обмена";
             await Task.Delay(1000);
             BFcopy.Text = null;
-            }
         }
 
         /// <summary>
