@@ -12,6 +12,43 @@ v 0.55.1
 
 3)Добавление/ удаление из партий возврата как в Шипторе, так и на складе
 		• выбор из списка адресов склада (Шарапово - id - DB)
+		[Партии]
+		//---------------------------------------
+			•Удаление:
+				1 - проверка существования в шиптор ;
+							select * from package_return pr where id in (53114);
+
+				2 - Убрать из партии возврата в Шиптор:
+
+								UPDATE public.package
+									SET return_id = NULL
+									WHERE id in (Список RP, без RP);
+
+				3 - Проверка существования партии в заппе (нужного склада) ~Проверка статуса партии в Запп~
+						select * from package_return pr where return_fid in(53114);
+
+				4 - Удаление из партии 
+						delete from package_return_item
+										where package_id in (select id from package p where package_fid in(Список RP));		
+
+			•Добавление: 
+				1 - проверка существования в шиптор 
+						select * from package_return pr where id in (53114);
+
+				2 - Подтверждение склада (по stock_id)
+						SELECT id, "name"  FROM public.warehouse where id = 23;
+
+				3 - Проверка существования в запсторе:
+						(select id from package_return pr where return_fid = 54098) => забрать ID-party;
+				4- Спрашивать подтверждение/предупреждать если партия в статусе отпарвлена  		
+
+				5 - Получение списка посылок:
+						(select id from package p where package_fid in(495471870) 		=> список в StrinG c добалением + ",(,ID-party)", с 1, (кроме 0);
+
+				4 - добавление посылки в партию:		
+						 INSERT into public.package_return_item (package_id, package_return_id) 
+							values (item [0], ID-party);
+//---------------------------------------------------------
 4)  Перебронирование по 2 схемам и 2 подсхемам:
 		• без изменения вгх
 			• откат статусов в ПМ и откат Матери в Null (подходит к переброни со статусами "Отменено", "Доставлено", "Возвращено")
