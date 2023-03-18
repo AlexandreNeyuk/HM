@@ -2,8 +2,12 @@
 using Npgsql;
 using System;
 using System.Data;
+using System.Drawing;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Threading;
+using Label = System.Windows.Controls.Label;
 
 namespace HM
 {
@@ -16,57 +20,77 @@ namespace HM
         ///
 
         bool ConnectBool = false;
+        private string stats = "Статус подключения";
+        Label label = new Label();
+        MainWindow ol;
+
 
         /// <summary>
         /// проверка подключения к БД (запускается при запуске программы)
         /// </summary>
-        async public void ProtectedConnection()
+        async public void ProtectedConnection(MainWindow cl)
         {
+            ol = cl;
+
             await Task.Run(() =>
-            {
-                string con = "Host={0};Username={1};Password={2};Database={3}";
-                string Host = "", DataBase = "", User = "", Pass = "";
+           {
+               string con = "Host={0};Username={1};Password={2};Database={3}";
+               string Host = "", DataBase = "", User = "", Pass = "";
 
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Hosts"))
-                {
-                    foreach (var item in key?.GetValueNames())
-                    {
-                        if (item.Contains("Шиптор") && item.Contains("Host_")) Host = key.GetValue(item).ToString();
-                        if (item.Contains("Шиптор") && item.Contains("DataBase_")) DataBase = key.GetValue(item).ToString();
-                    }
-                }
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Settings"))
-                {
-                    foreach (var item in key?.GetValueNames())
-                    {
-                        if (item.Contains("Имя пользователя")) User = key.GetValue(item).ToString();
-                        if (item.Contains("Пароль")) Pass = key.GetValue(item).ToString();
+               using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Hosts"))
+               {
+                   foreach (var item in key?.GetValueNames())
+                   {
+                       if (item.Contains("Шиптор") && item.Contains("Host_")) Host = key.GetValue(item).ToString();
+                       if (item.Contains("Шиптор") && item.Contains("DataBase_")) DataBase = key.GetValue(item).ToString();
+                   }
+               }
+               using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Settings"))
+               {
+                   foreach (var item in key?.GetValueNames())
+                   {
+                       if (item.Contains("Имя пользователя")) User = key.GetValue(item).ToString();
+                       if (item.Contains("Пароль")) Pass = key.GetValue(item).ToString();
 
-                    }
-                }
-                if (Host!="" && Pass!="" && DataBase!="" && User!="")
-                {
-                    con = String.Format(con, Host, User, Pass, DataBase);
-                    NpgsqlConnection nc = new NpgsqlConnection(con);
-                    try
-                    {
-                        //Открываем соединение.
-                        nc.Open();
-                        ConnectBool = true;
-                        nc.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        nc.Close();
-                        MessageBox.Show("Нет соединения с Сервером. Проверьте FortiClient VPN! А после подключения перезапустите меня! \n" + ex.Message);
-                        //Код обработки ошибок
-                    }
-                }
-                else MessageBox.Show("Засунь реестр в реестр. А после подключения перезапусти меня!");
+                   }
+               }
+               if (Host != "" && Pass != "" && DataBase != "" && User != "")
+               {
+                   con = String.Format(con, Host, User, Pass, DataBase);
+                   NpgsqlConnection nc = new NpgsqlConnection(con);
+                   try
+                   {
+                       //Открываем соединение.                         
+                       nc.Open();
+                       stats = "Подключено";
+                       ol.UpdateLabel(stats);
+                       stats = "Подключено";
+                       ConnectBool = true;
+                       nc.Close();
+                   }
+                   catch (Exception ex)
+                   {
+                       nc.Close();
+                       stats = "Не подключено!";
+                       ol.UpdateLabel(stats);
+                       MessageBox.Show("Нет соединения с Сервером. Проверьте FortiClient VPN! А после подключения перезапустите меня! \n" + ex.Message);
+                       //Код обработки ошибок
+                   }
+               }
+               else MessageBox.Show("Засунь реестр в реестр. А после подключения перезапусти меня!");
 
-            });
+           });
+
+
+
 
         }
+
+
+
+
+
+
 
         /// <summary>
         /// Запорос к БД

@@ -9,6 +9,7 @@
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <SignAssembly>False</SignAssembly>
     <ApplicationIcon>Assets\48_48.ico</ApplicationIcon>
+    <Version>0.4.21</Version>
 
   </PropertyGroup>
 
@@ -42,6 +43,21 @@
     <Resource Include="Assets\win_max.png" />
     <Resource Include="Assets\WIn_Min.png" />
     <Resource Include="Dock_Left_Black.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     x:Name="HM" x:Class="HM.MainWindow"
         mc:Ignorable="d"
-        Title="Help Manager v. 0.4.15" Height="465" Width="836" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="CanMinimize">
+        Title="Help Manager v." Height="465" Width="836" MinHeight="503" MinWidth="800" Grid.IsSharedSizeScope="True" KeyDown="HM_KeyDown" ResizeMode="CanMinimize">
 
     <Grid>
         <Grid.Background>
@@ -58,8 +58,8 @@
         </Grid>
 
         <!--TabControl -->
-        <Grid x:Name="TabControGrid">
-            <Grid x:Name="PartyGrid" Background="White">
+        <Grid x:Name="MajorGrid">
+            <Grid x:Name="PartyGrid" Background="White" d:IsHidden="True">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
                 <ComboBox x:Name="SelectAction" HorizontalAlignment="Left" Margin="670,125,0,0" VerticalAlignment="Top" Width="131">
                     <ComboBoxItem Content="Добавить в партию"/>
@@ -82,85 +82,146 @@
 
 
             </Grid>
-
-            <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2" d:IsHidden="True">
-                <TabItem Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
-                    <Grid Background="White" Height="451">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Canvas x:Name="Left_Controls" Margin="677,0,0,0">
-                            <ListBox x:Name="ListBox" Margin="15                                      ,160,0,0" BorderThickness="0,0,0,0" Height="74" VerticalAlignment="Top" HorizontalAlignment="Left" Width="108">
-                                <CheckBox x:Name="AF_1" Content="Вся семья☝" Checked="AF_1_Checked"/>
-                                <CheckBox x:Name="AF_2" Content="Родитель" Checked="AF_2_Checked" IsChecked="False"/>
-                                <CheckBox x:Name="UpperSearch" Content="Найти RP"/>
-                            </ListBox>
-                            <Button x:Name="ListProcess" Content="Обработка" VerticalAlignment="Center" Height="25" HorizontalAlignment="Left" Width="87" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0" ToolTip="Копирую сам!" Canvas.Left="8" Canvas.Top="113"/>
-                            <CheckBox x:Name="comma" Content="Запятые" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" IsChecked="True" Canvas.Left="25" Canvas.Top="85"/>
-                            <RadioButton x:Name="ContextRP" Content="RP" VerticalAlignment="Center" HorizontalAlignment="Left" Width="96" ToolTip="Обработка текста в рамках RP списка." IsChecked="True" FontFamily="Bahnschrift" Checked="ContextRP_Checked" Canvas.Left="25" Canvas.Top="35"/>
-                            <RadioButton x:Name="ConrextUpper" Content="Upper (' _ ')" VerticalAlignment="Center" HorizontalAlignment="Left" Width="99" IsChecked="False" FontFamily="Bahnschrift" ToolTip="Обработка списка с добавлением UPPER -контекста. " Checked="ConrextUpper_Checked" Canvas.Left="25" Canvas.Top="55"/>
-                            <Label Content="Параметры" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" Canvas.Left="25" Canvas.Top="4"/>
-                            <TextBlock x:Name="BFcopy" Height="77" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Width="136" Canvas.Left="10" Canvas.Top="325"/>
-                            <Button x:Name="Clear_all_textB" Content="X" Canvas.Left="102" Canvas.Top="114" BorderThickness="0,0,0,0" Width="31" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Clear_all_textB_Click"/>
-                        </Canvas>
-                        <avalonEdit:TextEditor
+            <Grid x:Name="PostomatsGrid" Background="White">
+                <Label VerticalAlignment="Top" Height="31" FontFamily="72" FontWeight="Bold" FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="#FFECECEC" Content="Работа с Postomats"/>
+                <Grid x:Name="BronbGrid" Margin="173,31,0,23" Background="White">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="RP_child" HorizontalAlignment="Left" Margin="39,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" FontFamily="72" Height="20"/>
+                    <TextBox x:Name="leagh_RP" HorizontalAlignment="Left" Margin="445,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="81" FontFamily="72" Height="20"/>
+                    <Label Content="ВГХ (ввести, если необходимо обновить)" HorizontalAlignment="Left" Margin="366,41,0,0" VerticalAlignment="Top" FontFamily="72"/>
+                    <TextBox x:Name="Whide_rp" HorizontalAlignment="Left" Margin="445,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="81" FontFamily="72" Height="20"/>
+                    <TextBox x:Name="hiegh_rp" HorizontalAlignment="Left" Margin="445,117,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="81" FontFamily="72" Height="20"/>
+                    <TextBox x:Name="Ves_RP" HorizontalAlignment="Left" Margin="445,142,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="81" FontFamily="72" Height="20"/>
+                    <Label HorizontalAlignment="Left" Margin="392,65,0,0" VerticalAlignment="Top" FontFamily="72" Content="Длина"/>
+                    <Label Content="Ширина" HorizontalAlignment="Left" Margin="392,92,0,0" VerticalAlignment="Top" FontFamily="72"/>
+                    <Label Content="Высота" HorizontalAlignment="Left" Margin="392,117,0,0" VerticalAlignment="Top" FontFamily="72"/>
+                    <Label Content="Вес" HorizontalAlignment="Left" Margin="392,141,0,0" VerticalAlignment="Top" FontFamily="72"/>
+                    <Label Content="см" HorizontalAlignment="Left" Margin="526,65,0,0" VerticalAlignment="Top" FontFamily="72"/>
+                    <Label Content="см" HorizontalAlignment="Left" Margin="526,92,0,0" VerticalAlignment="Top" FontFamily="72"/>
+                    <Label Content="см" HorizontalAlignment="Left" Margin="526,117,0,0" VerticalAlignment="Top" FontFamily="72"/>
+                    <Label Content="кг" HorizontalAlignment="Left" Margin="526,141,0,0" VerticalAlignment="Top" FontFamily="72"/>
+                    <Button x:Name="Bronirovat_Button" HorizontalAlignment="Left" Margin="214,163,0,0" VerticalAlignment="Top" Content="Забронировать" FontFamily="72" Width="118" Height="25" Click="Bronirovat_Button_Click"/>
+                    <Label Content="Бронирование + Смена ВГХ" VerticalAlignment="Top" FontFamily="72" Padding="5,5,5,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold" Height="29" Background="#FFF7F7F7" ToolTip="Это только бронирование и/или смена DU{? если поля будут заполены! Только бронирование, когда уже все готово к этомму! "/>
+                    <Label Content="Отправление (дочь)" HorizontalAlignment="Left" Margin="59,38,0,0" VerticalAlignment="Top" FontFamily="72" Width="123"/>
+                    <Label HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top" FontFamily="72" Width="29" Content="RP"/>
+                    <TextBlock x:Name="LogPOST1" HorizontalAlignment="Center" Margin="0,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="216" Width="663" FontFamily="72" Background="#FFF3F3F3" Padding="10,5,10,10"/>
+                    <Label Content="ЛОГ" HorizontalAlignment="Left" Margin="12,193,0,0" VerticalAlignment="Top" FontFamily="72"/>
+                </Grid>
+                <Grid x:Name="SyncEngyGrid" Margin="173,31,0,23" Background="White">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="RP_child1" HorizontalAlignment="Left" Margin="36,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" FontFamily="72" Height="20"/>
+                    <Label HorizontalAlignment="Left" Margin="366,41,0,0" VerticalAlignment="Top" FontFamily="72" Content="Статус посылки из Engy" Width="148" HorizontalContentAlignment="Center"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="366,70,0,0" VerticalAlignment="Top" Width="148">
+                        <ComboBoxItem Content="Готово к загрузке (забронировано)" FontFamily="72"/>
+                        <ComboBoxItem Content="Заложено" FontFamily="72"/>
+                    </ComboBox>
+                    <Button x:Name="Bronirovat_Button1" HorizontalAlignment="Left" Margin="214,188,0,0" VerticalAlignment="Top" FontFamily="72" Width="118" Height="25" Content="Синхронизировать"/>
+                    <Label VerticalAlignment="Top" FontFamily="72" Padding="5,5,5,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold" Height="29" Background="#FFF7F7F7" Content="Синхронизация посылок с Engy" ToolTip="Эта страница вызывает методы синхронзации/добавления посылки из Engy (если ее нет в ПМ), а также синхронизирует статус посылки с Engy"/>
+                    <DatePicker HorizontalAlignment="Left" Margin="366,126,0,0" VerticalAlignment="Top" Width="148" SelectedDateFormat="Short" Text="Дата добавления" FirstDayOfWeek="Monday" DisplayDate="03/18/2023 21:39:00"/>
+                    <Label Content="Отправление (дочь)" HorizontalAlignment="Left" Margin="58,40,0,0" VerticalAlignment="Top" FontFamily="72" Width="123"/>
+                    <Label HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" FontFamily="72" Width="26" Content="RP"/>
+                    <Label HorizontalAlignment="Left" Margin="326,102,0,0" VerticalAlignment="Top" FontFamily="72" Width="228" Content="Дата добавления посылки из Engy" HorizontalContentAlignment="Center"/>
+                    <TextBox x:Name="RP_child1_Copy" HorizontalAlignment="Left" Margin="36,128,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="127" FontFamily="72" Height="20"/>
+                    <Label HorizontalAlignment="Left" Margin="58,104,0,0" VerticalAlignment="Top" FontFamily="72" Width="63" Content="Постомат"/>
+                    <Label HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top" FontFamily="72" Width="26" Content="PS"/>
+                    <TextBox x:Name="RP_child1_Copy1" HorizontalAlignment="Left" Margin="36,155,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="54" FontFamily="72" Height="20"/>
+                    <Label HorizontalAlignment="Left" Margin="10,153,0,0" VerticalAlignment="Top" FontFamily="72" Width="26" Content="яч."/>
+                    <TextBlock x:Name="LogPOST2" HorizontalAlignment="Center" Margin="0,233,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="200" Width="663" FontFamily="72" Background="#FFF3F3F3" Padding="10,5,10,10"/>
+                    <Label Content="ЛОГ" HorizontalAlignment="Left" Margin="14,0,0,0" VerticalAlignment="Center" FontFamily="72"/>
+                </Grid>
+                <StackPanel x:Name="ST" Margin="0,31,0,23" Background="#FFEDEDED" HorizontalAlignment="Left" Width="173">
+                    <Canvas x:Name="Bronirovanie_Canvas" Height="32">
+                        <Label x:Name="Bron_LB" Content="Бронирование" Background="{x:Null}" FontFamily="72" FontSize="14" VerticalContentAlignment="Center" Height="32" VerticalAlignment="Center" HorizontalAlignment="Left" Width="173"/>
+                    </Canvas>
+                    <Canvas x:Name="Sync_Canvas" Height="32">
+                        <Label x:Name="Sync_LB" Height="32" Background="{x:Null}" FontFamily="72" FontSize="14" VerticalContentAlignment="Center" Content="Синхронизация с Engy" HorizontalAlignment="Left" VerticalAlignment="Center" Width="173"/>
+                    </Canvas>
+                </StackPanel>
+            </Grid>
+            <Grid x:Name="HomeGrid" d:IsHidden="True">
+                <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
+                    <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
+                        <Grid Background="White" Height="451">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Canvas x:Name="Left_Controls" Margin="677,0,0,0">
+                                <ListBox x:Name="ListBox" Margin="15                                      ,160,0,0" BorderThickness="0,0,0,0" Height="74" VerticalAlignment="Top" HorizontalAlignment="Left" Width="108">
+                                    <CheckBox x:Name="AF_1" Content="Вся семья☝" Checked="AF_1_Checked"/>
+                                    <CheckBox x:Name="AF_2" Content="Родитель" Checked="AF_2_Checked" IsChecked="False"/>
+                                    <CheckBox x:Name="UpperSearch" Content="Найти RP"/>
+                                </ListBox>
+                                <Button x:Name="ListProcess" Content="Обработка" VerticalAlignment="Center" Height="25" HorizontalAlignment="Left" Width="87" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0" ToolTip="Копирую сам!" Canvas.Left="8" Canvas.Top="113"/>
+                                <CheckBox x:Name="comma" Content="Запятые" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" IsChecked="True" Canvas.Left="25" Canvas.Top="85"/>
+                                <RadioButton x:Name="ContextRP" Content="RP" VerticalAlignment="Center" HorizontalAlignment="Left" Width="96" ToolTip="Обработка текста в рамках RP списка." IsChecked="True" FontFamily="Bahnschrift" Checked="ContextRP_Checked" Canvas.Left="25" Canvas.Top="35"/>
+                                <RadioButton x:Name="ConrextUpper" Content="Upper (' _ ')" VerticalAlignment="Center" HorizontalAlignment="Left" Width="99" IsChecked="False" FontFamily="Bahnschrift" ToolTip="Обработка списка с добавлением UPPER -контекста. " Checked="ConrextUpper_Checked" Canvas.Left="25" Canvas.Top="55"/>
+                                <Label Content="Параметры" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" Canvas.Left="25" Canvas.Top="4"/>
+                                <TextBlock x:Name="BFcopy" Height="77" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Width="136" Canvas.Left="10" Canvas.Top="325"/>
+                                <Button x:Name="Clear_all_textB" Content="X" Canvas.Left="102" Canvas.Top="114" BorderThickness="0,0,0,0" Width="31" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Clear_all_textB_Click"/>
+                            </Canvas>
+                            <avalonEdit:TextEditor
 				                x:Name="TextBox"
 				                FontFamily="Consolas"
 				                FontSize="14"
 				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="0,0,0,47" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="672"/>
 
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Сравнение списков" Width="120" Height="30" Margin="-8,-2.7,-2,0" >
-                    <Grid>
-                        <avalonEdit:TextEditor
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="SR_List" Header="Сравнение списков" Width="120" Height="30" Margin="-8,-2.7,-2,0" >
+                        <Grid>
+                            <avalonEdit:TextEditor
 				                x:Name="ListOne"
 				                FontFamily="Consolas"
 				                FontSize="14"
 				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="3,26,0,21" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0" HorizontalAlignment="Left" Width="226"/>
 
-                        <Label Content="Первый список" HorizontalAlignment="Left" Margin="68,2,0,0" VerticalAlignment="Top" FontFamily="72"/>
+                            <Label Content="Первый список" HorizontalAlignment="Left" Margin="68,2,0,0" VerticalAlignment="Top" FontFamily="72"/>
 
-                        <avalonEdit:TextEditor
+                            <avalonEdit:TextEditor
 				                x:Name="ListTwo"
 				                FontFamily="Consolas"
 				                FontSize="14"
 				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="348,26,0,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" BorderThickness="0,1,0,0" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="230"/>
 
-                        <Label HorizontalAlignment="Left" Margin="415,2,0,0" VerticalAlignment="Top" FontFamily="72" Content="Второй стписок"/>
-                        <Button x:Name="FidCopy" Margin="248,65,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="88" Content="Сравнить" Click="FidCopy_Click"/>
+                            <Label HorizontalAlignment="Left" Margin="415,2,0,0" VerticalAlignment="Top" FontFamily="72" Content="Второй стписок"/>
+                            <Button x:Name="FidCopy" Margin="248,65,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="88" Content="Сравнить" Click="FidCopy_Click"/>
 
-                        <avalonEdit:TextEditor
+                            <avalonEdit:TextEditor
 				                x:Name="ListCopyElm"
 				                FontFamily="Consolas"
 				                FontSize="14"
 				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="588,26,0,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderThickness="0,1,0,0" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="213"/>
 
 
-                        <Label HorizontalAlignment="Left" Margin="614,2,0,0" VerticalAlignment="Top" FontFamily="72" Width="148" Content="Совпавшие елементы"/>
-                        <Button x:Name="FidCopy_Copy" Margin="276,103,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="36" Content="X" Click="FidCopy_Copy_Click"/>
+                            <Label HorizontalAlignment="Left" Margin="614,2,0,0" VerticalAlignment="Top" FontFamily="72" Width="148" Content="Совпавшие елементы"/>
+                            <Button x:Name="FidCopy_Copy" Margin="276,103,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="36" Content="X" Click="FidCopy_Copy_Click"/>
 
-                    </Grid>
-                </TabItem>
-                <TabItem Margin="-4,-1,4,1" Width="120" Header="Ошибки тек. склада">
-                    <Grid>
-                        <avalonEdit:TextEditor
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="CurWarErr" Margin="-4,-1,4,1" Width="120" Header="Ошибки тек. склада">
+                        <Grid>
+                            <avalonEdit:TextEditor
                             x:Name="ListOne1"
                             FontFamily="Consolas"
                             FontSize="14"
                             SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="3,26,0,21" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0" HorizontalAlignment="Left" Width="226"/>
 
 
-                    </Grid>
-                </TabItem>
-            </TabControl>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
 
         </Grid>
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" Visibility="Hidden" IsEnabled="False" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" d:IsHidden="True" >
 
             <Border x:Name="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="350" Background="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border.Effect>
@@ -178,15 +239,29 @@
                             <Label Content="Имя пользователя" FontFamily="72" Padding="10,0,0,0" Margin="38,9,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
                             <TextBox x:Name="UserName" HorizontalAlignment="Left" Margin="184,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="184" FontFamily="Bahnschrift" ToolTip="Имя пользователя"/>
                             <Label Content="Пароль" FontFamily="72" Padding="10,0,0,0" Margin="38,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"/>
-                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="297,62,129,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click"/>
+                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="297,62,111,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click"/>
                             <PasswordBox x:Name="UserPass" Margin="184,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184" FontFamily="Bahnschrift" ToolTip="Пароль"/>
                             <Label x:Name="SussessLabel" FontFamily="72" Padding="10,0,0,0" Margin="130,62,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="162" FlowDirection="RightToLeft"/>
 
                         </Grid>
                         <Label Content="Подключенные БД" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4"/>
-                        <Grid x:Name="Warehouses" Height="67">
-                            <Label  Content="Редактирование" FontFamily="72" Padding="10,0,0,0" Margin="26,22,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="199" />
-                            <Button x:Name="WarhReg" Content="Клик" Height="20" VerticalAlignment="Top" Margin="230,19,178,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="WarhReg_Click" />
+                        <Grid x:Name="Warehouses" Height="44">
+                            <Label  Content="Редактирование" FontFamily="72" Padding="10,0,0,0" Margin="38,10,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="199" VerticalContentAlignment="Center" />
+                            <Button x:Name="WarhReg" Content="Клик" Height="20" VerticalAlignment="Top" Margin="242,9,166,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="WarhReg_Click" />
+
+
+                        </Grid>
+                        <Label FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4" Content="Настройки данных для POST-запросов"/>
+                        <Grid x:Name="PostSettings" Height="119">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label x:Name="QstLB_POST" FontFamily="72" Padding="10,0,0,0" Margin="26,22,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="166" Content="X-AUTH-TOKEN* Для PM" Cursor="Help" />
+                            <TextBox x:Name="TokenPost_PM" TextWrapping="Wrap" Margin="197,20,144,0" FontFamily="72" Height="20" VerticalAlignment="Top"/>
+                            <Button Margin="364,88,44,11" Width="90" Height="20" FontFamily="72" Content="Сохранить" BorderThickness="0,0,0,0" Click="SavePostToken"/>
+                            <Label x:Name="Save_indicatorPost" Margin="197,0,144,10" FontFamily="72" Height="22" VerticalAlignment="Bottom"/>
+                            <Label x:Name="QstLB_POST1" FontFamily="72" Padding="10,0,0,0" Margin="26,55,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="166" Content="X-AUTH-TOKEN* Для Engy" Cursor="Help" />
+                            <TextBox x:Name="TokenPost_Engy" TextWrapping="Wrap" Margin="197,53,144,0" FontFamily="72" Height="20" VerticalAlignment="Top"/>
 
 
                         </Grid>
@@ -221,8 +296,11 @@
         <DockPanel LastChildFill="False" Height="38" VerticalAlignment="Bottom" >
             <StatusBar DockPanel.Dock="Bottom" Background="#FF5B4EBB" >
 
-                <StatusBarItem VerticalAlignment="Bottom" Background="#FF21CA78">
+                <StatusBarItem VerticalAlignment="Bottom" Background="#FF5B4EBB">
                     <Image x:Name="Left_Switch_panel" Stretch="Fill" Height="18" Width="23"  MouseLeftButtonDown="Image_MouseLeftButtonDown" OpacityMask="Black" Source="/Dock_Left_Black.png"/>
+                </StatusBarItem>
+                <StatusBarItem VerticalAlignment="Center" Background="#FF5B4EBB" Width="144" HorizontalAlignment="Right" Height="24" Padding="0,0,0,0">
+                    <Label x:Name="Status_Con" FontFamily="72" Foreground="White" Content="Статус подключения" Width="134" HorizontalContentAlignment="Right" Padding="0,0,0,0"/>
                 </StatusBarItem>
             </StatusBar>
 

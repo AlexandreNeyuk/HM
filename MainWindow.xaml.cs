@@ -7,13 +7,17 @@ using System.Data;
 using System.Diagnostics;
 using System.IO.Packaging;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Clipboard = System.Windows.Clipboard;
 using Label = System.Windows.Controls.Label;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -28,9 +32,11 @@ namespace HM
 
         List<TextBox> KeyTextBoxies; // ///все поля для которых нужно свойство введения HotKeys, через  ",
         List<Canvas> MenuCanvas; // все элементы меню 
+        List<Grid> grids; //все гриды окон
+
         //Animations Animations = new Animations();
         DataBaseAsset dataBases = new DataBaseAsset();
-
+        string statusConnect;
         bool SetPanel = false; //false - закрытая панель, true - открытая панлеь
         #endregion
 
@@ -39,20 +45,19 @@ namespace HM
         {
             InitializeComponent();
 
-            #region Проверка соединения с сервером
-            dataBases.ProtectedConnection();
+            #region Проверка соединения с БД
+            dataBases.ProtectedConnection(this);
             #endregion
 
             #region Начальные накстройки
             TB.Margin = new Thickness(0, 0, 0, 0); //выравниванеи TableControl 
-            ///отключение панели настроек при иницииализации --
-            SettingsGrid.IsEnabled = false;
-            SettingsGrid.Visibility = Visibility.Hidden;
-            PartyGrid.IsEnabled = false;
-            PartyGrid.Visibility = Visibility.Hidden;
+            grids = new List<Grid>() { PartyGrid, HomeGrid, PostomatsGrid, SettingsGrid }; ///включение в список всех гридов-окон
+            OpenGrid(HomeGrid); //открытие начальной страницы
+            HM.Title += " " + Assembly.GetExecutingAssembly().GetName().Version.ToString(3); //версия в названии (менять в свовах проекта)
+
             #endregion
 
-            #region Regisrty Staff           
+            #region Regisrty Staff Настройки          
             ///Пересоздание корня настроек в реестре + синхрон с реестром настроек--
             using RegistryKey registry = Registry.CurrentUser.CreateSubKey(@"Software\HM\Settings");
             using RegistryKey registry1 = Registry.CurrentUser.CreateSubKey(@"Software\HM\Hosts");
@@ -62,12 +67,15 @@ namespace HM
                 {
                     UserName.Text = key.GetValue("Имя пользователя")?.ToString();
                     UserPass.Password = key.GetValue("Пароль")?.ToString();
+                    TokenPost_PM.Text = key.GetValue("X-AUTH-TOKEN_PM")?.ToString();
+                    TokenPost_Engy.Text = key.GetValue("X-AUTH-TOKEN_Engy")?.ToString();
                     SP_HotKey.Text = key.GetValue(SP_HotKey.Name)?.ToString();
                     Settings_HotKey.Text = key.GetValue(Settings_HotKey.Name)?.ToString();
                 }
             }
             #endregion
 
+            #region добавление всех начальных функций обработок в Настройки
             #region Добавление обработки событий для всех полей HotKeys в Настройках
             KeyTextBoxies = new List<TextBox>() { SP_HotKey, Settings_HotKey }; ///все поля для которых нужно свойство HotKeys, через  ","
             foreach (var item in KeyTextBoxies)
@@ -87,8 +95,13 @@ namespace HM
 
             #endregion
 
+            QstLB_POST.MouseDown += (a, e) => { Process.Start(new ProcessStartInfo("https://wiki.sblogistica.ru/display/LINE2SUPP/NEW+Back-end+ENGY+-+supportapi") { UseShellExecute = true }); };
+
+
+            #endregion
+
             #region Добавление обработки всех элементов меню (навердений мыши  и клики)
-            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home };
+            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home, Bronirovanie_Canvas, Sync_Canvas };
             foreach (var item in MenuCanvas)
             {
                 item.MouseEnter += (a, e) => { item.Background = new SolidColorBrush(Colors.Gray); };
@@ -97,16 +110,16 @@ namespace HM
             }
 
             ///обработка кликов на элементы меню
-            PartyCanvas.MouseDown += (a, e) => { PartyGrid.IsEnabled = true; PartyGrid.Visibility = Visibility.Visible; TB.IsEnabled = false; TB.Visibility = Visibility.Hidden; WarEdit wr = new WarEdit(); wr.LoadHosts(ListWarhouses); wr.Close(); SwitchPanel(); };
-            Home.MouseDown += (a, e) => { PartyGrid.IsEnabled = false; PartyGrid.Visibility = Visibility.Hidden; TB.IsEnabled = true; TB.Visibility = Visibility.Visible; SwitchPanel(); };
-            PostomatsCanvas.MouseDown += (a, e) => { MessageBox.Show("Здесь кода-нибудь чтото будет !))"); SwitchPanel(); };
-            SettingCanvas.MouseDown += (a, e) => { OpenSettings(); };
+            PartyCanvas.MouseDown += (a, e) => { OpenGrid(PartyGrid); WarEdit wr = new WarEdit(); wr.LoadHosts(ListWarhouses); wr.Close(); };
+            Home.MouseDown += (a, e) => { OpenGrid(HomeGrid); };
+            PostomatsCanvas.MouseDown += (a, e) => { OpenGrid(PostomatsGrid); };
+            SettingCanvas.MouseDown += (a, e) => { OpenGrid(SettingsGrid); };
 
+            //обработка кликов на пункты меню постаматов
+            Bronirovanie_Canvas.MouseDown += (a, e) => { Bron_LB.Background = new SolidColorBrush(Colors.White); Sync_LB.Background = new SolidColorBrush(Colors.Transparent); BronbGrid.Visibility = Visibility.Visible; BronbGrid.IsEnabled = true; SyncEngyGrid.Visibility = Visibility.Hidden; SyncEngyGrid.IsEnabled = false; };
+            Sync_Canvas.MouseDown += (a, e) => { Sync_LB.Background = new SolidColorBrush(Colors.White); Bron_LB.Background = new SolidColorBrush(Colors.Transparent); SyncEngyGrid.Visibility = Visibility.Visible; SyncEngyGrid.IsEnabled = true; BronbGrid.Visibility = Visibility.Hidden; BronbGrid.IsEnabled = false; };
 
             #endregion
-
-
-
         }
         #region Своя кнопка "Закрыть"
         ///// <summary>
@@ -139,6 +152,43 @@ namespace HM
         //}
         #endregion Button_close
 
+        /// <summary>
+        ///обновление статуса подключения из другого потока 
+        /// </summary>
+        /// <param name="newText"></param>
+        public void UpdateLabel(string newText)
+        {
+            // Получаем доступ к диспетчеру WPF UI
+            Dispatcher.Invoke(() =>
+            {
+                // Обновляем текст элемента управления WPF Label
+                Status_Con.Content = newText;
+            });
+        }
+
+        #region Переключение пунктов меню метод - Переключение(открытие) Гридов 
+
+        /// <summary>
+        /// Выключение всех других гридов, кроме выбранного (Включение выбранного)
+        /// </summary>
+        /// <param name="CurrentChange">Выбранный грид</param>
+        public void OpenGrid(Grid CurrentChange)
+        {
+            foreach (var item in grids)
+            {
+                if (item == CurrentChange)
+                {
+                    item.Visibility = Visibility.Visible;
+                    item.IsEnabled = true;
+                }
+                else { item.Visibility = Visibility.Hidden; item.IsEnabled = false; }
+
+            }
+            SwitchPanel();
+
+        }
+
+        #endregion
 
         #region Боковая панель
 
@@ -150,7 +200,7 @@ namespace HM
         {
             const int marginLeftMin = 0;
             const int marginLeftMax = 150;
-            double CurrentVarginLeft = TabControGrid.Margin.Left;
+            double CurrentVarginLeft = MajorGrid.Margin.Left;
 
             TextBox.IsEnabled = false;
             ListOne.IsEnabled = false;
@@ -162,14 +212,14 @@ namespace HM
             ///анимация боковой панели  
             if (SetPanel == true)
             {
-                while (TabControGrid.Margin.Left - TabControGrid.Margin.Left / 6 > marginLeftMin)
+                while (MajorGrid.Margin.Left - MajorGrid.Margin.Left / 6 > marginLeftMin)
                 {
-                    CurrentVarginLeft = TabControGrid.Margin.Left;
+                    CurrentVarginLeft = MajorGrid.Margin.Left;
                     await Task.Delay(1);
-                    TabControGrid.Margin = new Thickness(CurrentVarginLeft - CurrentVarginLeft / 6, 0, 0, 0);
-                    if (TabControGrid.Margin.Left < 2)
+                    MajorGrid.Margin = new Thickness(CurrentVarginLeft - CurrentVarginLeft / 6, 0, 0, 0);
+                    if (MajorGrid.Margin.Left < 2)
                     {
-                        TabControGrid.Margin = new Thickness(0, 0, 0, 0);
+                        MajorGrid.Margin = new Thickness(0, 0, 0, 0);
                         break;
                     }
                 }
@@ -181,12 +231,12 @@ namespace HM
 
                 while (CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 6 < marginLeftMax)
                 {
-                    CurrentVarginLeft = TabControGrid.Margin.Left;
+                    CurrentVarginLeft = MajorGrid.Margin.Left;
                     await Task.Delay(1);
-                    TabControGrid.Margin = new Thickness(CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 6, 0, 0, 0);
-                    if (TabControGrid.Margin.Left > 147)
+                    MajorGrid.Margin = new Thickness(CurrentVarginLeft + (marginLeftMax - CurrentVarginLeft) / 6, 0, 0, 0);
+                    if (MajorGrid.Margin.Left > 147)
                     {
-                        TabControGrid.Margin = new Thickness(150, 0, 0, 0);
+                        MajorGrid.Margin = new Thickness(150, 0, 0, 0);
                         break;
                     }
                 }
@@ -202,21 +252,6 @@ namespace HM
 
         #endregion
 
-        #region Сложные  функции элементов бокоовой панели 
-
-        /// <summary>
-        /// Открыть панель настроек 
-        /// </summary>
-        public void OpenSettings()
-        {
-            SettingsGrid.Visibility = Visibility.Visible;
-            SettingsGrid.IsEnabled = true;
-            SwitchPanel();
-
-
-        }
-
-        #endregion
 
 
         #region Table Item 1   
@@ -303,7 +338,7 @@ namespace HM
 
                 }
             }
-            try{if (TextBox.Text != "") Clipboard.SetText(TextBox.Text);}catch{}
+            try { if (TextBox.Text != "") Clipboard.SetText(TextBox.Text); } catch { }
             BFcopy.Text = "Результат скопирован в буфер обмена";
             await Task.Delay(1000);
             BFcopy.Text = null;
@@ -539,7 +574,7 @@ namespace HM
         {
             ///Отключение ПАНЕЛИ НАСТРОЕК бысчрой клавишей 
             if (e.Key.ToString() == SP_HotKey.Text) SwitchPanel(); // открытие боковой панели по кнопке 
-            if (e.Key.ToString() == Settings_HotKey.Text) OpenSettings();
+            if (e.Key.ToString() == Settings_HotKey.Text) OpenGrid(SettingsGrid);
 
         }
 
@@ -630,10 +665,60 @@ namespace HM
         /// </summary>
         private void Close_settings_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            SettingsGrid.IsEnabled = false; SettingsGrid.Visibility = Visibility.Hidden;
+            OpenGrid(HomeGrid);
+
+        }
+
+        /// <summary>
+        ///Сохранение данных об Токене для POST
+        /// </summary>
+        async private void SavePostToken(object sender, RoutedEventArgs e)
+        {
+            if (TokenPost_PM.Text != "" && TokenPost_Engy.Text != "")
+            {
+                using RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM\Settings");
+                {
+                    key?.SetValue("X-AUTH-TOKEN_PM", TokenPost_PM.Text);
+                    key?.SetValue("X-AUTH-TOKEN_Engy", TokenPost_Engy.Text);
+                }
+                Save_indicatorPost.Content = "Успешно";
+
+            }
+            else Save_indicatorPost.Content = "Не заполнено поле";
+
+            await Task.Delay(1000);
+            Save_indicatorPost.Content = "";
+
         }
 
 
+
+
+        #endregion
+
+        #region Postomats
+
+        #region Bronirovanie
+        /// <summary>
+        /// Кнопка "Забронировать" + обновить вгх
+        /// </summary>
+        private void Bronirovat_Button_Click(object sender, RoutedEventArgs e)
+        {
+            LogPOST1.Text = "";
+            Post post = new Post();
+            if (Whide_rp.Text != "" && leagh_RP.Text != "" && Ves_RP.Text != "" && hiegh_rp.Text != "")
+            { //обновляем вгх и пишел в лог
+                dataBases.ConnectDB("Шиптор", $@"update package_departure set postamat_queued_at = now(),postamat_sync_completed_at = now(), linked_with_postamat_at = now() where package_id in ({RP_child.Text})");
+                LogPOST1.Text = "Привязано к постамату.\n";
+                LogPOST1.Text += $@" Обновление размеров:\n {post.UpdateVGH(RP_child.Text)} \n ----Конец запроса----";
+                LogPOST1.Text += $@" Отвязать от ПМ:\n {post.unlinkPackage(RP_child.Text)} \n ----Конец запроса----";
+            }
+            //бронировать и писать в лог
+            LogPOST1.Text += $@"Бронирование 1:\n {post.enqueue(RP_child.Text)} \n ----Конец запроса----";
+            LogPOST1.Text += $@"Бронирование 2:\n {post.bookDestinationCell(RP_child.Text)} \n ----Конец запроса----";
+
+        }
+        #endregion
 
 
 
