@@ -81,8 +81,8 @@ namespace HM
                       ""id"": ""JsonRpcClient.js"",
                       ""jsonrpc"": ""2.0"",
                       ""method"": ""postamat.enqueue"",
-                      ""params"": [{RP}]
-                    }}";
+                      ""params"": [{RP}]" +
+                      "}}";
             return await SendPostRequest(api_Shiptor, data);
         }
 
@@ -124,11 +124,16 @@ namespace HM
                 {
                     if (response.IsSuccessStatusCode)
                     {
+
+                        MessageBox.Show(await response.Content.ReadAsStringAsync());
+                        ///получать сам ответ от запроса для логирования
+
                         return await response.Content.ReadAsStringAsync();
 
                     }
                     else
                     {
+
                         var responseContent = await response.Content.ReadAsStringAsync();
                         return $@"Запрос вернул ответ с ошибкой: {response.StatusCode}; Error message: {responseContent}";
 

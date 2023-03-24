@@ -9,7 +9,7 @@
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <SignAssembly>False</SignAssembly>
     <ApplicationIcon>Assets\48_48.ico</ApplicationIcon>
-    <Version>0.4.21</Version>
+    <Version>0.4.22</Version>
 
   </PropertyGroup>
 

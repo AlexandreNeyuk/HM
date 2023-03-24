@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Security.Cryptography;
 using System.Security.Policy;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -262,30 +263,40 @@ namespace HM
 
             if (ContextRP.IsChecked == true)
             {
+
                 //по сенарию RP (simple_List)
                 // TextBox.Text = TextBox.Text.Replace("RP", "");
 
                 //чуть сложнее
-                List<string> stringsRP = To_List(TextBox);
+                //List<string> stringsRP = To_List(TextBox);
                 List<string> resilt = new List<string>();  //лист с цифрами от RP
-                foreach (var item in stringsRP)
+
+                var pattern = @"RP\d+";
+                var matches = Regex.Matches(TextBox.Text, pattern);
+                foreach (Match match in matches)
                 {
-                    if (item.Contains("RP"))
-                    {
-                        // string h = item.Substring(item.IndexOf("RP"), 12);
-                        string[] valuesRP = item.Split("RP"); ///RP - 5656564
-                        if (valuesRP.Length >= 2)//в строке несколько RP
-                        {
-                            foreach (var item1 in valuesRP)
-                                if (string.Join("", item1.Where(c => char.IsDigit(c))) != "")
-                                    resilt.Add(string.Join("", item1.Where(c => char.IsDigit(c))));
-                        }
-                        else
-                            resilt.Add(string.Join("", item.Where(c => char.IsDigit(c))));
-
-                    }
-
+                    resilt.Add(match.Value.Replace("RP", ""));
                 }
+
+
+                /*  foreach (var item in stringsRP)
+                  {
+                      if (item.Contains("RP"))
+                      {
+                          // string h = item.Substring(item.IndexOf("RP"), 12);
+                          string[] valuesRP = item.Split("RP"); ///RP - 5656564
+                          if (valuesRP.Length >= 2)//в строке несколько RP
+                          {
+                              foreach (var item1 in valuesRP)
+                                  if (string.Join("", item1.Where(c => char.IsDigit(c))) != "")
+                                      resilt.Add(string.Join("", item1.Where(c => char.IsDigit(c))));
+                          }
+                          else
+                              resilt.Add(string.Join("", item.Where(c => char.IsDigit(c))));
+
+                      }
+
+                  }*/
                 resilt = resilt.Distinct().ToList();
                 TextBox.Text = string.Join("\r\n", resilt);
 
@@ -710,9 +721,12 @@ namespace HM
             { //обновляем вгх и пишел в лог
                 dataBases.ConnectDB("Шиптор", $@"update package_departure set postamat_queued_at = now(),postamat_sync_completed_at = now(), linked_with_postamat_at = now() where package_id in ({RP_child.Text})");
                 LogPOST1.Text = "Привязано к постамату.\n";
-                LogPOST1.Text += $@" Обновление размеров:\n {post.UpdateVGH(RP_child.Text)} \n ----Конец запроса----";
+                LogPOST1.Text += $@" Обновление размеров:\n {post.UpdateVGH(RP_child.Text)}
+                                    \n ----Конец запроса----";
                 LogPOST1.Text += $@" Отвязать от ПМ:\n {post.unlinkPackage(RP_child.Text)} \n ----Конец запроса----";
             }
+
+            LogPOST1.Text += $@" Отвязать от ПМ:\n {post.unlinkPackage(RP_child.Text)} \n ----Конец запроса----";
             //бронировать и писать в лог
             LogPOST1.Text += $@"Бронирование 1:\n {post.enqueue(RP_child.Text)} \n ----Конец запроса----";
             LogPOST1.Text += $@"Бронирование 2:\n {post.bookDestinationCell(RP_child.Text)} \n ----Конец запроса----";

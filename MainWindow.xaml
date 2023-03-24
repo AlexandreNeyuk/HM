@@ -115,13 +115,13 @@
                     </Grid.ColumnDefinitions>
                     <TextBox x:Name="RP_child1" HorizontalAlignment="Left" Margin="36,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" FontFamily="72" Height="20"/>
                     <Label HorizontalAlignment="Left" Margin="366,41,0,0" VerticalAlignment="Top" FontFamily="72" Content="Статус посылки из Engy" Width="148" HorizontalContentAlignment="Center"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="366,70,0,0" VerticalAlignment="Top" Width="148">
+                    <ComboBox HorizontalAlignment="Left" Margin="366,70,0,0" VerticalAlignment="Top" Width="148" SelectedIndex="0">
                         <ComboBoxItem Content="Готово к загрузке (забронировано)" FontFamily="72"/>
                         <ComboBoxItem Content="Заложено" FontFamily="72"/>
                     </ComboBox>
                     <Button x:Name="Bronirovat_Button1" HorizontalAlignment="Left" Margin="214,188,0,0" VerticalAlignment="Top" FontFamily="72" Width="118" Height="25" Content="Синхронизировать"/>
                     <Label VerticalAlignment="Top" FontFamily="72" Padding="5,5,5,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold" Height="29" Background="#FFF7F7F7" Content="Синхронизация посылок с Engy" ToolTip="Эта страница вызывает методы синхронзации/добавления посылки из Engy (если ее нет в ПМ), а также синхронизирует статус посылки с Engy"/>
-                    <DatePicker HorizontalAlignment="Left" Margin="366,126,0,0" VerticalAlignment="Top" Width="148" SelectedDateFormat="Short" Text="Дата добавления" FirstDayOfWeek="Monday" DisplayDate="03/18/2023 21:39:00"/>
+                    <DatePicker HorizontalAlignment="Left" Margin="366,126,0,0" VerticalAlignment="Top" Width="148" SelectedDateFormat="Long" Text="Дата добавления" FirstDayOfWeek="Monday" DisplayDate="03/18/2023 21:39:00"/>
                     <Label Content="Отправление (дочь)" HorizontalAlignment="Left" Margin="58,40,0,0" VerticalAlignment="Top" FontFamily="72" Width="123"/>
                     <Label HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" FontFamily="72" Width="26" Content="RP"/>
                     <Label HorizontalAlignment="Left" Margin="326,102,0,0" VerticalAlignment="Top" FontFamily="72" Width="228" Content="Дата добавления посылки из Engy" HorizontalContentAlignment="Center"/>
