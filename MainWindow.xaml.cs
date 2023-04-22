@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO.Packaging;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Security.Cryptography;
@@ -19,8 +20,10 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Clipboard = System.Windows.Clipboard;
 using Label = System.Windows.Controls.Label;
+using ListBox = System.Windows.Controls.ListBox;
 using MessageBox = System.Windows.Forms.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
 using Window = System.Windows.Window;
@@ -256,7 +259,9 @@ namespace HM
 
 
         #region Table Item 1   
-
+        /// <summary>
+        /// Саммая главная кнопка 
+        /// </summary>
         async private void ListProcess_Click(object sender, RoutedEventArgs e)
         {
 
@@ -382,7 +387,9 @@ namespace HM
             AF_1.IsEnabled = false;
             AF_2.IsChecked = false;
             AF_2.IsEnabled = false;
+            ConrextUpper.IsChecked = true;
             UpperSearch.IsEnabled = true;
+            UpperSearch.IsChecked = true;
 
         }
 
@@ -406,6 +413,8 @@ namespace HM
         /// </summary>
         private void FidCopy_Click(object sender, RoutedEventArgs e)
         {
+            ListOne.Text = ListOne.Text.ToUpper();
+            ListTwo.Text = ListTwo.Text.ToUpper();
             List<string> list1 = To_List(ListOne);
             ListTwo.Text += "\r\n";
             List<string> list2 = To_List(ListTwo);
@@ -569,7 +578,7 @@ namespace HM
         /// <returns></returns>
         public List<string> To_List(TextEditor tx)
         {
-            List<string> str = tx.Text.Split("\r\n").ToList();
+            List<string> str = tx.Text.Split(Environment.NewLine).ToList();
             return str;
 
         }
@@ -714,11 +723,12 @@ namespace HM
         /// Кнопка "Забронировать" + обновить вгх
         /// </summary>
         private void Bronirovat_Button_Click(object sender, RoutedEventArgs e)
-        {
+        { ///~~~ добавить в логику условие что возвращаемое значение Тасков POST не равно null и действовать далее !!!
             LogPOST1.Text = "";
             Post post = new Post();
+            //проверка наличия вгх в строках формы
             if (Whide_rp.Text != "" && leagh_RP.Text != "" && Ves_RP.Text != "" && hiegh_rp.Text != "")
-            { //обновляем вгх и пишел в лог
+            { //обновляем вгх и пишем в лог
                 dataBases.ConnectDB("Шиптор", $@"update package_departure set postamat_queued_at = now(),postamat_sync_completed_at = now(), linked_with_postamat_at = now() where package_id in ({RP_child.Text})");
                 LogPOST1.Text = "Привязано к постамату.\n";
                 LogPOST1.Text += $@" Обновление размеров:\n {post.UpdateVGH(RP_child.Text)}
@@ -732,9 +742,186 @@ namespace HM
             LogPOST1.Text += $@"Бронирование 2:\n {post.bookDestinationCell(RP_child.Text)} \n ----Конец запроса----";
 
         }
+
+
+
         #endregion
 
+        #endregion
 
+        #region MGK
+        /// <summary>
+        /// Clear Button
+        /// </summary>
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            //очищать все потоки и поля на MGK
+            ListT1.Items.Clear();
+            ListT2.Items.Clear();
+            ListT3.Items.Clear();
+            ListT4.Items.Clear();
+            ListT5.Items.Clear();
+            ListT6.Items.Clear();
+            ALL_GM.Text = null;
+        }
+
+        /// <summary>
+        ///Кнопка "Запуск" на странице MGK
+        /// </summary>
+        private void GO_GK_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> listRP_GK = new List<string>(To_List(ALL_GM)); //лист со всем "добром" (и шк и RP)
+            List<string> curRP;//лист с цифрами от RP отделенный от ШК, в дальнейшем полный список найденных RP 
+            List<string> SHK;//Лист с ШК
+            List<string> RP_fromSHK;//Лист с найденными RP из ШК
+            List<string> SHK_fromDB; // Лист с ШК из БД
+
+
+            //Для файла
+            List<string> NoFound = new List<string>(); //Список ненайденных
+
+
+            // • отделение RP от ШК
+            curRP = new List<string>();
+            var pattern = @"RP\d+";
+            var matches = Regex.Matches(ALL_GM.Text, pattern);
+            //вычитаем из всего списка RP
+            ListOne.Text = string.Join("\r\n", listRP_GK);
+            ListTwo.Text = string.Join("\r\n", matches);
+            FidCopy_Click(sender, e);
+            SHK = new List<string>(To_List(ListOne));
+            FidCopy_Copy_Click(sender, e);
+            foreach (Match match in matches) { curRP.Add(match.Value.Replace("RP", "")); }
+            curRP = curRP.Distinct().ToList();
+
+            //•Из ШК находим RP 
+            TextBox.Text = string.Join(Environment.NewLine, SHK);
+            ConrextUpper_Checked(sender, e);
+            ListProcess_Click(sender, e);
+            RP_fromSHK = new List<string>(TextBox.Text.Split(",\n").ToList());
+            Clear_all_textB_Click(sender, e);
+
+
+            //• Найти ненайденные по ШК
+            if (RP_fromSHK.Count > 0)
+            {
+                SHK_fromDB = dataBases.ConnectDB("Шиптор", $@"select id, external_id  from package p where id  in ({string.Join(",", RP_fromSHK)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
+                ListOne.Text = string.Join("\r\n", SHK);
+                ListTwo.Text = string.Join("\r\n", SHK_fromDB);
+                FidCopy_Click(sender, e);
+                NoFound = new List<string>(To_List(ListOne));//Не найденные по ШК
+                FidCopy_Copy_Click(sender, e);
+            }
+            //Также находим ненайденные по RP из БД 
+            if (curRP.Count > 0)
+            {
+                ListOne.Text = string.Join(Environment.NewLine, curRP);
+                ListTwo.Text = string.Join(Environment.NewLine, dataBases.ConnectDB("Шиптор", $@"select id, external_id  from package p where id  in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[0].ToString()).ToList());
+                FidCopy_Click(sender, e);
+                if (ListOne.Text != "") { NoFound.AddRange(To_List(ListOne)); }
+            }
+
+            //• Складываем списки RP и чистим по ним хеши
+            curRP.AddRange(RP_fromSHK); // обьединяем списки RP
+            dataBases.ConnectDB("Шиптор", $@"UPDATE public.package_sorter_data SET package_create_hash=NULL, package_merge_hash=NULL WHERE package_id in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
+
+
+            //•Делим общий список RP для всех выбранных потоков 
+            int chunkSize = curRP.Count / (ThreadsSelect.SelectedIndex + 1);
+            List<List<string>> chunks = new List<List<string>>();
+            for (int i = 0; i < curRP.Count; i += chunkSize)
+            {
+                if ((curRP.Count - (chunkSize * (chunks.Count + 1))) < curRP.Count / 10)
+                {
+
+                    //берем все до конца с текущего I 
+                    chunks.Add(curRP.GetRange(i, curRP.Count - i));
+                    break;
+                }
+                else
+                {
+                    chunks.Add(curRP.GetRange(i, Math.Min(chunkSize, curRP.Count - i)));
+                }
+
+            }
+
+            //• Запуск раннеров
+            for (int i = 0; i < (ThreadsSelect.SelectedIndex + 1); i++)
+            {
+                RuunerPosts(i, chunks);
+
+            }
+        }
+
+        /// <summary>
+        /// Раннер
+        /// </summary>
+        /// <param name="Thread">Поток</param>
+        /// <param name="chunks">Чанк посылок</param>
+        async void RuunerPosts(int Thread, List<List<string>> chunks)
+        {
+            //выбираем ЛисВью в который будем писать 
+            ListBox MylistThread = ListT1;
+            switch (Thread)
+            {
+                case 0: MylistThread = ListT1; break;
+                case 1: MylistThread = ListT2; break;
+                case 2: MylistThread = ListT3; break;
+                case 3: MylistThread = ListT4; break;
+                case 4: MylistThread = ListT5; break;
+                case 5: MylistThread = ListT6; break;
+
+            }
+
+            for (int i = 0; i < chunks[Thread].Count; i++)
+            {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                using (var httpClient = new HttpClient())
+                {
+                    var httpContent = new StringContent($@"{{
+                                                                ""id"": ""JsonRpcClient.js"",
+                                                                ""jsonrpc"": ""2.0"",
+                                                                ""method"": ""sapCreatePackage"",
+                                                                ""params"": [{chunks[Thread][i]}]
+                                                            }}");
+                    httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+                    using (var response = await httpClient.PostAsync("https://api.shiptor.ru/system/v1?key=SemEd5DexEk7Ub2YrVuyNavNutEh4Uh8TerSuwEnMev", httpContent))
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+
+                            ///получать сам ответ от запроса для логирования
+
+                            await response.Content.ReadAsStringAsync();
+                            stopwatch.Stop();
+                            Label label = new Label();
+                            label.Content = $"Iteration {i} success. Response time: {stopwatch.ElapsedMilliseconds} ms";
+                            MylistThread.Items.Add(label);
+
+
+                        }
+                        else
+                        {
+
+                            var responseContent = await response.Content.ReadAsStringAsync();
+                            // $@"Запрос вернул ответ с ошибкой: {response.StatusCode}; Error message: {responseContent}";
+                            stopwatch.Stop();
+                            Label label = new Label();
+                            label.Content = $"Iteration {i}. Error:{response.StatusCode}; Error message: {responseContent}.  Response time: {stopwatch.ElapsedMilliseconds} ms";
+                            MylistThread.Items.Add(label);
+
+
+                        }
+                        //return await response.Content.ReadAsStringAsync();
+                    }
+                }
+                MylistThread.ScrollIntoView(MylistThread.Items.GetItemAt(i));
+
+            }
+
+        }
 
         #endregion
 
