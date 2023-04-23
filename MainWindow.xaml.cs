@@ -1,10 +1,12 @@
 ﻿using ICSharpCode.AvalonEdit;
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Net.Http;
@@ -16,6 +18,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -766,19 +769,17 @@ namespace HM
         }
 
         /// <summary>
-        ///Кнопка "Запуск" на странице MGK
+        ///Кнопка "Запуск" на странице MGK (сортировка ГМ, поиск по бд, формирование списков для потоков и запуск потоков) (все, до запуска потоков!!!)
         /// </summary>
         private void GO_GK_Click(object sender, RoutedEventArgs e)
         {
             List<string> listRP_GK = new List<string>(To_List(ALL_GM)); //лист со всем "добром" (и шк и RP)
-            List<string> curRP;//лист с цифрами от RP отделенный от ШК, в дальнейшем полный список найденных RP 
             List<string> SHK;//Лист с ШК
             List<string> RP_fromSHK;//Лист с найденными RP из ШК
             List<string> SHK_fromDB; // Лист с ШК из БД
 
-
             //Для файла
-            List<string> NoFound = new List<string>(); //Список ненайденных
+            NoFound = new List<string>(); //Список ненайденных
 
 
             // • отделение RP от ШК
@@ -796,14 +797,18 @@ namespace HM
 
             //•Из ШК находим RP 
             TextBox.Text = string.Join(Environment.NewLine, SHK);
-            ConrextUpper_Checked(sender, e);
-            ListProcess_Click(sender, e);
+            if ((SHK.Count > 0) && (SHK[0] != ""))
+            {
+                ConrextUpper_Checked(sender, e);
+                ListProcess_Click(sender, e);
+
+            }
             RP_fromSHK = new List<string>(TextBox.Text.Split(",\n").ToList());
             Clear_all_textB_Click(sender, e);
 
 
             //• Найти ненайденные по ШК
-            if (RP_fromSHK.Count > 0)
+            if ((RP_fromSHK.Count > 0) && (RP_fromSHK[0] != ""))
             {
                 SHK_fromDB = dataBases.ConnectDB("Шиптор", $@"select id, external_id  from package p where id  in ({string.Join(",", RP_fromSHK)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
                 ListOne.Text = string.Join("\r\n", SHK);
@@ -821,13 +826,16 @@ namespace HM
                 if (ListOne.Text != "") { NoFound.AddRange(To_List(ListOne)); }
             }
 
-            //• Складываем списки RP и чистим по ним хеши
-            curRP.AddRange(RP_fromSHK); // обьединяем списки RP
+            //• Складываем списки RP (если не пустые!) и чистим по ним хеши
+            if ((RP_fromSHK.Count > 0) && (RP_fromSHK[0] != ""))
+                curRP.AddRange(RP_fromSHK); // обьединяем списки RP
             dataBases.ConnectDB("Шиптор", $@"UPDATE public.package_sorter_data SET package_create_hash=NULL, package_merge_hash=NULL WHERE package_id in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
 
 
             //•Делим общий список RP для всех выбранных потоков 
             int chunkSize = curRP.Count / (ThreadsSelect.SelectedIndex + 1);
+            GrThreads = (ThreadsSelect.SelectedIndex + 1);
+            curThread = 0;
             List<List<string>> chunks = new List<List<string>>();
             for (int i = 0; i < curRP.Count; i += chunkSize)
             {
@@ -851,6 +859,60 @@ namespace HM
                 RuunerPosts(i, chunks);
 
             }
+        }
+
+        int curThread = 0; // текущее количество выполненных потоков (++ после выполнения каждого из потоков, пока не достигнет числа)
+        int GrThreads; //Общее количество запущенных потоков (присваивается до начала распределения потоков)
+        List<string> NoFound;
+        List<string> curRP;//лист с цифрами от RP отделенный от ШК, в дальнейшем полный список найденных RP 
+
+        void checkFinallyThreadsAndCreateFile()
+        {
+            curThread++;
+            if (curThread == GrThreads)
+            {
+                //идем дальше проверять хеши и создавать файлик
+
+                List<string> NoLoadHash = dataBases.ConnectDB("Шиптор", $@"select package_id,package_create_hash from public.package_sorter_data where package_id in ({string.Join(",", curRP)}) and package_create_hash is null").AsEnumerable().Select(x => x[0].ToString()).ToList();
+                List<string> LoadedHash = dataBases.ConnectDB("Шиптор", $@"select package_id,package_create_hash from public.package_sorter_data where package_id in ({string.Join(",", curRP)}) and package_create_hash is not null").AsEnumerable().Select(x => x[0].ToString()).ToList();
+                var NoLoadRP_Status = dataBases.ConnectDB("Шиптор", $@"select  id, current_status from package p where id in ({string.Join(",", NoLoadHash)}) ");
+                List<string> NoLoadRP = NoLoadRP_Status.AsEnumerable().Select(x => x[0].ToString()).ToList();
+                List<string> NoLoadStatus = NoLoadRP_Status.AsEnumerable().Select(x => x[1].ToString()).ToList();
+
+                //•Создаем файлик Excel
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var file = new FileInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\Прогруженные_Hashes.xlsx");
+                using (var package = new ExcelPackage(file))
+                {
+                    // Добавление нового листа
+                    var worksheet = package.Workbook.Worksheets.Add("L_L");
+
+                    //Создаем шаблон
+                    worksheet.Cells["A1"].Value = "Прогруженные";
+                    worksheet.Cells["C1"].Value = "Не прогруженные";
+                    worksheet.Cells["D1"].Value = "Статус";
+                    worksheet.Cells["F1"].Value = "Не найденные в Шиптор";
+
+                    // Запись значений в колонку "Прогруженных"
+                    var A_Col = worksheet.Cells["A2:A" + LoadedHash.Count];
+                    A_Col.LoadFromCollection(LoadedHash);
+                    // Запись значений в колонку "Не прогруженных"
+                    var C_Col = worksheet.Cells["C2:C" + NoLoadHash.Count];
+                    C_Col.LoadFromCollection(NoLoadRP);
+                    // Запись значений в колонку "Статус"
+                    var D_Col = worksheet.Cells["D2:D" + NoLoadHash.Count];
+                    D_Col.LoadFromCollection(NoLoadStatus);
+                    // Запись значений в колонку "Не найденные в Шиптор"
+                    var F_Col = worksheet.Cells["F2:F" + NoLoadHash.Count];
+                    F_Col.LoadFromCollection(NoFound);
+
+                    // Сохранение файла
+                    package.Save();
+                }
+
+            }
+
+
         }
 
         /// <summary>
@@ -920,6 +982,7 @@ namespace HM
                 MylistThread.ScrollIntoView(MylistThread.Items.GetItemAt(i));
 
             }
+            checkFinallyThreadsAndCreateFile();
 
         }
 
