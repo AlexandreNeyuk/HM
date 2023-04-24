@@ -888,19 +888,12 @@ namespace HM
                 if ((NoLoadHash.Count > 0) && (NoLoadHash[0] != ""))
                     NoLoadRP_Status = dataBases.ConnectDB("Шиптор", $@"select  id, current_status from package p where id in ({string.Join(",", NoLoadHash)}) ");
 
-
-
                 List<string> NoLoadRP = NoLoadRP_Status.AsEnumerable().Select(x => x[0].ToString()).ToList();
                 List<string> NoLoadStatus = NoLoadRP_Status.AsEnumerable().Select(x => x[1].ToString()).ToList();
 
                 //•Создаем файлик Excel
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 var file = new FileInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + ExcelNameFile.Text + ".xlsx");
-
-                // Проверка, открыт ли файл Excel на данный момент
-
-
-
                 using (var package = new ExcelPackage(file))
                 {
                     // Добавление нового листа
