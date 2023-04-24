@@ -14,6 +14,7 @@ using System.Media;
 using System.Net.Http;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Reflection.Metadata;
 using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
@@ -30,6 +31,7 @@ using Clipboard = System.Windows.Clipboard;
 using Label = System.Windows.Controls.Label;
 using ListBox = System.Windows.Controls.ListBox;
 using MessageBox = System.Windows.Forms.MessageBox;
+using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
 using Window = System.Windows.Window;
 
@@ -131,34 +133,44 @@ namespace HM
             #endregion
         }
         #region Своя кнопка "Закрыть"
-        ///// <summary>
-        //////кнопка закрытия 
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //private void Close_Butt_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        //{
 
-        //}
-        ///// <summary>
-        ///// смеа цвета на красный
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //private void Close_Butt_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        //{
-        //    Close_Butt.Background =
-        //}
-        ///// <summary>
-        ///// смена цвета на = не цвет
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //private void Close_Butt_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        //{
+        /*  /// <summary>
+          ///кнопка закрытия 
+          /// </summary>
+          /// <param name="sender"></param>
+          /// <param name="e"></param>
+          private void Close_Butt_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+          {
 
-        //    Close_Butt.Background = null;
-        //}
+          }
+          /// <summary>
+          /// смеа цвета на красный
+          /// </summary>
+          /// <param name="sender"></param>
+          /// <param name="e"></param>
+          private void Close_Butt_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+          {
+              Close_Butt.Background =
+          }
+          /// <summary>
+          /// смена цвета на = не цвет
+          /// </summary>
+          /// <param name="sender"></param>
+          /// <param name="e"></param>
+          private void Close_Butt_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+          {
+
+              Close_Butt.Background = null;
+          }*/
+        // Обработчик события нажатия кнопки мыши на панели окна
+        /*   private void TitleBar_MouseDown(object sender, MouseEventArgs e)
+           {
+               if (e.Button == MouseButtons.Left)
+               {
+                   DragMove();
+
+               }
+           }*/
         #endregion Button_close
 
         /// <summary>
@@ -1007,8 +1019,8 @@ namespace HM
 
         }
 
-        #endregion
 
+        #endregion
 
     }
 }
