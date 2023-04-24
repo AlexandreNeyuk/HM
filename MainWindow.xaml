@@ -161,7 +161,7 @@
                                 <Button x:Name="ListProcess" Content="Обработка" VerticalAlignment="Center" Height="25" HorizontalAlignment="Left" Width="87" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0" ToolTip="Копирую сам!" Canvas.Left="8" Canvas.Top="113"/>
                                 <CheckBox x:Name="comma" Content="Запятые" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" IsChecked="True" Canvas.Left="25" Canvas.Top="85"/>
                                 <RadioButton x:Name="ContextRP" Content="RP" VerticalAlignment="Center" HorizontalAlignment="Left" Width="96" ToolTip="Обработка текста в рамках RP списка." IsChecked="True" FontFamily="Bahnschrift" Checked="ContextRP_Checked" Canvas.Left="25" Canvas.Top="35"/>
-                                <RadioButton x:Name="ConrextUpper" Content="Upper (' _ ')" VerticalAlignment="Center" HorizontalAlignment="Left" Width="99" IsChecked="False" FontFamily="Bahnschrift" ToolTip="Обработка списка с добавлением UPPER -контекста. " Checked="ConrextUpper_Checked" Canvas.Left="25" Canvas.Top="55"/>
+                                <RadioButton x:Name="ConrextUpper" Content="ШК" VerticalAlignment="Center" HorizontalAlignment="Left" Width="99" IsChecked="False" FontFamily="Bahnschrift" ToolTip="Обработка списка с добавлением UPPER -контекста. " Checked="ConrextUpper_Checked" Canvas.Left="25" Canvas.Top="55"/>
                                 <Label Content="Параметры" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" Canvas.Left="25" Canvas.Top="4"/>
                                 <TextBlock x:Name="BFcopy" Height="77" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Width="136" Canvas.Left="10" Canvas.Top="325"/>
                                 <Button x:Name="Clear_all_textB" Content="X" Canvas.Left="102" Canvas.Top="114" BorderThickness="0,0,0,0" Width="31" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Clear_all_textB_Click"/>
@@ -221,8 +221,8 @@
                             <avalonEdit:TextEditor x:Name="ALL_GM"
                                 FontFamily="Consolas"
                                 FontSize="14"
-                                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="413,24,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0" HorizontalAlignment="Left" Width="299"/>
-                            <ComboBox x:Name="ThreadsSelect" HorizontalAlignment="Left" Margin="750,78,0,0" VerticalAlignment="Top" Width="39" SelectedIndex="0" FontFamily="72" BorderThickness="0,0,0,1">
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="403,24,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0" HorizontalAlignment="Left" Width="299"/>
+                            <ComboBox x:Name="ThreadsSelect" HorizontalAlignment="Left" Margin="743,78,0,0" VerticalAlignment="Top" Width="39" SelectedIndex="0" FontFamily="72" BorderThickness="0,0,0,1">
                                 <ComboBoxItem Content="1"/>
                                 <ComboBoxItem Content="2"/>
                                 <ComboBoxItem Content="3"/>
@@ -231,8 +231,8 @@
                                 <ComboBoxItem Content="6"/>
                             </ComboBox>
                             <Label Content="Весь список ГМ" HorizontalAlignment="Left" Margin="503,0,0,0" VerticalAlignment="Top"/>
-                            <Label HorizontalAlignment="Left" Margin="744,47,0,0" VerticalAlignment="Top" Content="Потоки" FontFamily="72"/>
-                            <TabControl x:Name="ThreadsTab" Margin="0,1,436,10">
+                            <Label HorizontalAlignment="Left" Margin="737,47,0,0" VerticalAlignment="Top" Content="Потоки" FontFamily="72"/>
+                            <TabControl x:Name="ThreadsTab" Margin="0,1,0,10" HorizontalAlignment="Left" Width="397">
                                 <TabItem x:Name="Thread1" Header="Поток  1" Margin="-2,-2,-2,0">
                                     <Grid Background="#FFE5E5E5">
                                         <ListBox x:Name="ListT1" BorderThickness="0,0,0,0"/>
@@ -265,7 +265,9 @@
                                 </TabItem>
                             </TabControl>
                             <Button HorizontalAlignment="Center" Margin="789,4,0,0" VerticalAlignment="Top" Content="Х" Width="34" BorderThickness="0,0,0,0" FontFamily="72" HorizontalContentAlignment="Center" Click="Button_Click_1"/>
-                            <Button x:Name="GO_GK" Content="Запуск" HorizontalAlignment="Left" Margin="738,127,0,0" VerticalAlignment="Top" FontFamily="72" Height="27" Width="62" BorderThickness="0,0,0,0" Click="GO_GK_Click"/>
+                            <Button x:Name="GO_GK" Content="Запуск" HorizontalAlignment="Left" Margin="731,127,0,0" VerticalAlignment="Top" FontFamily="72" Height="27" Width="62" BorderThickness="0,0,0,0" Click="GO_GK_Click"/>
+                            <TextBox x:Name="ExcelNameFile" HorizontalAlignment="Left" Margin="712,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="99" FontFamily="72" Height="21" VerticalContentAlignment="Center"/>
+                            <Label HorizontalAlignment="Left" Margin="723,179,0,0" VerticalAlignment="Top" FontFamily="72" Content="Имя файла*"/>
 
 
                         </Grid>
