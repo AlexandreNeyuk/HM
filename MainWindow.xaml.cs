@@ -883,13 +883,24 @@ namespace HM
 
                 List<string> NoLoadHash = dataBases.ConnectDB("Шиптор", $@"select package_id,package_create_hash from public.package_sorter_data where package_id in ({string.Join(",", curRP)}) and package_create_hash is null").AsEnumerable().Select(x => x[0].ToString()).ToList();
                 List<string> LoadedHash = dataBases.ConnectDB("Шиптор", $@"select package_id,package_create_hash from public.package_sorter_data where package_id in ({string.Join(",", curRP)}) and package_create_hash is not null").AsEnumerable().Select(x => x[0].ToString()).ToList();
-                var NoLoadRP_Status = dataBases.ConnectDB("Шиптор", $@"select  id, current_status from package p where id in ({string.Join(",", NoLoadHash)}) ");
+
+                var NoLoadRP_Status = new DataTable();
+                if ((NoLoadHash.Count > 0) && (NoLoadHash[0] != ""))
+                    NoLoadRP_Status = dataBases.ConnectDB("Шиптор", $@"select  id, current_status from package p where id in ({string.Join(",", NoLoadHash)}) ");
+
+
+
                 List<string> NoLoadRP = NoLoadRP_Status.AsEnumerable().Select(x => x[0].ToString()).ToList();
                 List<string> NoLoadStatus = NoLoadRP_Status.AsEnumerable().Select(x => x[1].ToString()).ToList();
 
                 //•Создаем файлик Excel
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 var file = new FileInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + ExcelNameFile.Text + ".xlsx");
+
+                // Проверка, открыт ли файл Excel на данный момент
+
+
+
                 using (var package = new ExcelPackage(file))
                 {
                     // Добавление нового листа
@@ -924,15 +935,12 @@ namespace HM
                     // Сохранение файла
                     package.Save();
                 }
+
                 //• Звук уведомление о финале файла
                 using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
                 using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
                     new SoundPlayer(gzOut).Play();
-
             }
-
-
-
         }
 
         /// <summary>
