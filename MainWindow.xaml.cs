@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.IO.Packaging;
 using System.Linq;
+using System.Media;
 using System.Net.Http;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -267,7 +269,6 @@ namespace HM
         /// </summary>
         async private void ListProcess_Click(object sender, RoutedEventArgs e)
         {
-
 
             if (ContextRP.IsChecked == true)
             {
@@ -909,8 +910,13 @@ namespace HM
                     // Сохранение файла
                     package.Save();
                 }
+                //• Звук уведомление о финале файла
+                using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                    new SoundPlayer(gzOut).Play();
 
             }
+
 
 
         }
