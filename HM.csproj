@@ -9,7 +9,7 @@
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <SignAssembly>False</SignAssembly>
     <ApplicationIcon>Assets\48_48.ico</ApplicationIcon>
-    <Version>0.5.32</Version>
+    <Version>0.5.33</Version>
 
   </PropertyGroup>
 
@@ -30,6 +30,7 @@
     <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
     <PackageReference Include="EPPlus" Version="6.2.2" />
     <PackageReference Include="Npgsql" Version="7.0.0" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
 

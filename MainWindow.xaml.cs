@@ -2,6 +2,7 @@
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using OfficeOpenXml;
+using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -25,6 +26,7 @@ using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Clipboard = System.Windows.Clipboard;
@@ -32,8 +34,10 @@ using Label = System.Windows.Controls.Label;
 using ListBox = System.Windows.Controls.ListBox;
 using MessageBox = System.Windows.Forms.MessageBox;
 using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
+using Path = System.IO.Path;
 using TextBox = System.Windows.Controls.TextBox;
 using Window = System.Windows.Window;
+
 
 namespace HM
 {
@@ -762,6 +766,7 @@ namespace HM
         #endregion
 
         #region MGK
+
         /// <summary>
         /// Clear Button
         /// </summary>
@@ -774,7 +779,21 @@ namespace HM
             ListT4.Items.Clear();
             ListT5.Items.Clear();
             ListT6.Items.Clear();
+            ExcelNameFile.Text = null;
             ALL_GM.Text = null;
+        }
+
+        /// <summary>
+        ///Выбор папки расположения файла (если не выбиралась, то по умолчанию Desktop)
+        /// </summary>
+        private void SelectFolderHashes_Click(object sender, RoutedEventArgs e)
+        {
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+
+            if (dialog.ShowDialog() == true)
+                pathHashes = dialog.SelectedPath;
+            SelectedFolderHashes.Content = Path.GetFileName(pathHashes);
+
         }
 
         /// <summary>
@@ -782,97 +801,95 @@ namespace HM
         /// </summary>
         private void GO_GK_Click(object sender, RoutedEventArgs e)
         {
-            if (ExcelNameFile.Text == "")
+            if (ExcelNameFile.Text == null) ExcelNameFile.Text = "Hashes";
+            List<string> listRP_GK = new List<string>(To_List(ALL_GM)); //лист со всем "добром" (и шк и RP)
+            List<string> SHK;//Лист с ШК
+            List<string> RP_fromSHK;//Лист с найденными RP из ШК
+            List<string> SHK_fromDB; // Лист с ШК из БД
+
+            //Для файла
+            NoFound = new List<string>(); //Список ненайденных
+
+
+            // • отделение RP от ШК
+            curRP = new List<string>();
+            var pattern = @"RP\d+";
+            var matches = Regex.Matches(ALL_GM.Text, pattern);
+            //вычитаем из всего списка RP
+            ListOne.Text = string.Join("\r\n", listRP_GK);
+            ListTwo.Text = string.Join("\r\n", matches);
+            FidCopy_Click(sender, e);
+            SHK = new List<string>(To_List(ListOne));
+            FidCopy_Copy_Click(sender, e);
+            foreach (Match match in matches) { curRP.Add(match.Value.Replace("RP", "")); }
+            curRP = curRP.Distinct().ToList();
+
+            //•Из ШК находим RP 
+            TextBox.Text = string.Join(Environment.NewLine, SHK);
+            if ((SHK.Count > 0) && (SHK[0] != ""))
             {
+                ConrextUpper_Checked(sender, e);
+                ListProcess_Click(sender, e);
 
-                ExcelNameFile.Text = "Hashes";
-                List<string> listRP_GK = new List<string>(To_List(ALL_GM)); //лист со всем "добром" (и шк и RP)
-                List<string> SHK;//Лист с ШК
-                List<string> RP_fromSHK;//Лист с найденными RP из ШК
-                List<string> SHK_fromDB; // Лист с ШК из БД
-
-                //Для файла
-                NoFound = new List<string>(); //Список ненайденных
-
-
-                // • отделение RP от ШК
-                curRP = new List<string>();
-                var pattern = @"RP\d+";
-                var matches = Regex.Matches(ALL_GM.Text, pattern);
-                //вычитаем из всего списка RP
-                ListOne.Text = string.Join("\r\n", listRP_GK);
-                ListTwo.Text = string.Join("\r\n", matches);
-                FidCopy_Click(sender, e);
-                SHK = new List<string>(To_List(ListOne));
-                FidCopy_Copy_Click(sender, e);
-                foreach (Match match in matches) { curRP.Add(match.Value.Replace("RP", "")); }
-                curRP = curRP.Distinct().ToList();
-
-                //•Из ШК находим RP 
-                TextBox.Text = string.Join(Environment.NewLine, SHK);
-                if ((SHK.Count > 0) && (SHK[0] != ""))
-                {
-                    ConrextUpper_Checked(sender, e);
-                    ListProcess_Click(sender, e);
-
-                }
-                RP_fromSHK = new List<string>(TextBox.Text.Split(",\n").ToList());
-                Clear_all_textB_Click(sender, e);
-
-
-                //• Найти ненайденные по ШК
-                if ((RP_fromSHK.Count > 0) && (RP_fromSHK[0] != ""))
-                {
-                    SHK_fromDB = dataBases.ConnectDB("Шиптор", $@"select id, external_id  from package p where id  in ({string.Join(",", RP_fromSHK)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
-                    ListOne.Text = string.Join("\r\n", SHK);
-                    ListTwo.Text = string.Join("\r\n", SHK_fromDB);
-                    FidCopy_Click(sender, e);
-                    NoFound = new List<string>(To_List(ListOne));//Не найденные по ШК
-                    FidCopy_Copy_Click(sender, e);
-                }
-                //Также находим ненайденные по RP из БД 
-                if (curRP.Count > 0)
-                {
-                    ListOne.Text = string.Join(Environment.NewLine, curRP);
-                    ListTwo.Text = string.Join(Environment.NewLine, dataBases.ConnectDB("Шиптор", $@"select id, external_id  from package p where id  in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[0].ToString()).ToList());
-                    FidCopy_Click(sender, e);
-                    if (ListOne.Text != "") { NoFound.AddRange(To_List(ListOne)); }
-                }
-
-                //• Складываем списки RP (если не пустые!) и чистим по ним хеши
-                if ((RP_fromSHK.Count > 0) && (RP_fromSHK[0] != ""))
-                    curRP.AddRange(RP_fromSHK); // обьединяем списки RP
-                dataBases.ConnectDB("Шиптор", $@"UPDATE public.package_sorter_data SET package_create_hash=NULL, package_merge_hash=NULL WHERE package_id in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
-
-
-                //•Делим общий список RP для всех выбранных потоков 
-                int chunkSize = curRP.Count / (ThreadsSelect.SelectedIndex + 1);
-                GrThreads = (ThreadsSelect.SelectedIndex + 1);
-                curThread = 0;
-                List<List<string>> chunks = new List<List<string>>();
-                for (int i = 0; i < curRP.Count; i += chunkSize)
-                {
-                    if ((curRP.Count - (chunkSize * (chunks.Count + 1))) < curRP.Count / 10)
-                    {
-
-                        //берем все до конца с текущего I 
-                        chunks.Add(curRP.GetRange(i, curRP.Count - i));
-                        break;
-                    }
-                    else
-                    {
-                        chunks.Add(curRP.GetRange(i, Math.Min(chunkSize, curRP.Count - i)));
-                    }
-
-                }
-
-                //• Запуск раннеров
-                for (int i = 0; i < (ThreadsSelect.SelectedIndex + 1); i++)
-                {
-                    RuunerPosts(i, chunks);
-
-                }
             }
+            RP_fromSHK = new List<string>(TextBox.Text.Split(",\n").ToList());
+            Clear_all_textB_Click(sender, e);
+
+
+            //• Найти ненайденные по ШК
+            if ((RP_fromSHK.Count > 0) && (RP_fromSHK[0] != ""))
+            {
+                SHK_fromDB = dataBases.ConnectDB("Шиптор", $@"select id, external_id  from package p where id  in ({string.Join(",", RP_fromSHK)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
+                ListOne.Text = string.Join("\r\n", SHK);
+                ListTwo.Text = string.Join("\r\n", SHK_fromDB);
+                FidCopy_Click(sender, e);
+                NoFound = new List<string>(To_List(ListOne));//Не найденные по ШК
+                FidCopy_Copy_Click(sender, e);
+            }
+            //Также находим ненайденные по RP из БД 
+            if (curRP.Count > 0)
+            {
+                ListOne.Text = string.Join(Environment.NewLine, curRP);
+                ListTwo.Text = string.Join(Environment.NewLine, dataBases.ConnectDB("Шиптор", $@"select id, external_id  from package p where id  in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[0].ToString()).ToList());
+                FidCopy_Click(sender, e);
+                if (ListOne.Text != "") { NoFound.AddRange(To_List(ListOne)); }
+                FidCopy_Copy_Click(sender, e);
+            }
+
+            //• Складываем списки RP (если не пустые!) и чистим по ним хеши
+            if ((RP_fromSHK.Count > 0) && (RP_fromSHK[0] != ""))
+                curRP.AddRange(RP_fromSHK); // обьединяем списки RP
+            dataBases.ConnectDB("Шиптор", $@"UPDATE public.package_sorter_data SET package_create_hash=NULL, package_merge_hash=NULL WHERE package_id in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
+
+
+            //•Делим общий список RP для всех выбранных потоков 
+            int chunkSize = curRP.Count / (ThreadsSelect.SelectedIndex + 1);
+            GrThreads = (ThreadsSelect.SelectedIndex + 1);
+            curThread = 0;
+            List<List<string>> chunks = new List<List<string>>();
+            for (int i = 0; i < curRP.Count; i += chunkSize)
+            {
+                if ((curRP.Count - (chunkSize * (chunks.Count + 1))) < curRP.Count / 10)
+                {
+
+                    //берем все до конца с текущего I 
+                    chunks.Add(curRP.GetRange(i, curRP.Count - i));
+                    break;
+                }
+                else
+                {
+                    chunks.Add(curRP.GetRange(i, Math.Min(chunkSize, curRP.Count - i)));
+                }
+
+            }
+
+            //• Запуск раннеров
+            for (int i = 0; i < (ThreadsSelect.SelectedIndex + 1); i++)
+            {
+                RuunerPosts(i, chunks);
+
+            }
+
 
 
         }
@@ -882,6 +899,7 @@ namespace HM
         int GrThreads; //Общее количество запущенных потоков (присваивается до начала распределения потоков)
         List<string> NoFound;
         List<string> curRP;//лист с цифрами от RP отделенный от ШК, в дальнейшем полный список найденных RP 
+        string pathHashes = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
         /// <summary>
         /// Чек финала потоков и создание файла по шаблону
@@ -905,7 +923,7 @@ namespace HM
 
                 //•Создаем файлик Excel
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                var file = new FileInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + ExcelNameFile.Text + ".xlsx");
+                var file = new FileInfo(pathHashes + @"\" + ExcelNameFile.Text + ".xlsx");
                 using (var package = new ExcelPackage(file))
                 {
                     // Добавление нового листа
@@ -1021,6 +1039,7 @@ namespace HM
 
 
         #endregion
+
 
     }
 }

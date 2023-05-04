@@ -23,7 +23,7 @@
         <Grid x:Name="SwitchPanelCanvas" Margin="0,0,674,0">
 
             <Label HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="72" Foreground="White" Content="Меню" FontSize="16"/>
-            <Canvas x:Name="PostomatsCanvas"  Width="146" HorizontalAlignment="Left" Margin="0,120,0,0" Height="32" VerticalAlignment="Top">
+            <Canvas x:Name="PostomatsCanvas"  Width="146" HorizontalAlignment="Left" Margin="0,120,0,0" Height="32" VerticalAlignment="Top" IsEnabled="False" Visibility="Hidden">
                 <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Canvas.Left="10" Stretch="Fill" Source="/Assets/Postamats.png" Canvas.Top="6">
                     <Image.OpacityMask>
                         <ImageBrush ImageSource="/Assets/Postamats.png"/>
@@ -31,7 +31,7 @@
                 </Image>
                 <Label HorizontalAlignment="Left" VerticalAlignment="Center" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="20,10,5,5" Content="Постоматы" />
             </Canvas>
-            <Canvas x:Name="PartyCanvas" Width="146" HorizontalAlignment="Left" Margin="0,153,0,0" Height="32" VerticalAlignment="Top">
+            <Canvas x:Name="PartyCanvas" Width="146" HorizontalAlignment="Left" Margin="0,153,0,0" Height="32" VerticalAlignment="Top" IsEnabled="False" Visibility="Hidden">
                 <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Stretch="Fill" Canvas.Left="10" Canvas.Top="6" Source="/Assets/PartyLogo.png">
                     <Image.OpacityMask>
                         <ImageBrush ImageSource="/Assets/PartyLogo.png"/>
@@ -190,7 +190,7 @@
 				                FontSize="14"
 				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="348,26,0,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" BorderThickness="0,1,0,0" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="230"/>
 
-                            <Label HorizontalAlignment="Left" Margin="415,2,0,0" VerticalAlignment="Top" FontFamily="72" Content="Второй стписок"/>
+                            <Label HorizontalAlignment="Left" Margin="415,2,0,0" VerticalAlignment="Top" FontFamily="72" Content="Второй список"/>
                             <Button x:Name="FidCopy" Margin="248,65,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="88" Content="Сравнить" Click="FidCopy_Click"/>
 
                             <avalonEdit:TextEditor
@@ -200,7 +200,7 @@
 				                SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="588,26,0,21"  ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderThickness="0,1,0,0" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="213"/>
 
 
-                            <Label HorizontalAlignment="Left" Margin="614,2,0,0" VerticalAlignment="Top" FontFamily="72" Width="148" Content="Совпавшие елементы"/>
+                            <Label HorizontalAlignment="Left" Margin="588,2,0,0" VerticalAlignment="Top" FontFamily="72" Width="213" Content="Поле заметок" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                             <Button x:Name="FidCopy_Copy" Margin="276,103,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="36" Content="X" Click="FidCopy_Copy_Click"/>
 
                         </Grid>
@@ -235,7 +235,7 @@
                             <TabControl x:Name="ThreadsTab" Margin="0,1,0,10" HorizontalAlignment="Left" Width="397">
                                 <TabItem x:Name="Thread1" Header="Поток  1" Margin="-2,-2,-2,0">
                                     <Grid Background="#FFE5E5E5">
-                                        <ListBox x:Name="ListT1" BorderThickness="0,0,0,0"/>
+                                        <ListBox x:Name="ListT1" BorderThickness="0,0,0,0" Margin="0,0,0,10"/>
                                     </Grid>
                                 </TabItem>
                                 <TabItem x:Name="Thread2" Header="Поток  2" Margin="-2,-2,-2,0">
@@ -266,8 +266,10 @@
                             </TabControl>
                             <Button HorizontalAlignment="Center" Margin="789,4,0,0" VerticalAlignment="Top" Content="Х" Width="34" BorderThickness="0,0,0,0" FontFamily="72" HorizontalContentAlignment="Center" Click="Button_Click_1"/>
                             <Button x:Name="GO_GK" Content="Запуск" HorizontalAlignment="Left" Margin="731,127,0,0" VerticalAlignment="Top" FontFamily="72" Height="27" Width="62" BorderThickness="0,0,0,0" Click="GO_GK_Click"/>
-                            <TextBox x:Name="ExcelNameFile" HorizontalAlignment="Left" Margin="712,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="99" FontFamily="72" Height="21" VerticalContentAlignment="Center"/>
-                            <Label HorizontalAlignment="Left" Margin="723,179,0,0" VerticalAlignment="Top" FontFamily="72" Content="Имя файла*"/>
+                            <TextBox x:Name="ExcelNameFile" HorizontalAlignment="Left" Margin="712,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="99" FontFamily="72" Height="21" VerticalContentAlignment="Center"/>
+                            <Label HorizontalAlignment="Left" Margin="712,184,0,0" VerticalAlignment="Top" FontFamily="72" Content="Имя файла" Width="99" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Button x:Name="SelectFolderHashes" Content="Расположение" HorizontalAlignment="Left" Margin="712,275,0,0" VerticalAlignment="Top" BorderThickness="0,0,0,0" FontFamily="72" Height="27" Width="101" Click="SelectFolderHashes_Click"/>
+                            <Label x:Name="SelectedFolderHashes" Content="Desktop" HorizontalAlignment="Left" Margin="712,247,0,0" VerticalAlignment="Top" FontFamily="72" Width="101" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
 
                         </Grid>
@@ -286,7 +288,7 @@
                 <ScrollViewer x:Name="panel" VerticalScrollBarVisibility="Hidden">
                     <StackPanel ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" CanVerticallyScroll="True" ScrollViewer.CanContentScroll="True">
                         <Grid>
-                            <Label x:Name="Close_settings" FontFamily="72" BorderThickness="1,1,1,1" FontWeight="Bold" BorderBrush="Black" Margin="10,7,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="38" Padding="6,5,5,5" MouseDown="Close_settings_MouseDown">ESC</Label>
+                            <Label x:Name="Close_settings" FontFamily="72" BorderThickness="1,1,1,1" FontWeight="Bold" BorderBrush="Black" Margin="10,7,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="38" Padding="6,5,5,5" MouseDown="Close_settings_MouseDown" Content="Х" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                             <Label Content="Настройки подключеий"  FontFamily="72" FontSize="16" FontWeight="Bold" Margin="0,-1,0,0" Height="36" VerticalAlignment="Top" HorizontalAlignment="Center" Width="212" Padding="17,8,5,0" ToolTip="Все настройки в ветке реестра: HKEY_CURRENT_USER\Software\HM\Settings"/>
 
                         </Grid>
@@ -307,8 +309,8 @@
 
 
                         </Grid>
-                        <Label FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4" Content="Настройки данных для POST-запросов"/>
-                        <Grid x:Name="PostSettings" Height="119">
+                        <Label FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4" Content="Настройки данных для POST-запросов" Visibility="Collapsed"/>
+                        <Grid x:Name="PostSettings" Height="119" Visibility="Collapsed">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
@@ -327,10 +329,11 @@
                             <TextBox x:Name="SP_HotKey" HorizontalAlignment="Left" Margin="189,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="86" FontFamily="Bahnschrift" AutomationProperties.HelpText="Хост" ToolTip="Введите клавишу"/>
                             <Label x:Name="settings_label" Content="Настройки" FontFamily="72" Padding="10,0,0,0" Margin="43,30,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
                             <TextBox x:Name="Settings_HotKey" HorizontalAlignment="Left" Margin="189,30,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="86" FontFamily="Bahnschrift" ToolTip="Хост"/>
-                            <Label Content="***" FontFamily="72" Padding="10,0,0,0" Margin="43,51,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
-                            <TextBox HorizontalAlignment="Left" Margin="189,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" ToolTip="Хост"/>
+                            <Label Content="***" FontFamily="72" Padding="10,0,0,0" Margin="43,51,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top" Visibility="Hidden"/>
+                            <TextBox HorizontalAlignment="Left" Margin="189,51,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="124" FontFamily="Bahnschrift" ToolTip="Хост" Visibility="Hidden"/>
                             <Button Content="Сохранить" Height="20" VerticalAlignment="Bottom" Margin="0,0,69,11" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click_2" HorizontalAlignment="Right" Width="72"/>
                             <Label x:Name="SussessHotKeysLabel"  FontFamily="72" Padding="10,0,0,0" Margin="135,0,0,10" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="200" FlowDirection="RightToLeft"/>
+                            <Label FontFamily="72" Padding="10,0,0,0" Margin="0,6,10,0" HorizontalAlignment="Right" Width="131" Height="17" VerticalAlignment="Top" Content="ESC - очистка поля"/>
 
                         </Grid>
                     </StackPanel>
