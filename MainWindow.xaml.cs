@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.IO.Packaging;
@@ -16,6 +17,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
@@ -67,12 +69,11 @@ namespace HM
             #region Начальные накстройки
             TB.Margin = new Thickness(0, 0, 0, 0); //выравниванеи TableControl 
             grids = new List<Grid>() { PartyGrid, HomeGrid, PostomatsGrid, SettingsGrid }; ///включение в список всех гридов-окон
-            OpenGrid(HomeGrid); //открытие начальной страницы
             HM.Title += " " + Assembly.GetExecutingAssembly().GetName().Version.ToString(3); //версия в названии (менять в свовах проекта)
-
+            TitleVersionText.Content = "v. " + Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
             #endregion
 
-            #region Regisrty Staff Настройки          
+            #region Regisrty Staff Загрузка Настроек из реестра
             ///Пересоздание корня настроек в реестре + синхрон с реестром настроек--
             using RegistryKey registry = Registry.CurrentUser.CreateSubKey(@"Software\HM\Settings");
             using RegistryKey registry1 = Registry.CurrentUser.CreateSubKey(@"Software\HM\Hosts");
@@ -86,12 +87,13 @@ namespace HM
                     TokenPost_Engy.Text = key.GetValue("X-AUTH-TOKEN_Engy")?.ToString();
                     SP_HotKey.Text = key.GetValue(SP_HotKey.Name)?.ToString();
                     Settings_HotKey.Text = key.GetValue(Settings_HotKey.Name)?.ToString();
+                    Visual_ViewMenu.IsChecked = Convert.ToBoolean(key.GetValue("Settings_Visual_ViewMenu")?.ToString());
                 }
             }
             #endregion
 
             #region добавление всех начальных функций обработок в Настройки
-            #region Добавление обработки событий для всех полей HotKeys в Настройках
+            #region Прописывыаю все HotKeys что при ESC очищались 
             KeyTextBoxies = new List<TextBox>() { SP_HotKey, Settings_HotKey }; ///все поля для которых нужно свойство HotKeys, через  ","
             foreach (var item in KeyTextBoxies)
             {
@@ -110,10 +112,13 @@ namespace HM
 
             #endregion
 
+            //Привязываю ссылку на вопрос по токенам постомата какие вставлять в поле
             QstLB_POST.MouseDown += (a, e) => { Process.Start(new ProcessStartInfo("https://wiki.sblogistica.ru/display/LINE2SUPP/NEW+Back-end+ENGY+-+supportapi") { UseShellExecute = true }); };
 
 
             #endregion
+
+            VisualMenu_Apply(); //применение сохраненных настроек к всплывающему меню
 
             #region Добавление обработки всех элементов меню (навердений мыши  и клики)
             MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home, Bronirovanie_Canvas, Sync_Canvas };
@@ -135,47 +140,76 @@ namespace HM
             Sync_Canvas.MouseDown += (a, e) => { Sync_LB.Background = new SolidColorBrush(Colors.White); Bron_LB.Background = new SolidColorBrush(Colors.Transparent); SyncEngyGrid.Visibility = Visibility.Visible; SyncEngyGrid.IsEnabled = true; BronbGrid.Visibility = Visibility.Hidden; BronbGrid.IsEnabled = false; };
 
             #endregion
+
+            OpenGrid(HomeGrid); //открытие начальной страницы
         }
-        #region Своя кнопка "Закрыть"
+        #region Своя панель окна
 
-        /*  /// <summary>
-          ///кнопка закрытия 
-          /// </summary>
-          /// <param name="sender"></param>
-          /// <param name="e"></param>
-          private void Close_Butt_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-          {
+        /// <summary>
+        ///Перемещение своей панели окна 
+        /// </summary>
+        private void TopPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
+        }
 
-          }
-          /// <summary>
-          /// смеа цвета на красный
-          /// </summary>
-          /// <param name="sender"></param>
-          /// <param name="e"></param>
-          private void Close_Butt_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-          {
-              Close_Butt.Background =
-          }
-          /// <summary>
-          /// смена цвета на = не цвет
-          /// </summary>
-          /// <param name="sender"></param>
-          /// <param name="e"></param>
-          private void Close_Butt_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-          {
+        //Кнопка закрытия приложения
+        private void ButtonClose_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Close();
+        }
+        private void ButtonClose_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            ButtonClose.Background = new SolidColorBrush(Colors.Red);
+        }
+        private void ButtonClose_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            ButtonClose.Background = null;
+        }
 
-              Close_Butt.Background = null;
-          }*/
-        // Обработчик события нажатия кнопки мыши на панели окна
-        /*   private void TitleBar_MouseDown(object sender, MouseEventArgs e)
-           {
-               if (e.Button == MouseButtons.Left)
-               {
-                   DragMove();
+        //Установка свойсва TOPMOST для окна
+        private void StatusBar_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            HM.Topmost = !HM.Topmost;
+            if (!HM.Topmost) TitleAppText.Foreground = new SolidColorBrush(Colors.White);
+            else TitleAppText.Foreground = BottomBar.Background;
+        }
 
-               }
-           }*/
+
+
+
+
+
         #endregion Button_close
+
+        #region Применеие  Фиксированного или плавующиего меню из настроек
+        public void VisualMenu_Apply()
+        {
+
+            if (Visual_ViewMenu.IsChecked == true)
+            {
+                //Фиксированное меню
+                MajorGrid.Margin = new Thickness(40, MajorGrid.Margin.Top, MajorGrid.Margin.Right, MajorGrid.Margin.Bottom);
+                TitleMenu.Visibility = Visibility.Hidden;
+                Button_Open_SwitchMenu.IsEnabled = false;
+                Button_Open_SwitchMenu.Opacity = 0.5;
+
+            }
+            else
+            {
+                //Плавующее меню
+                MajorGrid.Margin = new Thickness(0, MajorGrid.Margin.Top, MajorGrid.Margin.Right, MajorGrid.Margin.Bottom);
+                TitleMenu.Visibility = Visibility.Visible;
+                Button_Open_SwitchMenu.IsEnabled = true;
+                Button_Open_SwitchMenu.Opacity = 1;
+
+            }
+
+        }
+        #endregion
 
         /// <summary>
         ///обновление статуса подключения из другого потока 
@@ -209,7 +243,8 @@ namespace HM
                 else { item.Visibility = Visibility.Hidden; item.IsEnabled = false; }
 
             }
-            SwitchPanel();
+            if (Visual_ViewMenu.IsChecked == false) SwitchPanel();
+
 
         }
 
@@ -614,7 +649,11 @@ namespace HM
         private void HM_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             ///Отключение ПАНЕЛИ НАСТРОЕК бысчрой клавишей 
-            if (e.Key.ToString() == SP_HotKey.Text) SwitchPanel(); // открытие боковой панели по кнопке 
+            if (e.Key.ToString() == SP_HotKey.Text)
+            { // открытие боковой панели по кнопке 
+                if (Visual_ViewMenu.IsChecked == false) SwitchPanel();
+
+            }
             if (e.Key.ToString() == Settings_HotKey.Text) OpenGrid(SettingsGrid);
 
         }
@@ -730,6 +769,18 @@ namespace HM
             await Task.Delay(1000);
             Save_indicatorPost.Content = "";
 
+        }
+
+        /// <summary>
+        ///Сохранение визуальных настроек и приминение сразу же
+        /// </summary>
+        private void Visual_ViewMenu_Click(object sender, RoutedEventArgs e)
+        {
+            VisualMenu_Apply();
+            using RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM\Settings");
+            {
+                key?.SetValue("Settings_Visual_ViewMenu", Visual_ViewMenu.IsChecked);
+            }
         }
 
 
@@ -1045,6 +1096,18 @@ namespace HM
             checkFinallyThreadsAndCreateFile();
 
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         #endregion

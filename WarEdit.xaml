@@ -11,17 +11,17 @@
         <Label Content="Данные о сервере" VerticalAlignment="Top" Background="#FFE6E6E6" Padding="183,5,5,5" HorizontalAlignment="Right" Width="466"/>
         <ListBox x:Name="List_Hosts" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,26,430,0" BorderThickness="0,0,0,0" Background="#FFF1F1F1"/>
         <Label Content="Хост" HorizontalAlignment="Right" Margin="0,76,352,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TextHost" HorizontalAlignment="Right" Margin="0,81,143,0" VerticalAlignment="Top" Width="200" FontFamily="72"/>
+        <TextBox x:Name="TextHost" HorizontalAlignment="Right" Margin="0,81,143,0" VerticalAlignment="Top" Width="200" FontFamily="72" Height="17"/>
         <Label Content="База данных" HorizontalAlignment="Right" Margin="0,107,347,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="Text_DB" Margin="0,112,16,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="327" FontFamily="72"/>
+        <TextBox x:Name="Text_DB" Margin="0,112,16,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="327" FontFamily="72" Height="17"/>
         <Label Content="Порт" HorizontalAlignment="Right" Margin="0,75,95,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="Text_Port" HorizontalAlignment="Right" Margin="0,81,16,0" VerticalAlignment="Top" Width="78" FontFamily="72"/>
-        <Button x:Name="AddReg" Content="Добавить" Margin="0,158,95,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="214" FontFamily="72" BorderThickness="0,0,0,0" Height="18" Click="Button_Click"/>
+        <TextBox x:Name="Text_Port" HorizontalAlignment="Right" Margin="0,81,16,0" VerticalAlignment="Top" Width="78" FontFamily="72" Height="17"/>
+        <Button x:Name="AddReg" Content="Добавить / Сохранить" Margin="0,158,95,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="214" FontFamily="72" BorderThickness="0,0,0,0" Height="18" Click="Button_Click"/>
         <Button x:Name="RemoveReg" Margin="0,187,134,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="133" Content="Удалить" FontFamily="72" BorderThickness="0,0,0,0" Height="18" Click="RemoveReg_Click"/>
         <Label HorizontalAlignment="Right" Margin="0,43,289,0" VerticalAlignment="Top" Content="Имя БД"/>
-        <TextBox x:Name="Text_NameHost" HorizontalAlignment="Right" Margin="0,48,79,0" VerticalAlignment="Top" Width="200" FontFamily="72"/>
+        <TextBox x:Name="Text_NameHost" HorizontalAlignment="Right" Margin="0,48,79,0" VerticalAlignment="Top" Width="200" FontFamily="72" Height="17"/>
         <Border BorderBrush="Black" Margin="0,0,430,0" Background="#FFF1F1F1" HorizontalAlignment="Right" Width="205" Height="26" VerticalAlignment="Top"/>
-        <TextBox x:Name="Search_Lbd" Margin="5,5,437,0" VerticalAlignment="Top" FontFamily="72" TextChanged="Search_Lbd_TextChanged" Height="16"/>
+        <TextBox x:Name="Search_Lbd" Margin="5,5,437,0" VerticalAlignment="Top" FontFamily="72" TextChanged="Search_Lbd_TextChanged" Height="17"/>
 
 
 
