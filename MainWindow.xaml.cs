@@ -328,9 +328,14 @@ namespace HM
             }
             else
             {
+                string[] lines = TextBox.Text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+                TextBox.Text = string.Join(Environment.NewLine, lines);
+
                 //по сценарию с UPPER`S
                 if (!TextBox.Text.Contains("UPPER"))
                 {
+
                     TextBox.Text = TextBox.Text.Replace("\r\n", "')," + "\rUPPER ('") + "')";
                     TextBox.Text = "UPPER ('" + TextBox.Text;
                 }
@@ -810,6 +815,10 @@ namespace HM
             //Для файла
             NoFound = new List<string>(); //Список ненайденных
 
+            //Убираем все пустые строки
+            string[] lines = ALL_GM.Text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+            ALL_GM.Text = string.Join(Environment.NewLine, lines);
 
             // • отделение RP от ШК
             curRP = new List<string>();
