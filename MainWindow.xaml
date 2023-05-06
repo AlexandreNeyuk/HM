@@ -23,7 +23,7 @@
         <Grid x:Name="SwitchPanelCanvas" Margin="0,0,674,0">
 
             <Label HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="72" Foreground="White" Content="Меню" FontSize="16"/>
-            <Canvas x:Name="PostomatsCanvas"  Width="146" HorizontalAlignment="Left" Margin="0,120,0,0" Height="32" VerticalAlignment="Top" IsEnabled="False" Visibility="Hidden">
+            <Canvas x:Name="PostomatsCanvas"  Width="146" HorizontalAlignment="Left" Margin="0,120,0,0" Height="32" VerticalAlignment="Top">
                 <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Canvas.Left="10" Stretch="Fill" Source="/Assets/Postamats.png" Canvas.Top="6">
                     <Image.OpacityMask>
                         <ImageBrush ImageSource="/Assets/Postamats.png"/>
@@ -31,7 +31,7 @@
                 </Image>
                 <Label HorizontalAlignment="Left" VerticalAlignment="Center" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="20,10,5,5" Content="Постоматы" />
             </Canvas>
-            <Canvas x:Name="PartyCanvas" Width="146" HorizontalAlignment="Left" Margin="0,153,0,0" Height="32" VerticalAlignment="Top" IsEnabled="False" Visibility="Hidden">
+            <Canvas x:Name="PartyCanvas" Width="146" HorizontalAlignment="Left" Margin="0,153,0,0" Height="32" VerticalAlignment="Top">
                 <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Stretch="Fill" Canvas.Left="10" Canvas.Top="6" Source="/Assets/PartyLogo.png">
                     <Image.OpacityMask>
                         <ImageBrush ImageSource="/Assets/PartyLogo.png"/>
@@ -58,7 +58,7 @@
         </Grid>
 
         <!--TabControl -->
-        <Grid x:Name="MajorGrid">
+        <Grid x:Name="MajorGrid" d:IsHidden="True">
             <Grid x:Name="PartyGrid" Background="White" d:IsHidden="True">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
                 <ComboBox x:Name="SelectAction" HorizontalAlignment="Left" Margin="670,125,0,0" VerticalAlignment="Top" Width="131">
@@ -279,7 +279,7 @@
 
         </Grid>
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" d:IsHidden="True" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" >
 
             <Border x:Name="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="350" Background="White" CornerRadius="10,10,10,10" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border.Effect>
@@ -309,8 +309,8 @@
 
 
                         </Grid>
-                        <Label FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4" Content="Настройки данных для POST-запросов" Visibility="Collapsed"/>
-                        <Grid x:Name="PostSettings" Height="119" Visibility="Collapsed">
+                        <Label FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4" Content="Настройки данных для POST-запросов"/>
+                        <Grid x:Name="PostSettings" Height="119">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
