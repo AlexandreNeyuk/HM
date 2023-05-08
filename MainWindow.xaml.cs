@@ -186,14 +186,15 @@ namespace HM
         #endregion Button_close
 
         #region Применеие  Фиксированного или плавующиего меню из настроек
-        public void VisualMenu_Apply()
+        public async void VisualMenu_Apply()
         {
 
             if (Visual_ViewMenu.IsChecked == true)
             {
                 //Фиксированное меню
                 MajorGrid.Margin = new Thickness(40, MajorGrid.Margin.Top, MajorGrid.Margin.Right, MajorGrid.Margin.Bottom);
-                TitleMenu.Visibility = Visibility.Hidden;
+                for (double i = 1; i > 0; i = i - 0.1) { await Task.Delay(1); TitleMenu.Opacity = i; }
+
                 Button_Open_SwitchMenu.IsEnabled = false;
                 Button_Open_SwitchMenu.Opacity = 0.5;
 
@@ -202,7 +203,7 @@ namespace HM
             {
                 //Плавующее меню
                 MajorGrid.Margin = new Thickness(0, MajorGrid.Margin.Top, MajorGrid.Margin.Right, MajorGrid.Margin.Bottom);
-                TitleMenu.Visibility = Visibility.Visible;
+                for (double i = 0; i < 1; i = i + 0.1) { await Task.Delay(1); TitleMenu.Opacity = i; }
                 Button_Open_SwitchMenu.IsEnabled = true;
                 Button_Open_SwitchMenu.Opacity = 1;
 
@@ -622,6 +623,28 @@ namespace HM
         /// </summary>
         private void ListWarhouses_SelectionChanged(object sender, SelectionChangedEventArgs e) { Name_War.Content = ListWarhouses.SelectedItem; }
 
+        /// <summary>
+        /// Выбор "Расформировать"
+        /// </summary>
+        private void SelectAction_Party_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (SelectAction_Party.SelectedIndex == 5)
+            {
+                //выбрано "Расформировать партию", значит дейсвия над посылками и список посылок становятся недоступны, т.к все посылки будут удалены из партии
+                SelectAction.SelectedIndex = 1;
+                SelectAction.IsEnabled = false;
+                RP_Party.Text = $@"Все посылки будут удалены из партии,
+                                   Партия будет расформирована, как в Шиптор, так и на складе,
+                                   Посылкам будет присвоен статус 'Упакована' в Шипторе, 'На складе' - в Zappstore";
+                RP_Party.IsEnabled = false;
+            }
+            else
+            {
+                //иначе включаем доступность всех этих элементов 
+                SelectAction.IsEnabled = true;
+                RP_Party.IsEnabled = true;
+            }
+        }
 
         #endregion
 
@@ -857,7 +880,7 @@ namespace HM
         /// </summary>
         private void GO_GK_Click(object sender, RoutedEventArgs e)
         {
-            if (ExcelNameFile.Text == null) ExcelNameFile.Text = "Hashes";
+            if (ExcelNameFile.Text == "") ExcelNameFile.Text = "Hashes";
             List<string> listRP_GK = new List<string>(To_List(ALL_GM)); //лист со всем "добром" (и шк и RP)
             List<string> SHK;//Лист с ШК
             List<string> RP_fromSHK;//Лист с найденными RP из ШК
@@ -919,37 +942,41 @@ namespace HM
             //• Складываем списки RP (если не пустые!) и чистим по ним хеши
             if ((RP_fromSHK.Count > 0) && (RP_fromSHK[0] != ""))
                 curRP.AddRange(RP_fromSHK); // обьединяем списки RP
-            dataBases.ConnectDB("Шиптор", $@"UPDATE public.package_sorter_data SET package_create_hash=NULL, package_merge_hash=NULL WHERE package_id in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
-
-
-            //•Делим общий список RP для всех выбранных потоков 
-            int chunkSize = curRP.Count / (ThreadsSelect.SelectedIndex + 1);
-            GrThreads = (ThreadsSelect.SelectedIndex + 1);
-            curThread = 0;
-            List<List<string>> chunks = new List<List<string>>();
-            for (int i = 0; i < curRP.Count; i += chunkSize)
+            if ((curRP.Count > 0) && (curRP[0] != "")) //Если общий список RP не пустой!
             {
-                if ((curRP.Count - (chunkSize * (chunks.Count + 1))) < curRP.Count / 10)
-                {
+                dataBases.ConnectDB("Шиптор", $@"UPDATE public.package_sorter_data SET package_create_hash=NULL, package_merge_hash=NULL WHERE package_id in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
 
-                    //берем все до конца с текущего I 
-                    chunks.Add(curRP.GetRange(i, curRP.Count - i));
-                    break;
-                }
-                else
+
+                //•Делим списки RP для нашего числа потоков 
+                int chunkSize = curRP.Count / (ThreadsSelect.SelectedIndex + 1);
+                GrThreads = (ThreadsSelect.SelectedIndex + 1);
+                curThread = 0;
+                List<List<string>> chunks = new List<List<string>>();
+                for (int i = 0; i < curRP.Count; i += chunkSize)
                 {
-                    chunks.Add(curRP.GetRange(i, Math.Min(chunkSize, curRP.Count - i)));
+                    if ((curRP.Count - (chunkSize * (chunks.Count + 1))) < curRP.Count / 10)
+                    {
+
+                        //берем все до конца с текущего I 
+                        chunks.Add(curRP.GetRange(i, curRP.Count - i));
+                        break;
+                    }
+                    else
+                    {
+                        chunks.Add(curRP.GetRange(i, Math.Min(chunkSize, curRP.Count - i)));
+                    }
+
+                }
+
+                //• Запуск раннеров
+                for (int i = 0; i < (ThreadsSelect.SelectedIndex + 1); i++)
+                {
+                    RuunerPosts(i, chunks);
+
                 }
 
             }
-
-            //• Запуск раннеров
-            for (int i = 0; i < (ThreadsSelect.SelectedIndex + 1); i++)
-            {
-                RuunerPosts(i, chunks);
-
-            }
-
+            else MessageBox.Show("По списку ничего не найдено в системе! Раннер не будет запущен! ");
 
 
         }
@@ -969,6 +996,7 @@ namespace HM
             curThread++;
             if (curThread == GrThreads)
             {
+
                 //идем дальше проверять хеши и создавать файлик
 
                 List<string> NoLoadHash = dataBases.ConnectDB("Шиптор", $@"select package_id,package_create_hash from public.package_sorter_data where package_id in ({string.Join(",", curRP)}) and package_create_hash is null").AsEnumerable().Select(x => x[0].ToString()).ToList();
@@ -1023,6 +1051,7 @@ namespace HM
                 using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
                 using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
                     new SoundPlayer(gzOut).Play();
+
             }
         }
 
@@ -1096,20 +1125,6 @@ namespace HM
             checkFinallyThreadsAndCreateFile();
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         #endregion
 
 
