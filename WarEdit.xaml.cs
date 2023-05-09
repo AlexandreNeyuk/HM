@@ -1,8 +1,13 @@
 ﻿using Microsoft.Win32;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Forms;
+using ListBox = System.Windows.Controls.ListBox;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace HM
 {
@@ -62,9 +67,11 @@ namespace HM
 
             }
 
-            //Hosts.Add(key.ToString());
 
+            //Hosts.Add(key.ToString());
+            Hosts_Name = Hosts_Name.OrderBy(item => item).ToList();
             ListHost.ItemsSource = Hosts_Name;
+
         }
         /// <summary>
         /// Сейв в реестр
@@ -80,7 +87,7 @@ namespace HM
                     key?.SetValue("Post" + Text_NameHost.Text, Text_Port.Text);
                     key?.SetValue("DataBase_" + Text_NameHost.Text, Text_DB.Text);
                 }
-                else MessageBox.Show("А нука ввел все сука поля, иначе сломаюсь к хуям, ты же меня знаешь -_-!!!");
+                else MessageBox.Show("Необходимо заполнить все поля!");
 
 
             }
@@ -152,12 +159,18 @@ namespace HM
         /// </summary>
         private void Search_Lbd_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            foreach (var item in List_Hosts.Items)
-                if (item.ToString().ToUpper().Contains(Search_Lbd.Text.ToUpper()))
-                {
-                    List_Hosts.SelectedItem = item;
+            if (Search_Lbd.Text != "")
+            {
+                foreach (var item in List_Hosts.Items)
+                    if (item.ToString().ToUpper().Contains(Search_Lbd.Text.ToUpper()))
+                    {
+                        List_Hosts.SelectedItem = item;
+                        List_Hosts.ScrollIntoView(List_Hosts.Items.GetItemAt(List_Hosts.SelectedIndex));
+                    }
+            }
 
-                }
+
+
 
         }
     }

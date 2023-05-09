@@ -609,13 +609,18 @@ namespace HM
         /// </summary>
         private void Search_Warh_TextChanged(object sender, TextChangedEventArgs e)
         {
-            foreach (var item in ListWarhouses.Items)
-                if (item.ToString().ToUpper().Contains(Search_Warh.Text.ToUpper()))
-                {
-                    ListWarhouses.SelectedItem = item;
+            if (Search_Warh.Text != "")
+            {
+                foreach (var item in ListWarhouses.Items)
+                    if (item.ToString().ToUpper().Contains(Search_Warh.Text.ToUpper()))
+                    {
+                        ListWarhouses.SelectedItem = item;
+                        Name_War.Content = ListWarhouses.SelectedItem;
+                        ListWarhouses.ScrollIntoView(ListWarhouses.Items.GetItemAt(ListWarhouses.SelectedIndex));
 
-                }
-            Name_War.Content = ListWarhouses.SelectedItem;
+
+                    }
+            }
         }
 
         /// <summary>
@@ -643,6 +648,7 @@ namespace HM
                 //иначе включаем доступность всех этих элементов 
                 SelectAction.IsEnabled = true;
                 RP_Party.IsEnabled = true;
+                if (RP_Party.Text.Contains("Все посылки будут удалены из партии")) RP_Party.Text = "";
             }
         }
 
