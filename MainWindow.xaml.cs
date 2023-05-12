@@ -28,6 +28,7 @@ using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -170,6 +171,23 @@ namespace HM
             ButtonClose.Background = null;
         }
 
+        //Кнопка сворачивания окна
+        private void MinimalizeWindow_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            MinimalizeWindow.Background = new SolidColorBrush(Colors.Silver);
+        }
+        private void MinimalizeWindow_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            MinimalizeWindow.Background = null;
+        }
+        private void MinimalizeWindow_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Window window = Window.GetWindow(this);
+            SystemCommands.MinimizeWindow(window);
+
+        }
+
+
         //Установка свойсва TOPMOST для окна
         private void StatusBar_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -177,11 +195,6 @@ namespace HM
             if (!HM.Topmost) TitleAppText.Foreground = new SolidColorBrush(Colors.White);
             else TitleAppText.Foreground = BottomBar.Background;
         }
-
-
-
-
-
 
         #endregion Button_close
 
@@ -572,7 +585,7 @@ namespace HM
                     List<string> StockName = dataBases.ConnectDB("Шиптор", $@"SELECT id, ""name""  FROM public.warehouse where id = {StockID[0]}").AsEnumerable().Select(x => x[1].ToString()).ToList();
                     if (Name_War.Content != StockName[0]) if (StockName[0] != null) Name_War.Content = StockName[0]; else MessageBox.Show($@"Склада с id {StockID[0]} не найдено в Шиптор!");//меняем имя склада на то что нашлось
 
-                    DataTable CurrentStock = dataBases.ConnectDB(StockName[0], $@"select id, status from package_return pr where return_fid = {paty}");
+                    DataTable CurrentStock = dataBases.ConnectDB(StockName[0], $@"select id, status from package_return pr where return_fid = {paty}");//ERROR::Место вылета изза имени БД (точнее его отсутствии в твоих данных)
                     List<string> ParyStockID = CurrentStock.AsEnumerable().Select(x => x["id"].ToString()).ToList();
                     List<string> PartyStockStatus = CurrentStock.AsEnumerable().Select(x => x["status"].ToString()).ToList();
                     if (ParyStockID[0] != null) //если партия существует на складе
@@ -886,6 +899,16 @@ namespace HM
         /// </summary>
         private void GO_GK_Click(object sender, RoutedEventArgs e)
         {
+            ListT1.Items.Clear();
+            ListT2.Items.Clear();
+            ListT3.Items.Clear();
+            ListT4.Items.Clear();
+            ListT5.Items.Clear();
+            ListT6.Items.Clear();
+
+            GO_GK.IsEnabled = false; //Отключение кнопки "Запуск"
+            StopRunnerGK_Button.IsEnabled = true; //Включение кнопки "Стоп"
+
             if (ExcelNameFile.Text == "") ExcelNameFile.Text = "Hashes";
             List<string> listRP_GK = new List<string>(To_List(ALL_GM)); //лист со всем "добром" (и шк и RP)
             List<string> SHK;//Лист с ШК
@@ -923,6 +946,11 @@ namespace HM
             }
             RP_fromSHK = new List<string>(TextBox.Text.Split(",\n").ToList());
             Clear_all_textB_Click(sender, e);
+            if (ALL_GM.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
+                ThreadsSelect.SelectedIndex = 0;
+
+
+
 
 
             //• Найти ненайденные по ШК
@@ -982,7 +1010,12 @@ namespace HM
                 }
 
             }
-            else MessageBox.Show("По списку ничего не найдено в системе! Раннер не будет запущен! ");
+            else
+            {
+                MessageBox.Show("По списку ничего не найдено в системе! Раннер не будет запущен! ");
+                GO_GK.IsEnabled = true; //Отключение кнопки "Запуск"
+                StopRunnerGK_Button.IsEnabled = false; //Включение кнопки "Стоп"
+            }
 
 
         }
@@ -993,6 +1026,7 @@ namespace HM
         List<string> NoFound;
         List<string> curRP;//лист с цифрами от RP отделенный от ШК, в дальнейшем полный список найденных RP 
         string pathHashes = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        bool isStopped = false; // если будет остановлен раннен станет True, если нет то False
 
         /// <summary>
         /// Чек финала потоков и создание файла по шаблону
@@ -1002,61 +1036,93 @@ namespace HM
             curThread++;
             if (curThread == GrThreads)
             {
-
-                //идем дальше проверять хеши и создавать файлик
-
-                List<string> NoLoadHash = dataBases.ConnectDB("Шиптор", $@"select package_id,package_create_hash from public.package_sorter_data where package_id in ({string.Join(",", curRP)}) and package_create_hash is null").AsEnumerable().Select(x => x[0].ToString()).ToList();
-                List<string> LoadedHash = dataBases.ConnectDB("Шиптор", $@"select package_id,package_create_hash from public.package_sorter_data where package_id in ({string.Join(",", curRP)}) and package_create_hash is not null").AsEnumerable().Select(x => x[0].ToString()).ToList();
-
-                var NoLoadRP_Status = new DataTable();
-                if ((NoLoadHash.Count > 0) && (NoLoadHash[0] != ""))
-                    NoLoadRP_Status = dataBases.ConnectDB("Шиптор", $@"select  id, current_status from package p where id in ({string.Join(",", NoLoadHash)}) ");
-
-                List<string> NoLoadRP = NoLoadRP_Status.AsEnumerable().Select(x => x[0].ToString()).ToList();
-                List<string> NoLoadStatus = NoLoadRP_Status.AsEnumerable().Select(x => x[1].ToString()).ToList();
-
-                //•Создаем файлик Excel
-                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                var file = new FileInfo(pathHashes + @"\" + ExcelNameFile.Text + ".xlsx");
-                using (var package = new ExcelPackage(file))
+                if (isStopped == false)
                 {
-                    // Добавление нового листа
-                    var worksheet = package.Workbook.Worksheets["L_L"];
+                    //кнопка остановки не прожималась, работаем в штатном режиме
+                    //идем дальше проверять хеши и создавать файлик
 
-                    if (worksheet != null)
+                    List<string> NoLoadHash = dataBases.ConnectDB("Шиптор", $@"select package_id,package_create_hash from public.package_sorter_data where package_id in ({string.Join(",", curRP)}) and package_create_hash is null").AsEnumerable().Select(x => x[0].ToString()).ToList();
+                    List<string> LoadedHash = dataBases.ConnectDB("Шиптор", $@"select package_id,package_create_hash from public.package_sorter_data where package_id in ({string.Join(",", curRP)}) and package_create_hash is not null").AsEnumerable().Select(x => x[0].ToString()).ToList();
+
+                    var NoLoadRP_Status = new DataTable();
+                    if ((NoLoadHash.Count > 0) && (NoLoadHash[0] != ""))
+                        NoLoadRP_Status = dataBases.ConnectDB("Шиптор", $@"select  id, current_status from package p where id in ({string.Join(",", NoLoadHash)}) ");
+
+                    List<string> NoLoadRP = NoLoadRP_Status.AsEnumerable().Select(x => x[0].ToString()).ToList();
+                    List<string> NoLoadStatus = NoLoadRP_Status.AsEnumerable().Select(x => x[1].ToString()).ToList();
+
+
+                    //•Создаем файлик Excel
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                    var file = new FileInfo(pathHashes + @"\" + ExcelNameFile.Text + ".xlsx");
+                    using (var package = new ExcelPackage(file))
                     {
-                        package.Workbook.Worksheets.Delete(worksheet);
+                        // Добавление нового листа
+                        var worksheet = package.Workbook.Worksheets["L_L"];
+
+                        if (worksheet != null)
+                        {
+                            package.Workbook.Worksheets.Delete(worksheet);
+                        }
+                        worksheet = package.Workbook.Worksheets.Add("L_L");
+
+
+                        //Создаем шаблон
+                        worksheet.Cells["A1"].Value = "Прогруженные";
+                        worksheet.Cells["C1"].Value = "Не прогруженные";
+                        worksheet.Cells["D1"].Value = "Статус";
+                        worksheet.Cells["F1"].Value = "Не найденные в Шиптор";
+
+                        if (LoadedHash.Count <= 2) LoadedHash.AddRange(new[] { "", "", "", "" });
+                        if (NoLoadRP.Count <= 2) NoLoadRP.AddRange(new[] { "", "", "", "" });
+                        if (NoLoadStatus.Count <= 2) NoLoadStatus.AddRange(new[] { "", "", "", "" });
+                        if (NoFound.Count <= 2) NoFound.AddRange(new[] { "", "", "", "" });
+
+                        // Запись значений в колонку "Прогруженных"
+                        var A_Col = worksheet.Cells["A2:A" + LoadedHash.Count]; ///ERROR::необходимо сделать проверку по колву элементов, т.к когда они 0 то вылетает программа (А0 - не существует в ядре экселя)!!!!! 
+                        A_Col.LoadFromCollection(LoadedHash);
+                        // Запись значений в колонку "Не прогруженных"
+                        var C_Col = worksheet.Cells["C2:C" + NoLoadRP.Count];//ERROR::если этот count 0 kb 1 или 2 - то что ниже или равно 2 то по ядру excel идет ошибка, т.к нумерацию необходимо корректировать 
+                        C_Col.LoadFromCollection(NoLoadRP);
+                        // Запись значений в колонку "Статус"
+                        var D_Col = worksheet.Cells["D2:D" + NoLoadStatus.Count];
+                        D_Col.LoadFromCollection(NoLoadStatus);
+                        // Запись значений в колонку "Не найденные в Шиптор"
+                        var F_Col = worksheet.Cells["F2:F" + NoFound.Count]; //ERROR:: если не найденное будет равно 1 то будет все ломаться из-за ядра excel
+                        F_Col.LoadFromCollection(NoFound);
+
+
+
+                        // Сохранение файла
+                        try
+                        {
+                            package.Save();
+                        }
+                        catch (Exception)
+                        {
+
+                            MessageBox.Show("Файл открыт в другом процессе! Файл сохранен не будет, его придется собирать самим! ВАЖНО: это сообщение касается ТОЛЬКО файла!", "Предупреждение");
+
+                        }
+
                     }
-                    worksheet = package.Workbook.Worksheets.Add("L_L");
 
-
-                    //Создаем шаблон
-                    worksheet.Cells["A1"].Value = "Прогруженные";
-                    worksheet.Cells["C1"].Value = "Не прогруженные";
-                    worksheet.Cells["D1"].Value = "Статус";
-                    worksheet.Cells["F1"].Value = "Не найденные в Шиптор";
-
-                    // Запись значений в колонку "Прогруженных"
-                    var A_Col = worksheet.Cells["A2:A" + LoadedHash.Count];
-                    A_Col.LoadFromCollection(LoadedHash);
-                    // Запись значений в колонку "Не прогруженных"
-                    var C_Col = worksheet.Cells["C2:C" + NoLoadHash.Count];
-                    C_Col.LoadFromCollection(NoLoadRP);
-                    // Запись значений в колонку "Статус"
-                    var D_Col = worksheet.Cells["D2:D" + NoLoadHash.Count];
-                    D_Col.LoadFromCollection(NoLoadStatus);
-                    // Запись значений в колонку "Не найденные в Шиптор"
-                    var F_Col = worksheet.Cells["F2:F" + NoLoadHash.Count];
-                    F_Col.LoadFromCollection(NoFound);
-
-                    // Сохранение файла
-                    package.Save();
+                    //• Звук уведомление о финале файла
+                    using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                    using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                        new SoundPlayer(gzOut).Play();
+                    GO_GK.IsEnabled = true;
+                    StopRunnerGK_Button.IsEnabled = false;
                 }
+                else
+                {
+                    //кнопка остановки прожималась и остановились все потоки 
+                    MessageBox.Show("Раннер остановлен");
+                    GO_GK.IsEnabled = true;
+                    StopRunnerGK_Button.IsEnabled = false;
+                    isStopped = false;
 
-                //• Звук уведомление о финале файла
-                using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
-                using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                    new SoundPlayer(gzOut).Play();
+                }
 
             }
         }
@@ -1083,54 +1149,77 @@ namespace HM
 
             for (int i = 0; i < chunks[Thread].Count; i++)
             {
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-                using (var httpClient = new HttpClient())
-                {
-                    var httpContent = new StringContent($@"{{
+                if (isStopped == false)
+                {// раннен не был остановлен
+
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    using (var httpClient = new HttpClient())
+                    {
+                        var httpContent = new StringContent($@"{{
                                                                 ""id"": ""JsonRpcClient.js"",
                                                                 ""jsonrpc"": ""2.0"",
                                                                 ""method"": ""sapCreatePackage"",
                                                                 ""params"": [{chunks[Thread][i]}]
                                                             }}");
-                    httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                        httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
-                    using (var response = await httpClient.PostAsync("https://api.shiptor.ru/system/v1?key=SemEd5DexEk7Ub2YrVuyNavNutEh4Uh8TerSuwEnMev", httpContent))
-                    {
-                        if (response.IsSuccessStatusCode)
+                        using (var response = await httpClient.PostAsync("https://api.shiptor.ru/system/v1?key=SemEd5DexEk7Ub2YrVuyNavNutEh4Uh8TerSuwEnMev", httpContent))
                         {
+                            if (response.IsSuccessStatusCode)
+                            {
 
-                            ///получать сам ответ от запроса для логирования
+                                ///получать сам ответ от запроса для логирования
 
-                            await response.Content.ReadAsStringAsync();
-                            stopwatch.Stop();
-                            Label label = new Label();
-                            label.Content = $"Iteration {i} success. Response time: {stopwatch.ElapsedMilliseconds} ms";
-                            MylistThread.Items.Add(label);
+                                await response.Content.ReadAsStringAsync();
+                                stopwatch.Stop();
+                                Label label = new Label();
+                                label.Content = $"Iteration {i} success. Response time: {stopwatch.ElapsedMilliseconds} ms";
+                                MylistThread.Items.Add(label);
 
 
+                            }
+                            else
+                            {
+
+                                var responseContent = await response.Content.ReadAsStringAsync();
+                                // $@"Запрос вернул ответ с ошибкой: {response.StatusCode}; Error message: {responseContent}";
+                                stopwatch.Stop();
+                                Label label = new Label();
+                                label.Content = $"Iteration {i}. Error:{response.StatusCode}; Error message: {responseContent}.  Response time: {stopwatch.ElapsedMilliseconds} ms";
+                                MylistThread.Items.Add(label);
+
+
+                            }
+                            //return await response.Content.ReadAsStringAsync();
                         }
-                        else
-                        {
-
-                            var responseContent = await response.Content.ReadAsStringAsync();
-                            // $@"Запрос вернул ответ с ошибкой: {response.StatusCode}; Error message: {responseContent}";
-                            stopwatch.Stop();
-                            Label label = new Label();
-                            label.Content = $"Iteration {i}. Error:{response.StatusCode}; Error message: {responseContent}.  Response time: {stopwatch.ElapsedMilliseconds} ms";
-                            MylistThread.Items.Add(label);
-
-
-                        }
-                        //return await response.Content.ReadAsStringAsync();
                     }
+                    MylistThread.ScrollIntoView(MylistThread.Items.GetItemAt(i));
                 }
-                MylistThread.ScrollIntoView(MylistThread.Items.GetItemAt(i));
+                else
+                {
+                    //раннер будет остановлен
 
+                    break;
+
+                }
             }
             checkFinallyThreadsAndCreateFile();
 
         }
+
+        /// <summary>
+        /// Кнопочка "Стоп", останавливающая раннер ГК
+        /// </summary>
+        private void StopRunnerGK_Button_Click(object sender, RoutedEventArgs e)
+        {
+            isStopped = true;
+
+        }
+
+
+
+
         #endregion
 
 
