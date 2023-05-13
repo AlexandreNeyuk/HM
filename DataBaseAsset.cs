@@ -87,11 +87,6 @@ namespace HM
         }
 
 
-
-
-
-
-
         /// <summary>
         /// Запорос к БД
         /// </summary>
@@ -106,12 +101,30 @@ namespace HM
 
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Hosts"))
             {
+
                 foreach (var item in key?.GetValueNames())
                 {
-                    if (item.Contains(db) && item.Contains("Host_")) Host = key.GetValue(item).ToString();
-                    if (item.Contains(db) && item.Contains("DataBase_")) DataBase = key.GetValue(item).ToString();
+                    if (item.Contains(db))
+                    {
+                        string founded = item.Replace(" ", "").Replace("Name_", "").Replace("Host_", "").Replace("Post", "").Replace("DataBase_", "");
+                        if (founded == db.Replace(" ", ""))
+                        {
+                            if (item.Contains("Host_")) Host = key?.GetValue(item).ToString();
+                            if (item.Contains("DataBase_")) DataBase = key?.GetValue(item).ToString();
+                        }
+
+                    }
 
                 }
+
+
+
+                /*   foreach (var item in key?.GetValueNames())
+                   {
+                       if (item.Contains(db) && item.Contains("Host_")) Host = key.GetValue(item).ToString();
+                       if (item.Contains(db) && item.Contains("DataBase_")) DataBase = key.GetValue(item).ToString();
+
+                   }*/
             }
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Settings"))
             {
