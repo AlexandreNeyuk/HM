@@ -100,7 +100,7 @@ namespace HM
         public DataTable ConnectDB(string db, string query)
         {
             ///загрузка из реестра данных об складе через поиск по переменной db
-            ///формирование конечной строрки соединений con
+            ///формирование конечной строки соединений con
             string con = "Host={0};Username={1};Password={2};Database={3}";
             string Host = "", DataBase = "", User = "", Pass = "";
 

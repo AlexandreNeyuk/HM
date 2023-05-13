@@ -141,10 +141,14 @@ namespace HM
                 {
                     if (item.Contains(ssl))
                     {
-                        if (item.Contains("Name_")) Text_NameHost.Text = key?.GetValue(item).ToString();
-                        if (item.Contains("Host_")) TextHost.Text = key?.GetValue(item).ToString();
-                        if (item.Contains("Post")) Text_Port.Text = key?.GetValue(item).ToString();
-                        if (item.Contains("DataBase_")) Text_DB.Text = key?.GetValue(item).ToString();
+                        string founded = item.Replace(" ", "").Replace("Name_", "").Replace("Host_", "").Replace("Post", "").Replace("DataBase_", "");
+                        if (founded == ssl.Replace(" ", ""))
+                        {
+                            if (item.Contains("Name_")) Text_NameHost.Text = key?.GetValue(item).ToString();
+                            if (item.Contains("Host_")) TextHost.Text = key?.GetValue(item).ToString();
+                            if (item.Contains("Post")) Text_Port.Text = key?.GetValue(item).ToString();
+                            if (item.Contains("DataBase_")) Text_DB.Text = key?.GetValue(item).ToString();
+                        }
 
                     }
                     //Hosts_Name.Add(key.GetValue(item).ToString());
