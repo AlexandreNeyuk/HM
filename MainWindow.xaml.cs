@@ -1,9 +1,11 @@
 ﻿using ICSharpCode.AvalonEdit;
+using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using OfficeOpenXml;
 using Ookii.Dialogs.Wpf;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -483,6 +485,14 @@ namespace HM
         /// </summary>
         private void FidCopy_Click(object sender, RoutedEventArgs e)
         {
+
+            FidCopyVoid();
+
+        }
+
+        //метод поиска разницы
+        public void FidCopyVoid()
+        {
             ListOne.Text = ListOne.Text.ToUpper();
             ListTwo.Text = ListTwo.Text.ToUpper();
             List<string> list1 = To_List(ListOne);
@@ -495,14 +505,16 @@ namespace HM
             list1 = list1.Distinct().ToList();
             ListOne.Text = string.Join(Environment.NewLine, result);
 
-
-
         }
 
         /// <summary>
         ///Очистка полей листов
         /// </summary>
         private void FidCopy_Copy_Click(object sender, RoutedEventArgs e)
+        {
+            FidCopy_CopyVoid();
+        }
+        public void FidCopy_CopyVoid()
         {
             ListOne.Text = null;
             ListTwo.Text = null;
@@ -942,9 +954,9 @@ namespace HM
             //вычитаем из всего списка RP
             ListOne.Text = string.Join("\r\n", listRP_GK);
             ListTwo.Text = string.Join("\r\n", matches);
-            FidCopy_Click(sender, e);
+            FidCopyVoid();
             SHK = new List<string>(To_List(ListOne));
-            FidCopy_Copy_Click(sender, e);
+            FidCopy_CopyVoid();
             foreach (Match match in matches) { curRP.Add(match.Value.Replace("RP", "")); }
             curRP = curRP.Distinct().ToList();
 
@@ -971,18 +983,18 @@ namespace HM
                 SHK_fromDB = dataBases.ConnectDB("Шиптор", $@"select id, external_id  from package p where id  in ({string.Join(",", RP_fromSHK)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
                 ListOne.Text = string.Join("\r\n", SHK);
                 ListTwo.Text = string.Join("\r\n", SHK_fromDB);
-                FidCopy_Click(sender, e);
+                FidCopyVoid();
                 NoFound = new List<string>(To_List(ListOne));//Не найденные по ШК
-                FidCopy_Copy_Click(sender, e);
+                FidCopy_CopyVoid();
             }
             //Также находим ненайденные по RP из БД 
             if (curRP.Count > 0)
             {
                 ListOne.Text = string.Join(Environment.NewLine, curRP);
                 ListTwo.Text = string.Join(Environment.NewLine, dataBases.ConnectDB("Шиптор", $@"select id, external_id  from package p where id  in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[0].ToString()).ToList());
-                FidCopy_Click(sender, e);
+                FidCopyVoid();
                 if (ListOne.Text != "") { NoFound.AddRange(To_List(ListOne)); }
-                FidCopy_Copy_Click(sender, e);
+                FidCopy_CopyVoid();
             }
 
             //• Складываем списки RP (если не пустые!) и чистим по ним хеши
@@ -1063,6 +1075,24 @@ namespace HM
                     List<string> NoLoadRP = NoLoadRP_Status.AsEnumerable().Select(x => x[0].ToString()).ToList();
                     List<string> NoLoadStatus = NoLoadRP_Status.AsEnumerable().Select(x => x[1].ToString()).ToList();
 
+                    //•находим также все имеющиеся в Шиптор, но не созданных в таблице в хешами и добавлячем к общим спискам с непрогруженными
+                    List<string> ShipHaveButNotInHashesTable;
+                    List<string> Buf = LoadedHash.Concat(NoLoadRP).ToList(); //это все что есть в таблице с хешами вместе
+
+                    ListOne.Text = string.Join("\r\n", curRP);
+                    ListTwo.Text = string.Join("\r\n", Buf);
+                    FidCopyVoid();
+                    ShipHaveButNotInHashesTable = new List<string>(To_List(ListOne));
+                    FidCopy_CopyVoid();
+
+                    var DopNoLoaded = new DataTable();
+                    if ((ShipHaveButNotInHashesTable.Count > 0) && (ShipHaveButNotInHashesTable[0] != ""))
+                        DopNoLoaded = dataBases.ConnectDB("Шиптор", $@"select  id, current_status from package p where id in ({string.Join(",", ShipHaveButNotInHashesTable)}) ");
+                    List<string> DopNoLoadRP = DopNoLoaded.AsEnumerable().Select(x => x[0].ToString()).ToList();
+                    List<string> DopNoLoadStatus = DopNoLoaded.AsEnumerable().Select(x => x[1].ToString()).ToList();
+
+                    NoLoadRP.AddRange(DopNoLoadRP);
+                    NoLoadStatus.AddRange(DopNoLoadStatus);
 
                     //•Создаем файлик Excel
                     ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
