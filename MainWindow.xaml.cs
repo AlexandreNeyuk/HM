@@ -382,6 +382,20 @@ namespace HM
                 string[] lines = TextBox.Text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
                 lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
                 TextBox.Text = string.Join(Environment.NewLine, lines);
+                List<string> SBC_strings = new List<string>();  //лист с SBC
+                if (TextBox.Text.Contains("SBC"))
+                {
+
+
+                    var pattern = @"SBC\d+";
+                    var matches = Regex.Matches(TextBox.Text, pattern);
+                    foreach (Match match in matches)
+                    {
+                        SBC_strings.Add("'" + match.Value + "'");
+                    }
+                    SBC_strings = SBC_strings.Distinct().ToList();
+
+                }
 
                 //по сценарию с UPPER`S
                 if (!TextBox.Text.Contains("UPPER"))
@@ -390,6 +404,7 @@ namespace HM
                     TextBox.Text = TextBox.Text.Replace("\r\n", "')," + "\rUPPER ('") + "')";
                     TextBox.Text = "UPPER ('" + TextBox.Text;
                 }
+
                 //ищу RP в БД из UPPER`s
                 if (UpperSearch.IsChecked == true)
                 {
@@ -398,6 +413,22 @@ namespace HM
                     TextBox.Text = TextBox.Text.Replace("\r\n", ",\n");
 
                 }
+                //Bce все SBC 
+                if ((SBC_strings.Count > 0) && (SBC_strings[0] != ""))
+                {
+                    List<string> SBC_RP = dataBases.ConnectDB("Шиптор", $@"select package_id from package_barcode pb where main in ({string.Join(",\n", SBC_strings).ToUpper()})").AsEnumerable().Select(x => x[0].ToString()).ToList();
+                    List<string> SBC_RP_surrogate = dataBases.ConnectDB("Шиптор", $@"select package_id from package_barcode pb where surrogate in ({string.Join(",\n", SBC_strings).ToUpper()})").AsEnumerable().Select(x => x[0].ToString()).ToList();
+                    SBC_RP.AddRange(SBC_RP_surrogate);
+                    SBC_RP = SBC_RP.Distinct().ToList();
+                    if (TextBox.Text != "")
+                        TextBox.Text = TextBox.Text + ",\n" + string.Join(",\n", SBC_RP);
+
+                    else TextBox.Text = TextBox.Text + string.Join(",\n", SBC_RP);
+
+
+                }
+
+
             }
 
             //______________работа с запятыми______________

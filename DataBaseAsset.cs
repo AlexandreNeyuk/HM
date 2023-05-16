@@ -140,25 +140,30 @@ namespace HM
             if (ConnectBool == false) MessageBox.Show("Нет коннекта! Проверьте FortiClient VPN!\n А затем перезапустите программу. ");
             else
             {
+                if ((Host != "") && (DataBase != ""))
+                {
+                    NpgsqlConnection nc = new NpgsqlConnection(con);
+                    try
+                    {
+                        //Открываем соединение.
+                        nc.Open();
+                        if (nc.FullState == ConnectionState.Broken || nc.FullState == ConnectionState.Closed) MessageBox.Show("Нет коннекта. Сломано или Соекдинение закрылось. Ксива коннекта, мб в нем чего: \n" + con);
+                        NpgsqlCommand cmd = new NpgsqlCommand(query, nc);
+                        dt.Load(cmd.ExecuteReader());
+                        nc.Close();
+                        // MessageBox.Show(dt.Rows[0][1].ToString());
+                        return dt;
+                    }
+                    catch (Exception ex)
+                    {
+                        nc.Close();
+                        MessageBox.Show("Коннект точно пошел по пизде! - Ошибка : " + ex.Message);
+                        //Код обработки ошибок
+                    }
+                }
+                else MessageBox.Show($@"Какоето поле не найдено из базы БД (возможно неверное имя бд, отличающееся от имени из таблички Warehouse): Host: {Host}; DB: {DataBase}");
 
-                NpgsqlConnection nc = new NpgsqlConnection(con);
-                try
-                {
-                    //Открываем соединение.
-                    nc.Open();
-                    if (nc.FullState == ConnectionState.Broken || nc.FullState == ConnectionState.Closed) MessageBox.Show("Нет коннекта. Сломано или Соекдинение закрылось. Ксива коннекта, мб в нем чего: \n" + con);
-                    NpgsqlCommand cmd = new NpgsqlCommand(query, nc);
-                    dt.Load(cmd.ExecuteReader());
-                    nc.Close();
-                    // MessageBox.Show(dt.Rows[0][1].ToString());
-                    return dt;
-                }
-                catch (Exception ex)
-                {
-                    nc.Close();
-                    MessageBox.Show("Коннект точно пошел по пизде! - Ошибка : " + ex.Message);
-                    //Код обработки ошибок
-                }
+
             }
             return dt;
 
