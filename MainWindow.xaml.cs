@@ -385,15 +385,21 @@ namespace HM
                 List<string> SBC_strings = new List<string>();  //лист с SBC
                 if (TextBox.Text.Contains("SBC"))
                 {
-
-
-                    var pattern = @"SBC\d+";
+                    List<string> SBCs = To_List(TextBox); // лист разделенный на строки из всего TextBox
+                    foreach (var item in SBCs)
+                    {
+                        if (item.Contains("SBC"))
+                        {
+                            SBC_strings.Add("'" + item + "'"); //добавляю в основной лист с SBC
+                        }
+                    }
+                    /*var pattern = @"SBC\d+";
                     var matches = Regex.Matches(TextBox.Text, pattern);
                     foreach (Match match in matches)
                     {
                         SBC_strings.Add("'" + match.Value + "'");
                     }
-                    SBC_strings = SBC_strings.Distinct().ToList();
+                    SBC_strings = SBC_strings.Distinct().ToList();*/
 
                 }
 
