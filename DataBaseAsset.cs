@@ -17,12 +17,19 @@ namespace HM
 
         ///Если будут проблемы со скоростью впоследствии 
         ///то слздать класс с хастами и в фоне выгрузить все данные о бд из реестра в этот лист
-        ///
-
+        private string UserData_D;
+        private string Pass_D;
         bool ConnectBool = false;
         private string stats = "Статус подключения";
         Label label = new Label();
         MainWindow ol;
+
+        public DataBaseAsset(string U, string P)
+        {
+            UserData_D = U;
+            Pass_D = P;
+        }
+
 
 
         /// <summary>
@@ -35,7 +42,7 @@ namespace HM
             await Task.Run(() =>
            {
                string con = "Host={0};Username={1};Password={2};Database={3}";
-               string Host = "", DataBase = "", User = "", Pass = "";
+               string Host = "", DataBase = "", User = UserData_D, Pass = Pass_D;
 
                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Hosts"))
                {
@@ -45,15 +52,7 @@ namespace HM
                        if (item.Contains("Шиптор") && item.Contains("DataBase_")) DataBase = key.GetValue(item).ToString();
                    }
                }
-               using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Settings"))
-               {
-                   foreach (var item in key?.GetValueNames())
-                   {
-                       if (item.Contains("Имя пользователя")) User = key.GetValue(item).ToString();
-                       if (item.Contains("Пароль")) Pass = key.GetValue(item).ToString();
 
-                   }
-               }
                if (Host != "" && Pass != "" && DataBase != "" && User != "")
                {
                    con = String.Format(con, Host, User, Pass, DataBase);
@@ -117,24 +116,12 @@ namespace HM
 
                 }
 
-
-
-                /*   foreach (var item in key?.GetValueNames())
-                   {
-                       if (item.Contains(db) && item.Contains("Host_")) Host = key.GetValue(item).ToString();
-                       if (item.Contains(db) && item.Contains("DataBase_")) DataBase = key.GetValue(item).ToString();
-
-                   }*/
             }
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Settings"))
-            {
-                foreach (var item in key?.GetValueNames())
-                {
-                    if (item.Contains("Имя пользователя")) User = key.GetValue(item).ToString();
-                    if (item.Contains("Пароль")) Pass = key.GetValue(item).ToString();
 
-                }
-            }
+            ///получать данные после дешифровки от главного скрипта (!)
+            User = UserData_D;
+            Pass = Pass_D;
+
             con = String.Format(con, Host, User, Pass, DataBase);
             DataTable dt = new DataTable();
             if (ConnectBool == false) MessageBox.Show("Нет коннекта! Проверьте FortiClient VPN!\n А затем перезапустите программу. ");

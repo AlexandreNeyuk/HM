@@ -317,7 +317,7 @@
 
         <!--TabControl -->
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" d:IsHidden="True" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" >
 
             <Border x:Name="Settings" Background="White" CornerRadius="5,5,5,5" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,25,0,0" HorizontalAlignment="Center" Width="550" Height="425" VerticalAlignment="Top">
                 <Border.Effect>
@@ -331,13 +331,14 @@
 
                         </Grid>
                         <Label Content="Настройки пользователя БД" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4" FontSize="14"/>
-                        <Grid x:Name="UserData" Height="86">
+                        <Grid x:Name="UserData" Height="126">
                             <Label Content="Имя пользователя" FontFamily="72" Padding="10,0,0,0" Margin="38,9,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
                             <TextBox x:Name="UserName" HorizontalAlignment="Left" Margin="184,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="184" FontFamily="Bahnschrift" ToolTip="Имя пользователя"/>
                             <Label Content="Пароль" FontFamily="72" Padding="10,0,0,0" Margin="38,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"/>
-                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="0,60,69,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click" HorizontalAlignment="Right" Width="90"/>
+                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="0,61,49,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click" HorizontalAlignment="Right" Width="90"/>
                             <PasswordBox x:Name="UserPass" Margin="184,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184" FontFamily="Bahnschrift" ToolTip="Пароль"/>
                             <Label x:Name="SussessLabel" FontFamily="72" Padding="10,0,0,0" Margin="206,61,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="162" FlowDirection="RightToLeft"/>
+                            <Button x:Name="DeleteUserData" Height="20" VerticalAlignment="Top" Margin="402,96,0,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" HorizontalAlignment="Left" Width="104" Content="Удалить данные" ToolTip="Удаление всех данных о пользователе из реестра и зашифрованного ключа" Click="DeleteKeyFolder_method"/>
 
                         </Grid>
                         <Label Content="Подключенные БД" FontFamily="72" Padding="10,2,0,2" Background="#FFE4E4E4" FontSize="14"/>

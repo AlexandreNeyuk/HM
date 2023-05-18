@@ -9,7 +9,9 @@
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <SignAssembly>False</SignAssembly>
     <ApplicationIcon>Assets\48_48.ico</ApplicationIcon>
-    <Version>0.5.45</Version>
+    <Version>0.5.57</Version>
+    <Copyright></Copyright>
+    <Authors></Authors>
 
   </PropertyGroup>
 

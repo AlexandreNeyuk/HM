@@ -34,6 +34,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using Clipboard = System.Windows.Clipboard;
 using Label = System.Windows.Controls.Label;
 using ListBox = System.Windows.Controls.ListBox;
@@ -55,9 +56,19 @@ namespace HM
         List<Grid> grids; //все гриды окон
 
         //Animations Animations = new Animations();
-        DataBaseAsset dataBases = new DataBaseAsset();
+        DataBaseAsset dataBases;
         string statusConnect;
         bool SetPanel = false; //false - закрытая панель, true - открытая панлеь
+
+        //Дешифрованные данные пользователя
+        private string Decrypt_UserName;
+        private string Decrypt_Password;
+
+        //Зашифрованные данные пользователя полученные из реестра 
+        private string Encrypt_UserName;
+        private string Encrypt_Password;
+
+
         #endregion
 
 
@@ -65,15 +76,14 @@ namespace HM
         {
             InitializeComponent();
 
-            #region Проверка соединения с БД
-            dataBases.ProtectedConnection(this);
-            #endregion
+
 
             #region Начальные накстройки
             TB.Margin = new Thickness(0, 0, 0, 0); //выравниванеи TableControl 
             grids = new List<Grid>() { PartyGrid, HomeGrid, PostomatsGrid, SettingsGrid }; ///включение в список всех гридов-окон
             HM.Title += " " + Assembly.GetExecutingAssembly().GetName().Version.ToString(3); //версия в названии (менять в свовах проекта)
             TitleVersionText.Content = "v. " + Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+
             #endregion
 
             #region Regisrty Staff Загрузка Настроек из реестра
@@ -84,8 +94,8 @@ namespace HM
             {
                 if (key != null)
                 {
-                    UserName.Text = key.GetValue("Имя пользователя")?.ToString();
-                    UserPass.Password = key.GetValue("Пароль")?.ToString();
+                    Encrypt_UserName = key.GetValue("Имя пользователя")?.ToString();
+                    Encrypt_Password = key.GetValue("Пароль")?.ToString();
                     TokenPost_PM.Text = key.GetValue("X-AUTH-TOKEN_PM")?.ToString();
                     TokenPost_Engy.Text = key.GetValue("X-AUTH-TOKEN_Engy")?.ToString();
                     SP_HotKey.Text = key.GetValue(SP_HotKey.Name)?.ToString();
@@ -93,6 +103,36 @@ namespace HM
                     Visual_ViewMenu.IsChecked = Convert.ToBoolean(key.GetValue("Settings_Visual_ViewMenu")?.ToString());
                 }
             }
+            #endregion
+
+            #region Дешифровка данных пользователя полученных из реестра с помошью ключа безопасности 
+
+            //получаю ключ из файла
+            var decriptionkey = CriptoAES_Container.RetrieveEncryptionKey();
+            if (decriptionkey != null)
+            {
+                //Дешифрую данные с помощью ключа
+                Decrypt_UserName = CriptoAES_Container.DecryptString(Encrypt_UserName, decriptionkey);
+                Decrypt_Password = CriptoAES_Container.DecryptString(Encrypt_Password, decriptionkey);
+
+                UserName.Text = Decrypt_UserName;
+                UserPass.Password = Decrypt_Password;
+
+            }
+            //если данные подгружены и расшифрованы, то кнопка "Удалить данные" будет доступна
+            if ((UserName.Text == "" && UserPass.Password == ""))
+                DeleteUserData.IsEnabled = false;
+            else DeleteUserData.IsEnabled = true;
+
+
+
+
+
+            #endregion
+
+            #region Проверка соединения с БД
+            dataBases = new DataBaseAsset(Decrypt_UserName, Decrypt_Password);
+            dataBases.ProtectedConnection(this);
             #endregion
 
             #region добавление всех начальных функций обработок в Настройки
@@ -763,6 +803,8 @@ namespace HM
 
         #region Settings      
 
+
+        #region UserData_crypto
         /// <summary>
         /// Сохранение данных пользователя
         /// </summary>
@@ -770,15 +812,18 @@ namespace HM
         {
             if (UserName.Text != "" && UserPass.Password != "")
             {
+                EncryptSaveUserData();
+
                 using RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM\Settings");
                 {
-                    key?.SetValue("Имя пользователя", UserName.Text);
-                    key?.SetValue("Пароль", UserPass.Password);
+                    key?.SetValue("Имя пользователя", Encrypt_UserName);
+                    key?.SetValue("Пароль", Encrypt_Password);
                 }
                 SussessLabel.Content = "Успешно";
+                DeleteUserData.IsEnabled = true;
 
             }
-            else SussessLabel.Content = "Не заполнено поле";
+            else SussessLabel.Content = "Не заполнено одно из полей!";
 
             await Task.Delay(1000);
             SussessLabel.Content = "";
@@ -786,11 +831,54 @@ namespace HM
         }
 
         /// <summary>
-        /// функйция проверки полей и записи в реестр
+        /// Удаление старого файла ключа безопастности и создание зашифрованных данных с помоью ключа безопастности
+        /// </summary>
+        private void EncryptSaveUserData()
+        {
+
+            //генерация нового ключа 
+            byte[] encryptionKey = CriptoAES_Container.GenerateRandomKey();
+
+            //сохранение нового ключа безопастности в новый файл (или старый если он уже существет )
+            CriptoAES_Container.SaveEncryptionKey(encryptionKey);
+
+            //шифрую данные с помощью нового ключа и сохраняю в переменные
+            Encrypt_UserName = CriptoAES_Container.EncryptString(UserName.Text, encryptionKey);
+            Encrypt_Password = CriptoAES_Container.EncryptString(UserPass.Password, encryptionKey);
+
+        }
+
+        /// <summary>
+        /// Удаление данных пользователя из системы
+        /// </summary>
+        private void DeleteKeyFolder_method(object sender, RoutedEventArgs e)
+        {
+            //удаленрие данных пользователя из реестра 
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Settings", true))
+            {
+                if (key != null)
+                {
+                    key.DeleteValue("Имя пользователя", false);
+                    key.DeleteValue("Пароль", false);
+                }
+            }
+            //удаление папки с ключом
+            CriptoAES_Container.DeleteKeyFolder();
+            //ОЧИСТКА ПОЛЕЙ 
+            UserName.Text = "";
+            UserPass.Password = "";
+
+            MessageBox.Show("Данные пользователя успешно удалены из системы");
+
+        }
+        #endregion
+
+        /// <summary>
+        /// функйция проверки полей и записи в реестр / не используется 
         /// </summary>
         /// <param name="L1">Поле для хостов</param>
         /// <param name="L2">Поле для имени БД </param>
-        /// <param name="suslabel">Лейбл статусов</param>
+        /// <param name="suslabel">Лейбл статусов</param> 
         async public void SaveProtected(TextBox L1, TextBox L2, Label suslabel)
         {
             if (L1.Text != "" && L2.Text != "")
@@ -1293,6 +1381,7 @@ namespace HM
             isStopped = true;
 
         }
+
 
 
 
