@@ -503,6 +503,13 @@ namespace HM
                 TextBox.Text = string.Join(",\n", list.Distinct());
 
             }
+
+            //Удаление последней запятой из текста
+            if (!string.IsNullOrEmpty(TextBox.Text))
+            {
+                TextBox.Text = TextBox.Text.TrimEnd(',', ' ', '\n');
+            }
+
             try { if (TextBox.Text != "") Clipboard.SetText(TextBox.Text); } catch { }
             BFcopy.Text = "Результат скопирован в буфер обмена";
             await Task.Delay(1000);
@@ -1105,6 +1112,7 @@ namespace HM
             //• Найти ненайденные по ШК
             if ((RP_fromSHK.Count > 0) && (RP_fromSHK[0] != ""))
             {
+
                 SHK_fromDB = dataBases.ConnectDB("Шиптор", $@"select id, external_id  from package p where id  in ({string.Join(",", RP_fromSHK)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
                 ListOne.Text = string.Join("\r\n", SHK);
                 ListTwo.Text = string.Join("\r\n", SHK_fromDB);

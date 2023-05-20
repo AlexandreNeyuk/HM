@@ -317,7 +317,7 @@
 
         <!--TabControl -->
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" d:IsHidden="True" >
 
             <Border x:Name="Settings" Background="White" CornerRadius="5,5,5,5" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,25,0,0" HorizontalAlignment="Center" Width="550" Height="425" VerticalAlignment="Top">
                 <Border.Effect>
