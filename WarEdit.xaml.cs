@@ -109,7 +109,13 @@ namespace HM
                     {
                         if (host.Contains(List_Hosts.SelectedItem.ToString()))
                         {
-                            key.DeleteValue(host);
+                            string founded = host.Replace(" ", "").Replace("Name_", "").Replace("Host_", "").Replace("Post", "").Replace("DataBase_", "");
+                            if (List_Hosts.SelectedItem.ToString().Replace(" ", "").Replace("Name_", "").Replace("Host_", "").Replace("Post", "").Replace("DataBase_", "") == founded)
+                            {
+                                key.DeleteValue(host);
+
+                            }
+
                         }
                     }
 
