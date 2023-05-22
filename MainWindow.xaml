@@ -85,7 +85,7 @@
             </Canvas>
         </Grid>
         <Grid x:Name="MajorGrid" Height="478" VerticalAlignment="Bottom">
-            <Grid x:Name="PartyGrid" Background="White">
+            <Grid x:Name="PartyGrid" Background="White" d:IsHidden="True">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии склада" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
                 <ComboBox x:Name="SelectAction" HorizontalAlignment="Right" Margin="0,153,24,0" VerticalAlignment="Top" Width="147" SelectedIndex="0" BorderThickness="0,0,0,0" FontFamily="72" Height="22">
                     <ComboBoxItem Content="Добавить в партию"/>
@@ -177,7 +177,7 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid" d:IsHidden="True">
+            <Grid x:Name="HomeGrid">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
                         <Grid Background="White" Height="451">
@@ -257,7 +257,7 @@
                                 FontFamily="Consolas"
                                 FontSize="14"
                                 SyntaxHighlighting="C#" LineNumbersForeground="#FFC1660A" Background="White" Foreground="Black" WordWrap="True" Margin="0,24,131,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FFFF8206" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0" HorizontalAlignment="Right" Width="299"/>
-                            <ComboBox x:Name="ThreadsSelect" Margin="0,122,41,0" VerticalAlignment="Top" SelectedIndex="0" FontFamily="72" BorderThickness="0,0,0,1" HorizontalAlignment="Right" Width="39">
+                            <ComboBox x:Name="ThreadsSelect" Margin="0,140,41,0" VerticalAlignment="Top" SelectedIndex="0" FontFamily="72" BorderThickness="0,0,0,1" HorizontalAlignment="Right" Width="39">
                                 <ComboBoxItem Content="1"/>
                                 <ComboBoxItem Content="2"/>
                                 <ComboBoxItem Content="3"/>
@@ -266,7 +266,7 @@
                                 <ComboBoxItem Content="6"/>
                             </ComboBox>
                             <Label Content="Весь список ГМ" Margin="0,0,234,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="96"/>
-                            <Label Margin="0,98,37,0" VerticalAlignment="Top" Content="Потоки" FontFamily="72" HorizontalAlignment="Right" Width="49"/>
+                            <Label Margin="0,116,37,0" VerticalAlignment="Top" Content="Потоки" FontFamily="72" HorizontalAlignment="Right" Width="49"/>
                             <TabControl x:Name="ThreadsTab" Margin="0,1,436,20">
                                 <TabItem x:Name="Thread1" Header="Поток  1" Margin="-2,-2,-2,0">
                                     <Grid Background="#FFE5E5E5">
@@ -300,12 +300,13 @@
                                 </TabItem>
                             </TabControl>
                             <Button HorizontalAlignment="Right" Margin="0,4,5,0" VerticalAlignment="Top" Content="Х" Width="34" BorderThickness="0,0,0,0" FontFamily="72" HorizontalContentAlignment="Center" Click="Button_Click_1"/>
-                            <Button x:Name="GO_GK" Content="Запуск" Margin="0,51,59,0" VerticalAlignment="Top" FontFamily="72" Height="27" BorderThickness="0,0,0,0" Click="GO_GK_Click" HorizontalAlignment="Right" Width="62"/>
-                            <TextBox x:Name="ExcelNameFile" Margin="0,183,12,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="21" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="99"/>
-                            <Label Margin="0,158,12,0" VerticalAlignment="Top" FontFamily="72" Content="Имя файла" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="99"/>
-                            <Button x:Name="SelectFolderHashes" Content="Расположение" Margin="0,241,10,0" VerticalAlignment="Top" BorderThickness="0,0,0,0" FontFamily="72" Height="27" Click="SelectFolderHashes_Click" HorizontalAlignment="Right" Width="101"/>
-                            <Label x:Name="SelectedFolderHashes" Content="Desktop" Margin="0,213,10,0" VerticalAlignment="Top" FontFamily="72" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="101"/>
-                            <Button x:Name="StopRunnerGK_Button" Margin="0,51,5,0" VerticalAlignment="Top" FontFamily="72" Height="27" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="49" Content="Стоп" IsEnabled="False" Click="StopRunnerGK_Button_Click"/>
+                            <Button x:Name="GO_GK" Content="Запуск" Margin="0,40,59,0" VerticalAlignment="Top" FontFamily="72" Height="27" BorderThickness="0,0,0,0" Click="GO_GK_Click" HorizontalAlignment="Right" Width="62"/>
+                            <TextBox x:Name="ExcelNameFile" Margin="0,200,11,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="22" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="99"/>
+                            <Label Margin="0,176,12,0" VerticalAlignment="Top" FontFamily="72" Content="Имя файла" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="99"/>
+                            <Button x:Name="SelectFolderHashes" Content="Расположение" Margin="0,266,9,0" VerticalAlignment="Top" BorderThickness="0,0,0,0" FontFamily="72" Height="27" Click="SelectFolderHashes_Click" HorizontalAlignment="Right" Width="101"/>
+                            <Label x:Name="SelectedFolderHashes" Content="Desktop" Margin="0,238,9,0" VerticalAlignment="Top" FontFamily="72" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="101"/>
+                            <Button x:Name="StopRunnerGK_Button" Margin="0,40,5,0" VerticalAlignment="Top" FontFamily="72" Height="27" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="49" Content="Стоп" IsEnabled="False" Click="StopRunnerGK_Button_Click"/>
+                            <CheckBox x:Name="fromSAP_radioButton" Margin="0,91,22,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="88" FontFamily="72" Content="7 day`s limit" ToolTip="7-дневное ограничение для списка посылок (используется при прогрузке списка из САП)"/>
 
 
                         </Grid>
