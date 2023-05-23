@@ -307,6 +307,7 @@
                             <Label x:Name="SelectedFolderHashes" Content="Desktop" Margin="0,238,9,0" VerticalAlignment="Top" FontFamily="72" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="101"/>
                             <Button x:Name="StopRunnerGK_Button" Margin="0,40,5,0" VerticalAlignment="Top" FontFamily="72" Height="27" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="49" Content="Стоп" IsEnabled="False" Click="StopRunnerGK_Button_Click"/>
                             <CheckBox x:Name="fromSAP_radioButton" Margin="0,91,22,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="88" FontFamily="72" Content="7 day`s limit" ToolTip="7-дневное ограничение для списка посылок (используется при прогрузке списка из САП)"/>
+                            <Label x:Name="FoundedLimeted" Margin="0,389,12,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="99" Content="Найдено: "/>
 
 
                         </Grid>
