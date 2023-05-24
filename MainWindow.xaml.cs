@@ -1207,14 +1207,14 @@ namespace HM
             if ((curRP.Count > 0) && (curRP[0] != "")) //Если общий список RP не пустой!
             {
                 //  dataBases.ConnectDB("Шиптор", $@"UPDATE public.package_sorter_data SET package_create_hash=NULL, package_merge_hash=NULL WHERE package_id in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
-                FoundedLimeted.Content = FoundedLimeted.Content + curRP.Count.ToString();
+                FoundedLimeted.Content = "Найдено: " + curRP.Count.ToString();
 
                 if (fromSAP_radioButton.IsChecked == true)
                 {//использую 7-ми дневное ограничение 
 
                     curRP = dataBases.ConnectDB("Шиптор", $@"select id, created_at from package where id in ({string.Join(",", curRP)}) and created_at >= current_date - interval '7 days'").AsEnumerable().Select(x => x[0].ToString()).ToList();
 
-                    FoundedLimeted.Content = FoundedLimeted.Content + curRP.Count.ToString();
+                    FoundedLimeted.Content = "Найдено: " + curRP.Count.ToString();
                 }
 
                 //•Делим списки RP для нашего числа потоков 

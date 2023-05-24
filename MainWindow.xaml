@@ -117,7 +117,7 @@
 
 
             </Grid>
-            <Grid x:Name="PostomatsGrid" Background="White" d:IsHidden="True">
+            <Grid x:Name="PostomatsGrid" Background="White">
                 <Label VerticalAlignment="Top" Height="31" FontFamily="72" FontWeight="Bold" FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="#FFECECEC" Content="Работа с Postomats"/>
                 <Grid x:Name="BronbGrid" Margin="173,31,0,23" Background="White">
                     <Grid.ColumnDefinitions>
@@ -137,14 +137,14 @@
                     <Label Content="см" HorizontalAlignment="Left" Margin="526,92,0,0" VerticalAlignment="Top" FontFamily="72"/>
                     <Label Content="см" HorizontalAlignment="Left" Margin="526,117,0,0" VerticalAlignment="Top" FontFamily="72"/>
                     <Label Content="кг" HorizontalAlignment="Left" Margin="526,141,0,0" VerticalAlignment="Top" FontFamily="72"/>
-                    <Button x:Name="Bronirovat_Button" HorizontalAlignment="Left" Margin="214,163,0,0" VerticalAlignment="Top" Content="Забронировать" FontFamily="72" Width="118" Height="25" Click="Bronirovat_Button_Click"/>
-                    <Label Content="Бронирование + Смена ВГХ" VerticalAlignment="Top" FontFamily="72" Padding="5,5,5,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold" Height="29" Background="#FFF7F7F7" ToolTip="Это только бронирование и/или смена DU{? если поля будут заполены! Только бронирование, когда уже все готово к этомму! "/>
+                    <Button x:Name="Bronirovat_Button" HorizontalAlignment="Left" Margin="214,163,0,0" VerticalAlignment="Top" Content="Забронировать" FontFamily="72" Width="118" Height="25" Click="Bronirovat_Button_Click" IsEnabled="False"/>
+                    <Label Content="Бронирование + Смена ВГХ" VerticalAlignment="Top" FontFamily="72" Padding="5,5,5,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold" Height="29" Background="#FFF7F7F7" ToolTip="ТОЛЬКО бронирование и/или смена ВГХ, если поля будут заполены! Только бронирование, когда уже все готово к этому! "/>
                     <Label Content="Отправление (дочь)" HorizontalAlignment="Left" Margin="59,38,0,0" VerticalAlignment="Top" FontFamily="72" Width="123"/>
                     <Label HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top" FontFamily="72" Width="29" Content="RP"/>
                     <TextBlock x:Name="LogPOST1" HorizontalAlignment="Center" Margin="0,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="216" Width="663" FontFamily="72" Background="#FFF3F3F3" Padding="10,5,10,10"/>
                     <Label Content="ЛОГ" HorizontalAlignment="Left" Margin="12,193,0,0" VerticalAlignment="Top" FontFamily="72"/>
                 </Grid>
-                <Grid x:Name="SyncEngyGrid" Margin="173,31,0,23" Background="White">
+                <Grid x:Name="SyncEngyGrid" Margin="173,31,0,23" Background="White" d:IsHidden="True" Visibility="Hidden">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
@@ -172,12 +172,12 @@
                     <Canvas x:Name="Bronirovanie_Canvas" Height="32">
                         <Label x:Name="Bron_LB" Content="Бронирование" Background="{x:Null}" FontFamily="72" FontSize="14" VerticalContentAlignment="Center" Height="32" VerticalAlignment="Center" HorizontalAlignment="Left" Width="173"/>
                     </Canvas>
-                    <Canvas x:Name="Sync_Canvas" Height="32">
+                    <Canvas x:Name="Sync_Canvas" Height="32" IsEnabled="False">
                         <Label x:Name="Sync_LB" Height="32" Background="{x:Null}" FontFamily="72" FontSize="14" VerticalContentAlignment="Center" Content="Синхронизация с Engy" HorizontalAlignment="Left" VerticalAlignment="Center" Width="173"/>
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid">
+            <Grid x:Name="HomeGrid" d:IsHidden="True">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
                         <Grid Background="White" Height="451">
@@ -319,7 +319,7 @@
 
         <!--TabControl -->
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" d:IsHidden="True" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" >
 
             <Border x:Name="Settings" Background="White" CornerRadius="5,5,5,5" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,25,0,0" HorizontalAlignment="Center" Width="550" Height="425" VerticalAlignment="Top">
                 <Border.Effect>
@@ -332,15 +332,16 @@
                             <Label Content="Настройки"  FontFamily="72" FontSize="16" FontWeight="Bold" Margin="0,-1,0,0" Height="36" VerticalAlignment="Top" HorizontalAlignment="Center" Width="212" Padding="17,0,5,0" ToolTip="Все настройки в ветке реестра: HKEY_CURRENT_USER\Software\HM\Settings" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White"/>
 
                         </Grid>
-                        <Label Content="Настройки пользователя БД" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4" FontSize="14"/>
-                        <Grid x:Name="UserData" Height="126">
-                            <Label Content="Имя пользователя" FontFamily="72" Padding="10,0,0,0" Margin="38,9,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
-                            <TextBox x:Name="UserName" HorizontalAlignment="Left" Margin="184,9,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="184" FontFamily="Bahnschrift" ToolTip="Имя пользователя"/>
-                            <Label Content="Пароль" FontFamily="72" Padding="10,0,0,0" Margin="38,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"/>
-                            <Button Content="Сохранить" Height="20" VerticalAlignment="Top" Margin="0,61,49,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click" HorizontalAlignment="Right" Width="90"/>
-                            <PasswordBox x:Name="UserPass" Margin="184,32,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184" FontFamily="Bahnschrift" ToolTip="Пароль"/>
-                            <Label x:Name="SussessLabel" FontFamily="72" Padding="10,0,0,0" Margin="206,61,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="162" FlowDirection="RightToLeft"/>
-                            <Button x:Name="DeleteUserData" Height="20" VerticalAlignment="Top" Margin="402,96,0,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" HorizontalAlignment="Left" Width="104" Content="Удалить данные" ToolTip="Удаление всех данных о пользователе из реестра и зашифрованного ключа" Click="DeleteKeyFolder_method"/>
+                        <Grid Height="11" Width="548" Visibility="Collapsed"/>
+                        <Label Content="Настройки пользователя БД" FontFamily="72" Padding="10,0,0,0" Background="#FFE4E4E4" FontSize="14" Height="20.1" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Grid x:Name="UserData" Height="105">
+                            <Label Content="Имя пользователя" FontFamily="72" Padding="10,0,0,0" Margin="38,13,0,0" HorizontalAlignment="Left" Width="116" Height="17" VerticalAlignment="Top"/>
+                            <TextBox x:Name="UserName" HorizontalAlignment="Left" Margin="184,13,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="184" FontFamily="Bahnschrift" ToolTip="Имя пользователя"/>
+                            <Label Content="Пароль" FontFamily="72" Padding="10,0,0,0" Margin="38,36,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"/>
+                            <Button Content="Сохранить" Margin="402,35,0,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click" HorizontalAlignment="Left" Width="104" Height="20" VerticalAlignment="Top"/>
+                            <PasswordBox x:Name="UserPass" Margin="184,36,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184" FontFamily="Bahnschrift" ToolTip="Пароль"/>
+                            <Label x:Name="SussessLabel" FontFamily="72" Padding="10,0,0,0" Margin="206,71,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="162" FlowDirection="RightToLeft"/>
+                            <Button x:Name="DeleteUserData" Height="20" VerticalAlignment="Top" Margin="402,71,0,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" HorizontalAlignment="Left" Width="104" Content="Удалить данные" ToolTip="Удаление всех данных о пользователе из реестра и зашифрованного ключа" Click="DeleteKeyFolder_method"/>
 
                         </Grid>
                         <Label Content="Подключенные БД" FontFamily="72" Padding="10,2,0,2" Background="#FFE4E4E4" FontSize="14"/>
