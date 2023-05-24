@@ -35,6 +35,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using Brush = System.Windows.Media.Brush;
 using Clipboard = System.Windows.Clipboard;
 using Label = System.Windows.Controls.Label;
 using ListBox = System.Windows.Controls.ListBox;
@@ -1135,8 +1136,10 @@ namespace HM
 
             GO_GK.IsEnabled = false; //Отключение кнопки "Запуск"
             StopRunnerGK_Button.IsEnabled = true; //Включение кнопки "Стоп"
+            StopRunnerGK_Button.Background = (Brush)new BrushConverter().ConvertFrom("#FFC51308");
+            StopRunnerGK_Button.Foreground = new SolidColorBrush(Colors.White);
 
-            if (ExcelNameFile.Text == "") ExcelNameFile.Text = "Hashes";
+            if (ExcelNameFile.Text == "") ExcelNameFile.Text = "Hashes" + "_" + DateTime.Now.ToString("yyyy_MM_dd HH_mm");
             List<string> listRP_GK = new List<string>(To_List(ALL_GM)); //лист со всем "добром" (и шк и RP)
             List<string> SHK;//Лист с ШК
             List<string> RP_fromSHK;//Лист с найденными RP из ШК
@@ -1206,7 +1209,7 @@ namespace HM
                 curRP.AddRange(RP_fromSHK); // обьединяем списки RP
             if ((curRP.Count > 0) && (curRP[0] != "")) //Если общий список RP не пустой!
             {
-                //  dataBases.ConnectDB("Шиптор", $@"UPDATE public.package_sorter_data SET package_create_hash=NULL, package_merge_hash=NULL WHERE package_id in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
+                dataBases.ConnectDB("Шиптор", $@"UPDATE public.package_sorter_data SET package_create_hash=NULL, package_merge_hash=NULL WHERE package_id in ({string.Join(",", curRP)})").AsEnumerable().Select(x => x[1].ToString()).ToList();
                 FoundedLimeted.Content = "Найдено: " + curRP.Count.ToString();
 
                 if (fromSAP_radioButton.IsChecked == true)
@@ -1249,8 +1252,10 @@ namespace HM
             else
             {
                 MessageBox.Show("По списку ничего не найдено в системе! Раннер не будет запущен! ");
-                GO_GK.IsEnabled = true; //Отключение кнопки "Запуск"
-                StopRunnerGK_Button.IsEnabled = false; //Включение кнопки "Стоп"
+                GO_GK.IsEnabled = true; //Bключение кнопки "Запуск"
+                StopRunnerGK_Button.IsEnabled = false; //Отключение кнопки "Стоп"
+                StopRunnerGK_Button.Background = (Brush)new BrushConverter().ConvertFrom("#FFDDDDDD");
+                StopRunnerGK_Button.Foreground = (Brush)new BrushConverter().ConvertFrom("#FF696969");
             }
 
 
@@ -1365,6 +1370,17 @@ namespace HM
                         new SoundPlayer(gzOut).Play();
                     GO_GK.IsEnabled = true;
                     StopRunnerGK_Button.IsEnabled = false;
+
+                    //• открываем проводник и выделяем наш файл в нем
+                    string filePath = Path.Combine(pathHashes, ExcelNameFile.Text + ".xlsx");
+                    Process process = new Process();
+                    process.StartInfo = new ProcessStartInfo()
+                    {// Передаем команду открытия и выделения файла
+                        FileName = "explorer.exe",
+                        Arguments = $"/select, /order, \"date\", \"{filePath}\""
+                    };
+                    // Запускаем процесс
+                    process.Start();
                 }
                 else
                 {
@@ -1426,7 +1442,7 @@ namespace HM
                                 await response.Content.ReadAsStringAsync();
                                 stopwatch.Stop();
                                 Label label = new Label();
-                                label.Content = $"Iteration {i} success. Response time: {stopwatch.ElapsedMilliseconds} ms";
+                                label.Content = $"Iteration {i + 1} success. Response time: {stopwatch.ElapsedMilliseconds} ms";
                                 MylistThread.Items.Add(label);
 
 
@@ -1438,7 +1454,7 @@ namespace HM
                                 // $@"Запрос вернул ответ с ошибкой: {response.StatusCode}; Error message: {responseContent}";
                                 stopwatch.Stop();
                                 Label label = new Label();
-                                label.Content = $"Iteration {i}. Error:{response.StatusCode}; Error message: {responseContent}.  Response time: {stopwatch.ElapsedMilliseconds} ms";
+                                label.Content = $"Iteration {i + 1}. Error:{response.StatusCode}; Error message: {responseContent}.  Response time: {stopwatch.ElapsedMilliseconds} ms";
                                 MylistThread.Items.Add(label);
 
 
