@@ -340,7 +340,7 @@
                             <Label Content="Пароль" FontFamily="72" Padding="10,0,0,0" Margin="38,36,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75"/>
                             <Button Content="Сохранить" Margin="402,35,0,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="Button_Click" HorizontalAlignment="Left" Width="104" Height="20" VerticalAlignment="Top"/>
                             <PasswordBox x:Name="UserPass" Margin="184,36,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="184" FontFamily="Bahnschrift" ToolTip="Пароль"/>
-                            <Label x:Name="SussessLabel" FontFamily="72" Padding="10,0,0,0" Margin="206,71,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="162" FlowDirection="RightToLeft"/>
+                            <Label x:Name="SussessLabel" FontFamily="72" Padding="10,0,0,0" Margin="167,71,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="201" FlowDirection="RightToLeft"/>
                             <Button x:Name="DeleteUserData" Height="20" VerticalAlignment="Top" Margin="402,71,0,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" HorizontalAlignment="Left" Width="104" Content="Удалить данные" ToolTip="Удаление всех данных о пользователе из реестра и зашифрованного ключа" Click="DeleteKeyFolder_method"/>
 
                         </Grid>
