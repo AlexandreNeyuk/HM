@@ -117,7 +117,7 @@
 
 
             </Grid>
-            <Grid x:Name="PostomatsGrid" Background="White" d:IsHidden="True">
+            <Grid x:Name="PostomatsGrid" Background="White">
                 <Label VerticalAlignment="Top" Height="31" FontFamily="72" FontWeight="Bold" FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="#FFECECEC" Content="Работа с Postomats"/>
                 <Grid x:Name="BronbGrid" Margin="173,31,0,23" Background="White">
                     <Grid.ColumnDefinitions>
@@ -137,7 +137,7 @@
                     <Label Content="см" HorizontalAlignment="Left" Margin="526,92,0,0" VerticalAlignment="Top" FontFamily="72"/>
                     <Label Content="см" HorizontalAlignment="Left" Margin="526,117,0,0" VerticalAlignment="Top" FontFamily="72"/>
                     <Label Content="кг" HorizontalAlignment="Left" Margin="526,141,0,0" VerticalAlignment="Top" FontFamily="72"/>
-                    <Button x:Name="Bronirovat_Button" HorizontalAlignment="Left" Margin="214,163,0,0" VerticalAlignment="Top" Content="Забронировать" FontFamily="72" Width="118" Height="25" Click="Bronirovat_Button_Click" IsEnabled="False"/>
+                    <Button x:Name="Bronirovat_Button" HorizontalAlignment="Left" Margin="214,163,0,0" VerticalAlignment="Top" Content="Забронировать" FontFamily="72" Width="118" Height="25" Click="Bronirovat_Button_Click"/>
                     <Label Content="Бронирование + Смена ВГХ" VerticalAlignment="Top" FontFamily="72" Padding="5,5,5,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold" Height="29" Background="#FFF7F7F7" ToolTip="ТОЛЬКО бронирование и/или смена ВГХ, если поля будут заполены! Только бронирование, когда уже все готово к этому! "/>
                     <Label Content="Отправление (дочь)" HorizontalAlignment="Left" Margin="59,38,0,0" VerticalAlignment="Top" FontFamily="72" Width="123"/>
                     <Label HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top" FontFamily="72" Width="29" Content="RP"/>
@@ -177,7 +177,7 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid">
+            <Grid x:Name="HomeGrid" d:IsHidden="True">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
                         <Grid Background="White" Height="451">
