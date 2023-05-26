@@ -693,7 +693,7 @@ namespace HM
                                         string RPid = RP_Party.Text.Replace("\r\n", "");
 
                                         //удаляю из партии в шипторе и корректировка статусов посылок на "УПАКОВАНА"
-                                        dataBases.ConnectDB("Шиптор", $@"UPDATE public.package SET return_id = NULL, current_status='packed', sent_at = NULL  returned_at = NULL, returning_to_warehouse_at = NULL, packed_since = now()   WHERE id in ({RPid})");
+                                        dataBases.ConnectDB("Шиптор", $@"UPDATE public.package SET return_id = NULL, current_status='packed', sent_at = NULL,  returned_at = NULL, returning_to_warehouse_at = NULL, packed_since = now()   WHERE id in ({RPid})");
                                         dataBases.ConnectDB("Шиптор", $@"UPDATE package_departure SET package_action = NULL  WHERE package_id in ({RPid})");
 
                                         //удаление из партии склада 
