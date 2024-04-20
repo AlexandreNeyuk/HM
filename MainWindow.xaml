@@ -119,7 +119,7 @@
             </Grid>
             <Grid x:Name="PostomatsGrid" Background="White">
                 <Label VerticalAlignment="Top" Height="31" FontFamily="72" FontWeight="Bold" FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="#FFECECEC" Content="Работа с Postomats"/>
-                <Grid x:Name="BronbGrid" Margin="173,31,0,23" Background="White">
+                <Grid x:Name="BronbGrid" Margin="173,31,0,23" Background="White" d:IsHidden="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
@@ -141,38 +141,39 @@
                     <Label Content="Бронирование + Смена ВГХ" VerticalAlignment="Top" FontFamily="72" Padding="5,5,5,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold" Height="29" Background="#FFF7F7F7" ToolTip="ТОЛЬКО бронирование и/или смена ВГХ, если поля будут заполены! Только бронирование, когда уже все готово к этому! "/>
                     <Label Content="Отправление (дочь)" HorizontalAlignment="Left" Margin="59,38,0,0" VerticalAlignment="Top" FontFamily="72" Width="123"/>
                     <Label HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top" FontFamily="72" Width="29" Content="RP"/>
-                    <TextBlock x:Name="LogPOST1" HorizontalAlignment="Center" Margin="0,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="216" Width="663" FontFamily="72" Background="#FFF3F3F3" Padding="10,5,10,10"/>
+                    <TextBlock x:Name="LogPOST1" HorizontalAlignment="Left" Margin="0,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="216" Width="663" FontFamily="72" Background="#FFF3F3F3" Padding="10,5,10,10"/>
                     <Label Content="ЛОГ" HorizontalAlignment="Left" Margin="12,193,0,0" VerticalAlignment="Top" FontFamily="72"/>
+                    <Button x:Name="cleanLog1" HorizontalAlignment="Left" Margin="45,195,0,0" VerticalAlignment="Top" FontFamily="72" Width="23" Height="19" Content="X" BorderThickness="0,0,0,0"/>
                 </Grid>
-                <Grid x:Name="SyncEngyGrid" Margin="173,31,0,23" Background="White" d:IsHidden="True" Visibility="Hidden">
+                <Grid x:Name="SyncEngyGrid" Margin="173,31,0,23" Background="White">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="RP_child1" HorizontalAlignment="Left" Margin="36,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" FontFamily="72" Height="20"/>
+                    <TextBox x:Name="RP_child_sync" HorizontalAlignment="Left" Margin="36,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="170" FontFamily="72" Height="20"/>
                     <Label HorizontalAlignment="Left" Margin="366,41,0,0" VerticalAlignment="Top" FontFamily="72" Content="Статус посылки из Engy" Width="148" HorizontalContentAlignment="Center"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="366,70,0,0" VerticalAlignment="Top" Width="148" SelectedIndex="0">
+                    <ComboBox x:Name="StatusPackagePM" HorizontalAlignment="Left" Margin="366,70,0,0" VerticalAlignment="Top" Width="148" SelectedIndex="0">
                         <ComboBoxItem Content="Готово к загрузке (забронировано)" FontFamily="72"/>
                         <ComboBoxItem Content="Заложено" FontFamily="72"/>
                     </ComboBox>
-                    <Button x:Name="Bronirovat_Button1" HorizontalAlignment="Left" Margin="214,188,0,0" VerticalAlignment="Top" FontFamily="72" Width="118" Height="25" Content="Синхронизировать"/>
+                    <Button x:Name="Synchra_Button1" HorizontalAlignment="Left" Margin="260,195,0,0" VerticalAlignment="Top" FontFamily="72" Width="118" Height="25" Content="Синхронизировать"/>
                     <Label VerticalAlignment="Top" FontFamily="72" Padding="5,5,5,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold" Height="29" Background="#FFF7F7F7" Content="Синхронизация посылок с Engy" ToolTip="Эта страница вызывает методы синхронзации/добавления посылки из Engy (если ее нет в ПМ), а также синхронизирует статус посылки с Engy"/>
-                    <DatePicker HorizontalAlignment="Left" Margin="366,126,0,0" VerticalAlignment="Top" Width="148" SelectedDateFormat="Long" Text="Дата добавления" FirstDayOfWeek="Monday" DisplayDate="03/18/2023 21:39:00"/>
-                    <Label Content="Отправление (дочь)" HorizontalAlignment="Left" Margin="58,40,0,0" VerticalAlignment="Top" FontFamily="72" Width="123"/>
+                    <Label Content="Отправление (дочь)" HorizontalAlignment="Left" Margin="60,42,0,0" VerticalAlignment="Top" FontFamily="72" Width="122"/>
                     <Label HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" FontFamily="72" Width="26" Content="RP"/>
-                    <Label HorizontalAlignment="Left" Margin="326,102,0,0" VerticalAlignment="Top" FontFamily="72" Width="228" Content="Дата добавления посылки из Engy" HorizontalContentAlignment="Center"/>
-                    <TextBox x:Name="RP_child1_Copy" HorizontalAlignment="Left" Margin="36,128,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="127" FontFamily="72" Height="20"/>
+                    <TextBox x:Name="PostomatPS" HorizontalAlignment="Left" Margin="36,128,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="127" FontFamily="72" Height="20"/>
                     <Label HorizontalAlignment="Left" Margin="58,104,0,0" VerticalAlignment="Top" FontFamily="72" Width="63" Content="Постомат"/>
                     <Label HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top" FontFamily="72" Width="26" Content="PS"/>
-                    <TextBox x:Name="RP_child1_Copy1" HorizontalAlignment="Left" Margin="36,155,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="54" FontFamily="72" Height="20"/>
+                    <TextBox x:Name="PS_cell" HorizontalAlignment="Left" Margin="36,155,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="54" FontFamily="72" Height="20"/>
                     <Label HorizontalAlignment="Left" Margin="10,153,0,0" VerticalAlignment="Top" FontFamily="72" Width="26" Content="яч."/>
-                    <TextBlock x:Name="LogPOST2" HorizontalAlignment="Center" Margin="0,233,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="200" Width="663" FontFamily="72" Background="#FFF3F3F3" Padding="10,5,10,10"/>
+                    <TextBlock x:Name="LogPOST2" HorizontalAlignment="Center" Margin="0,233,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="200" Width="663" FontFamily="72" Background="#FFF3F3F3" Padding="10,5,10,10" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="True"/>
                     <Label Content="ЛОГ" HorizontalAlignment="Left" Margin="14,0,0,0" VerticalAlignment="Center" FontFamily="72"/>
+                    <CheckBox x:Name="SMS_check" Content="Отправить смс" HorizontalAlignment="Left" Margin="366,113,0,0" VerticalAlignment="Top" FontFamily="72" IsChecked="False"/>
+                    <Button x:Name="ClearLog_sync" HorizontalAlignment="Left" Margin="47,203,0,0" VerticalAlignment="Top" FontFamily="72" Width="22" Height="21" Content="Х" BorderThickness="0,0,0,0"/>
                 </Grid>
                 <StackPanel x:Name="ST" Margin="0,31,0,23" Background="#FFEDEDED" HorizontalAlignment="Left" Width="173">
-                    <Canvas x:Name="Bronirovanie_Canvas" Height="32">
+                    <Canvas x:Name="Bronirovanie_Canvas" Height="32" Background="Gray">
                         <Label x:Name="Bron_LB" Content="Бронирование" Background="{x:Null}" FontFamily="72" FontSize="14" VerticalContentAlignment="Center" Height="32" VerticalAlignment="Center" HorizontalAlignment="Left" Width="173"/>
                     </Canvas>
-                    <Canvas x:Name="Sync_Canvas" Height="32" IsEnabled="False">
+                    <Canvas x:Name="Sync_Canvas" Height="32">
                         <Label x:Name="Sync_LB" Height="32" Background="{x:Null}" FontFamily="72" FontSize="14" VerticalContentAlignment="Center" Content="Синхронизация с Engy" HorizontalAlignment="Left" VerticalAlignment="Center" Width="173"/>
                     </Canvas>
                 </StackPanel>

@@ -16,6 +16,7 @@ using System.IO.Packaging;
 using System.Linq;
 using System.Media;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Reflection.Metadata;
@@ -82,7 +83,8 @@ namespace HM
             grids = new List<Grid>() { PartyGrid, HomeGrid, PostomatsGrid, SettingsGrid }; ///включение в список всех гридов-окон
             HM.Title += " " + Assembly.GetExecutingAssembly().GetName().Version.ToString(3); //версия в названии (менять в свовах проекта)
             TitleVersionText.Content = "v. " + Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
-
+            //сразу нажатое окно брони 
+            BronbGrid.IsEnabled = true; Bronirovanie_Canvas.Background = (Brush)new BrushConverter().ConvertFrom("#FF808080"); BronbGrid.Visibility = Visibility.Visible; SyncEngyGrid.Visibility = Visibility.Hidden; SyncEngyGrid.IsEnabled = false; Sync_Canvas.Background = new SolidColorBrush(Colors.Transparent);
             #endregion
 
             #region Regisrty Staff Загрузка Настроек из реестра
@@ -105,18 +107,26 @@ namespace HM
             #endregion
 
             #region Дешифровка данных пользователя полученных из реестра с помошью ключа безопасности 
+            if ((Encrypt_UserName != null) && (Encrypt_Password != null))
+            {//если есть данные о пользователе из реестра, то рабтаем дольше с ключом, если ключа нет то выведет сообщение 
 
-            //получаю ключ из файла
-            var decriptionkey = CriptoAES_Container.RetrieveEncryptionKey();
-            if (decriptionkey != null)
-            {
-                //Дешифрую данные с помощью ключа
-                Decrypt_UserName = CriptoAES_Container.DecryptString(Encrypt_UserName, decriptionkey);
-                Decrypt_Password = CriptoAES_Container.DecryptString(Encrypt_Password, decriptionkey);
 
-                UserName.Text = Decrypt_UserName;
-                UserPass.Password = Decrypt_Password;
+                //получаю ключ из файла
+                var decriptionkey = CriptoAES_Container.RetrieveEncryptionKey();
+                if (decriptionkey != null) //если ключ существует
+                {
+                    //Дешифрую данные с помощью ключа
+                    Decrypt_UserName = CriptoAES_Container.DecryptString(Encrypt_UserName, decriptionkey);
+                    Decrypt_Password = CriptoAES_Container.DecryptString(Encrypt_Password, decriptionkey);
 
+                    UserName.Text = Decrypt_UserName;
+                    UserPass.Password = Decrypt_Password;
+
+                }
+            }
+            else
+            {//если нет данных о пользователе из реестра , то удаляем (если есть такая папка) ключ
+                CriptoAES_Container.DeleteKeyFolder();
             }
             //если данные подгружены и расшифрованы, то кнопка "Удалить данные" будет доступна
             if ((UserName.Text == "" && UserPass.Password == ""))
@@ -129,9 +139,11 @@ namespace HM
 
             #endregion
 
-            #region Проверка соединения с БД
-            dataBases = new DataBaseAsset(Decrypt_UserName, Decrypt_Password);
-            dataBases.ProtectedConnection(this);
+            #region Запуск Проверки соединения с БД по таймеру на основе тех данных что были дешифрованы в начале программы (эти данные обновляются при сохранении новых)
+            CheckProtectConnect_Timer();
+
+            /* dataBases = new DataBaseAsset(Decrypt_UserName, Decrypt_Password);
+             dataBases.ProtectedConnection(this);*/
             #endregion
 
             #region добавление всех начальных функций обработок в Настройки
@@ -163,7 +175,7 @@ namespace HM
             VisualMenu_Apply(); //применение сохраненных настроек к всплывающему меню
 
             #region Добавление обработки всех элементов меню (навердений мыши  и клики)
-            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home, Bronirovanie_Canvas, Sync_Canvas };
+            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home };
             foreach (var item in MenuCanvas)
             {
                 item.MouseEnter += (a, e) => { item.Background = new SolidColorBrush(Colors.Gray); };
@@ -178,9 +190,11 @@ namespace HM
             SettingCanvas.MouseDown += (a, e) => { OpenGrid(SettingsGrid); };
 
             //обработка кликов на пункты меню постаматов
-            Bronirovanie_Canvas.MouseDown += (a, e) => { Bron_LB.Background = new SolidColorBrush(Colors.White); Sync_LB.Background = new SolidColorBrush(Colors.Transparent); BronbGrid.Visibility = Visibility.Visible; BronbGrid.IsEnabled = true; SyncEngyGrid.Visibility = Visibility.Hidden; SyncEngyGrid.IsEnabled = false; };
-            Sync_Canvas.MouseDown += (a, e) => { Sync_LB.Background = new SolidColorBrush(Colors.White); Bron_LB.Background = new SolidColorBrush(Colors.Transparent); SyncEngyGrid.Visibility = Visibility.Visible; SyncEngyGrid.IsEnabled = true; BronbGrid.Visibility = Visibility.Hidden; BronbGrid.IsEnabled = false; };
-
+            Bronirovanie_Canvas.MouseDown += (a, e) => { BronbGrid.IsEnabled = true; Bronirovanie_Canvas.Background = (Brush)new BrushConverter().ConvertFrom("#FF808080"); BronbGrid.Visibility = Visibility.Visible; SyncEngyGrid.Visibility = Visibility.Hidden; SyncEngyGrid.IsEnabled = false; Sync_Canvas.Background = new SolidColorBrush(Colors.Transparent); };
+            Sync_Canvas.MouseDown += (a, e) => { BronbGrid.IsEnabled = false; Bronirovanie_Canvas.Background = new SolidColorBrush(Colors.Transparent); BronbGrid.Visibility = Visibility.Hidden; SyncEngyGrid.Visibility = Visibility.Visible; SyncEngyGrid.IsEnabled = true; Sync_Canvas.Background = (Brush)new BrushConverter().ConvertFrom("#FF808080"); };
+            cleanLog1.Click += (a, e) => { LogPOST1.Text = null; };
+            ClearLog_sync.Click += (a, e) => { LogPOST2.Text = null; };
+            Synchra_Button1.Click += (a, e) => { SynchronizationPackages(); };
             #endregion
 
             OpenGrid(HomeGrid); //открытие начальной страницы
@@ -266,6 +280,18 @@ namespace HM
         }
         #endregion
 
+
+        #region CheckConnect
+
+        /// <summary>
+        ///Проверка соединения с БД по таймеру 
+        /// </summary>
+        public void CheckProtectConnect_Timer()
+        {
+            dataBases = new DataBaseAsset(Decrypt_UserName, Decrypt_Password);
+            dataBases.ProtectedConnection(this);
+        }
+
         /// <summary>
         ///обновление статуса подключения из другого потока 
         /// </summary>
@@ -279,6 +305,10 @@ namespace HM
                 Status_Con.Content = newText;
             });
         }
+
+
+        #endregion
+
 
         #region Переключение пунктов меню метод - Переключение(открытие) Гридов 
 
@@ -1057,33 +1087,148 @@ namespace HM
         #endregion
 
         #region Postomats
-
+        Post post = new Post();
         #region Bronirovanie
         /// <summary>
-        /// Кнопка "Забронировать" + обновить вгх
-        /// </summary>
+        /// Кнопка "Забронировать" + обновить вгх !!!пока не синхронная!!!
+        /// </summary> 
         private void Bronirovat_Button_Click(object sender, RoutedEventArgs e)
         { ///~~~ добавить в логику условие что возвращаемое значение Тасков POST не равно null и действовать далее !!!
             LogPOST1.Text = "";
-            Post post = new Post();
+
             //проверка наличия вгх в строках формы
             if (Whide_rp.Text != "" && leagh_RP.Text != "" && Ves_RP.Text != "" && hiegh_rp.Text != "")
             { //обновляем вгх и пишем в лог
                 dataBases.ConnectDB("Шиптор", $@"update package_departure set postamat_queued_at = now(),postamat_sync_completed_at = now(), linked_with_postamat_at = now() where package_id in ({RP_child.Text})");
                 LogPOST1.Text = "Привязано к постамату.\n";
-                LogPOST1.Text += $@" Обновление размеров:\n {post.UpdateVGH(RP_child.Text)}
-                                    \n ----Конец запроса----";
-                LogPOST1.Text += $@" Отвязать от ПМ:\n {post.unlinkPackage(RP_child.Text)} \n ----Конец запроса----";
+                LogPOST1.Text += "Обновление размеров:\n"; post.UpdateVGH(RP_child.Text, LogPOST1); LogPOST1.Text += "\n ----Конец запроса----";
+                LogPOST1.Text += "\nОтвязать от ПМ:\n"; post.unlinkPackage(RP_child.Text, LogPOST1); LogPOST1.Text += "\n ----Конец запроса----";
             }
 
-            LogPOST1.Text += $@" Отвязать от ПМ:\n {post.unlinkPackage(RP_child.Text)} \n ----Конец запроса----";
+            LogPOST1.Text += "\nОтвязать от ПМ: \n"; post.unlinkPackage(RP_child.Text, LogPOST1); LogPOST1.Text += " \n ----Конец запроса----";
             //бронировать и писать в лог
-            LogPOST1.Text += $@"Бронирование 1:\n {post.enqueue(RP_child.Text)} \n ----Конец запроса----";
-            LogPOST1.Text += $@"Бронирование 2:\n {post.bookDestinationCell(RP_child.Text)} \n ----Конец запроса----";
+            LogPOST1.Text += "\nБронирование 1:\n"; post.enqueue(RP_child.Text, LogPOST1); LogPOST1.Text += "\n ----Конец запроса----";
+            LogPOST1.Text += "\nБронирование 2:\n"; post.bookDestinationCell(RP_child.Text, LogPOST1); LogPOST1.Text += " \n ----Конец запроса----";
 
         }
 
 
+        #endregion
+
+        #region SyncPackages
+
+
+        /// <summary>
+        ///Кнопка синхронизации посылки с ПМ из engy
+        /// </summary>
+        public async void SynchronizationPackages()
+        {
+            ///1. Есть ли он в ПМ
+            ///Есть:
+            ///1.1 Делаю статус такой же как в Engy:
+            /// Заложено в Engy: 
+            ///1. В "готова к загрузке" через БД
+            ///2. Добавляю ID в ячейку постамата, выкинув оттуда "мусор"
+            ///3. Методом в Заложено
+            ///4.Галочка отправки смс,если да то отправить https://pm.shiptor.ru/admin/parcel/delivery-sms/resend/--id_parcel и открываю страницу с смс сразу с поиском по номеру из бд
+            ///Нет: ``Отдельный void`` {
+            ///2.1 Прохожу методами:
+            ///1 В новую из ожидает +
+            ///2.Смена яч у заброненной на 0, потом на нужную из поля 
+            ///3.В заложено постоматы 2.1}
+            ///Дальше все тоже самое что и в п.1
+
+            LogPOST2.Text = null;
+            var foundID = dataBases.ConnectDB("ПМ", $@"select id from parcel p where external_id in ('{RP_child_sync.Text}')");
+            if (foundID.AsEnumerable().Any() == true)
+            {
+                LogPOST2.Text += "\nПосылка есть в ПМ, синхронизирую с ENGY:\n";
+                //посылка есть в пм - вызываю метод синхры с энджи по статусу выбраному в проге
+                switch (StatusPackagePM.SelectedIndex)
+                {
+
+                    case 0:
+                        //готова к загрузке
+                        dataBases.ConnectDB("ПМ", $@"update parcel set state = 'ready_for_load' where external_id in ('{RP_child_sync.Text}')");
+                        LogPOST2.Text += "Cтатус скорректирован на 'ready_for_load'\n";
+
+                        //!!остается добавить только в яч!!
+                        break;
+                    case 1:
+                        //Заложено
+                        Z_SMS_PM();
+                        break;
+                }
+            }
+            else
+            {//Посылки нет в ПМ
+                LogPOST2.Text += "\nПосылки нет в ПМ, прогоняю группу методов Engy:\n";
+                //проверить свободна ли ячейка, очистить, сохранив посылку
+                var cells_ISfree = dataBases.ConnectDB("ПМ", $@"select current_parcel_id, waiting_parcel_id,  c.id from cell c	join postamat p on p.id = c.postamat_id		where p.serial_number = '{PostomatPS.Text}'	and hardware_number in ({PS_cell.Text})").AsEnumerable().Select(x => x[0].ToString()).ToList();
+                string cur_cell = cells_ISfree[0];
+                string waiting_cell = cells_ISfree[1];
+                string id_post = cells_ISfree[2];
+
+                if ((cur_cell != null) || (waiting_cell != null))
+                { //ТЕК Яч или ожидающая чем то заняты, надо сохранить и чистить
+                    LogPOST2.Text += $@"В нужной ячейке лежала посылка подкидыш с id для ПМ: {cur_cell},{waiting_cell}";
+                    dataBases.ConnectDB("ПМ", $@"UPDATE public.cell	SET current_parcel_id=NULL,waiting_parcel_id = NULL	WHERE id={id_post};");
+                }
+                post.MethodsSynchr_Engy(RP_child_sync.Text, int.Parse(PS_cell.Text), LogPOST2);
+                Z_SMS_PM();
+            }
+
+        }
+        /// <summary>
+        ///Метод закладки в пм и отправки смсc
+        /// </summary>
+        public void Z_SMS_PM()
+        { //1 проверяю есть ли посылка в пм снова до внесения изменений
+            var foundID = dataBases.ConnectDB("ПМ", $@"select id from parcel p where external_id in ('{RP_child_sync.Text}')");
+            if (foundID.AsEnumerable().Any() == true)
+
+            {
+                string RP_id_PM = dataBases.ConnectDB("ПМ", $@"select id from parcel p where external_id in ('{RP_child_sync.Text}')").AsEnumerable().Select(x => x[0].ToString()).ToList()[0];
+                LogPOST2.Text += "\n Посылка появилась в ПМ! \n";
+                dataBases.ConnectDB("ПМ", $@"update parcel set state = 'ready_for_load' where external_id in ('{RP_child_sync.Text}')");
+
+                string id_postamata = dataBases.ConnectDB("ПМ", $@"select current_parcel_id, waiting_parcel_id,  c.id from cell c	join postamat p on p.id = c.postamat_id		where p.serial_number = '{PostomatPS.Text}'	and hardware_number in ({PS_cell.Text})").AsEnumerable().Select(x => x[0].ToString()).ToList()[2];
+                dataBases.ConnectDB("ПМ", $@"UPDATE public.cell	SET waiting_parcel_id = {RP_id_PM}	WHERE id={id_postamata};");
+
+                string Last_eventId = dataBases.ConnectDB("ПМ", $@"select current_parcel_id, waiting_parcel_id,  c.id, last_event_id from cell c	join postamat p on p.id = c.postamat_id		where p.serial_number = '{PostomatPS.Text}'	and hardware_number in ({PS_cell.Text})").AsEnumerable().Select(x => x[0].ToString()).ToList()[3];
+
+
+                post.Load_PM_CELL(PostomatPS.Text, int.Parse(PS_cell.Text), int.Parse(Last_eventId) + 1, LogPOST2);
+
+                string phone_search = dataBases.ConnectDB("ПМ", $@"select recipient_phone from parcel p where external_id in ('{RP_child_sync.Text}')").AsEnumerable().Select(x => x[0].ToString()).ToList()[0];
+
+                if (SMS_check.IsChecked == true)
+                {
+
+
+                    try
+                    {
+                        Process.Start("https://pm.shiptor.ru/admin/parcel/delivery-sms/resend/" + RP_id_PM);
+                        Process.Start("https://shiptor.ru/control/search/sms?q=%2B" + phone_search.Replace("+", ""));
+
+                    }
+                    catch
+                    {
+
+                        MessageBox.Show("не удалось открыть браузер");
+
+                    }
+                }
+
+
+            }
+            else
+            {
+                LogPOST2.Text += "\nПосылка не появилась в ПМ. Проверьте лог выше, возможно один из методов вернул отрицательный результат";
+            }
+
+
+        }
 
         #endregion
 
