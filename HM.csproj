@@ -9,7 +9,7 @@
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <SignAssembly>False</SignAssembly>
     <ApplicationIcon>Assets\48_48.ico</ApplicationIcon>
-    <Version>0.5.71</Version>
+    <Version>0.5.72</Version>
     <Copyright></Copyright>
     <Authors></Authors>
 
@@ -26,12 +26,13 @@
     <None Remove="Assets\win_max.png" />
     <None Remove="Assets\WIn_Min.png" />
     <None Remove="Dock_Left_Black.png" />
+    <None Remove="store.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
-    <PackageReference Include="EPPlus" Version="6.2.2" />
-    <PackageReference Include="Npgsql" Version="7.0.0" />
+    <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
+    <PackageReference Include="EPPlus" Version="7.1.2" />
+    <PackageReference Include="Npgsql" Version="8.0.2" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
@@ -47,6 +48,7 @@
     <Resource Include="Assets\win_max.png" />
     <Resource Include="Assets\WIn_Min.png" />
     <Resource Include="Dock_Left_Black.png" />
+    <Resource Include="store.png" />
   </ItemGroup>
 
   <ItemGroup>

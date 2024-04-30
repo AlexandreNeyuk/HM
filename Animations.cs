@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace HM
@@ -71,5 +74,35 @@ namespace HM
             await Task.Delay(sec);
         }
 
+
+        #region ImageAnimation_Rotate
+
+        /// <summary>
+        ////Анимация вращения картинки вокруг своей оси
+        /// </summary>
+        /// <param name="sec">Кол-во в сек. за сколько сделает полный оборот вокург своей оси</param>
+        public void Animation_rotate_ON(double sec, Image ob)
+        {
+            DoubleAnimation rotationAnimation = new DoubleAnimation();
+            rotationAnimation.From = 0;
+            rotationAnimation.To = 360;
+            rotationAnimation.Duration = new Duration(TimeSpan.FromSeconds(sec));
+            rotationAnimation.RepeatBehavior = RepeatBehavior.Forever;
+
+            RotateTransform rotateTransform = new RotateTransform();
+            ob.RenderTransform = rotateTransform;
+            rotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotationAnimation);
+        }
+
+        public void Animation_rotate_OFF(Image ob)
+        {
+            ob.RenderTransform.BeginAnimation(RotateTransform.AngleProperty, null);
+        }
+
+        #endregion
+
     }
+
+
+
 }

@@ -1,5 +1,6 @@
 ﻿using ICSharpCode.AvalonEdit;
 using Microsoft.Extensions.FileSystemGlobbing;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using OfficeOpenXml;
@@ -57,7 +58,7 @@ namespace HM
         List<Canvas> MenuCanvas; // все элементы меню 
         List<Grid> grids; //все гриды окон
 
-        //Animations Animations = new Animations();
+        Animations Animations = new Animations();
         DataBaseAsset dataBases;
         string statusConnect;
         bool SetPanel = false; //false - закрытая панель, true - открытая панлеь
@@ -80,7 +81,7 @@ namespace HM
 
             #region Начальные накстройки
             TB.Margin = new Thickness(0, 0, 0, 0); //выравниванеи TableControl 
-            grids = new List<Grid>() { PartyGrid, HomeGrid, PostomatsGrid, SettingsGrid }; ///включение в список всех гридов-окон
+            grids = new List<Grid>() { PartyGrid, HomeGrid, PostomatsGrid, SettingsGrid, StoreGrid }; ///включение в список всех гридов-окон
             HM.Title += " " + Assembly.GetExecutingAssembly().GetName().Version.ToString(3); //версия в названии (менять в свовах проекта)
             TitleVersionText.Content = "v. " + Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
             //сразу нажатое окно брони 
@@ -175,19 +176,23 @@ namespace HM
             VisualMenu_Apply(); //применение сохраненных настроек к всплывающему меню
 
             #region Добавление обработки всех элементов меню (навердений мыши  и клики)
-            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home };
+            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home, StoreCanvas };
             foreach (var item in MenuCanvas)
             {
                 item.MouseEnter += (a, e) => { item.Background = new SolidColorBrush(Colors.Gray); };
                 item.MouseLeave += (a, e) => { item.Background = new SolidColorBrush(Colors.Transparent); };
 
             }
+            ///Анимация вращения кнопки настроек 
+            SettingCanvas.MouseEnter += (a, e) => { Animations.Animation_rotate_ON(1, settingImage_AnimatingEl); };
+            SettingCanvas.MouseLeave += (a, e) => { Animations.Animation_rotate_OFF(settingImage_AnimatingEl); };
 
             ///обработка кликов на элементы меню
             PartyCanvas.MouseDown += (a, e) => { OpenGrid(PartyGrid); WarEdit wr = new WarEdit(); wr.LoadHosts(ListWarhouses); wr.Close(); };
             Home.MouseDown += (a, e) => { OpenGrid(HomeGrid); };
             PostomatsCanvas.MouseDown += (a, e) => { OpenGrid(PostomatsGrid); };
             SettingCanvas.MouseDown += (a, e) => { OpenGrid(SettingsGrid); };
+            StoreCanvas.MouseDown += (a, e) => { OpenGrid(StoreGrid); };
 
             //обработка кликов на пункты меню постаматов
             Bronirovanie_Canvas.MouseDown += (a, e) => { BronbGrid.IsEnabled = true; Bronirovanie_Canvas.Background = (Brush)new BrushConverter().ConvertFrom("#FF808080"); BronbGrid.Visibility = Visibility.Visible; SyncEngyGrid.Visibility = Visibility.Hidden; SyncEngyGrid.IsEnabled = false; Sync_Canvas.Background = new SolidColorBrush(Colors.Transparent); };
@@ -195,6 +200,9 @@ namespace HM
             cleanLog1.Click += (a, e) => { LogPOST1.Text = null; };
             ClearLog_sync.Click += (a, e) => { LogPOST2.Text = null; };
             Synchra_Button1.Click += (a, e) => { SynchronizationPackages(); };
+
+            //Обработка кнопок в Склады-Импорт
+            SearchWarh.Click += (a, e) => { SearchStoreinDB(SearchWH.Text); };
             #endregion
 
             OpenGrid(HomeGrid); //открытие начальной страницы
@@ -590,6 +598,57 @@ namespace HM
             UpperSearch.IsEnabled = false;
 
         }
+
+        /// <summary>
+        ///Добавление RP к списку цыфр посылок
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AddRP_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> result = new List<string>();
+
+            // Разбиваем текст на строки по разделителю-запятой
+            string[] arrStr = TextBox.Text.Split(new char[] { ',', ' ', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Преобразуем массив строк в список
+            List<string> numbers = new List<string>(arrStr);
+
+            foreach (string number in numbers)
+            {
+                if (!string.IsNullOrEmpty(number))
+                {
+                    result.Add("RP" + number);
+                }
+            }
+            TextBox.Text = string.Join(",\r\n", result);
+        }
+        /// <summary>
+        ///Добавление апострафоф дл ПВЗ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AddRPforPVZ_Click(object sender, RoutedEventArgs e)
+        {
+
+            List<string> result = new List<string>();
+
+            // Разбиваем текст на строки по разделителю-запятой
+            string[] arrStr = TextBox.Text.Split(new char[] { ',', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Преобразуем массив строк в список
+            List<string> numbers = new List<string>(arrStr);
+
+            foreach (string number in numbers)
+            {
+                if (!string.IsNullOrEmpty(number))
+                {
+                    result.Add("'" + number + "'");
+                }
+            }
+            TextBox.Text = string.Join(",\r\n", result);
+        }
+
         #endregion
 
         #region Tab_Item 2    
@@ -1633,6 +1692,45 @@ namespace HM
 
 
 
+
+        #endregion
+
+        #region Store
+
+        #region Import
+        DataTable data;
+        int selected_id_warh;
+
+        /// <summary>
+        ///Поиск склада и отображение его в таблице складов с адресом и slug
+        /// </summary>
+        /// <param name="TextSearchWarh">Тескт из поля поиска</param>
+        public void SearchStoreinDB(string TextSearchWarh)
+        {
+            data = dataBases.ConnectDB("Шиптор", $@"select id, slug, name, address from warehouse where name  ilike ('%{TextSearchWarh}%') or slug ilike ('%{TextSearchWarh}%') or address ilike ('%{TextSearchWarh}%') order by name");
+            WarhausesTable.ItemsSource = data.DefaultView;
+
+        }
+
+        /// <summary>
+        /// Отобрадение выборанного имени и ID нужной строки склада
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void WarhausesTable_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (WarhausesTable.SelectedItem != null)
+            {
+                DataRowView selectedRow = WarhausesTable.SelectedItem as DataRowView;
+                object cellValue = selectedRow["name"];
+                selected_id_warh = (int)selectedRow["id"]; //полученпие ID выбранного склада 
+                Selected_NameWarh.Content = cellValue.ToString(); //вывод имени склада в Лабел
+
+            }
+        }
+
+
+        #endregion
 
         #endregion
 

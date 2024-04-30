@@ -48,7 +48,7 @@
 
 
 
-        <Grid x:Name="SwitchPanelCanvas" Margin="0,30,0,0" HorizontalAlignment="Left" Width="162">
+        <Grid x:Name="SwitchPanelCanvas" Margin="0,30,0,0" HorizontalAlignment="Left" Width="162" d:IsLocked="True">
 
             <Label x:Name="TitleMenu" HorizontalAlignment="Left" Margin="6,15,0,0" VerticalAlignment="Top" FontFamily="72" Foreground="White" Content="Меню" FontSize="16"/>
             <Canvas x:Name="PostomatsCanvas"  Width="146" HorizontalAlignment="Left" Margin="0,120,0,0" Height="32" VerticalAlignment="Top" ToolTip="Постоматы">
@@ -67,8 +67,16 @@
                 </Image>
                 <Label HorizontalAlignment="Center" VerticalAlignment="Top" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="20,10,5,5" Content="Партии" />
             </Canvas>
+            <Canvas x:Name="StoreCanvas" Width="146" HorizontalAlignment="Left" Margin="0,185,0,0" Height="32" VerticalAlignment="Top" ToolTip="Партии">
+                <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Canvas.Left="10" Canvas.Top="6" Source="/store.png" Stretch="Fill">
+                    <Image.OpacityMask>
+                        <ImageBrush ImageSource="/store.png"/>
+                    </Image.OpacityMask>
+                </Image>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Top" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="20,10,5,5" Content="Склад" />
+            </Canvas>
             <Canvas x:Name="SettingCanvas" Width="146" HorizontalAlignment="Left" Canvas.Top="417" Margin="0,0,0,35" Height="32" VerticalAlignment="Bottom" ToolTip="Настройки">
-                <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Source="/Assets/Settings.png" Stretch="Fill" Canvas.Left="10" Canvas.Top="6">
+                <Image x:Name="settingImage_AnimatingEl" HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Source="/Assets/Settings.png" Stretch="Fill" Canvas.Left="10" Canvas.Top="6" RenderTransformOrigin="0.506,0.488">
                     <Image.OpacityMask>
                         <ImageBrush ImageSource="/Assets/Settings.png"/>
                     </Image.OpacityMask>
@@ -85,7 +93,7 @@
             </Canvas>
         </Grid>
         <Grid x:Name="MajorGrid" Height="478" VerticalAlignment="Bottom">
-            <Grid x:Name="PartyGrid" Background="White" d:IsHidden="True">
+            <Grid x:Name="PartyGrid" Background="White" d:IsHidden="True" d:IsLocked="True">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии склада" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
                 <ComboBox x:Name="SelectAction" HorizontalAlignment="Right" Margin="0,153,24,0" VerticalAlignment="Top" Width="147" SelectedIndex="0" BorderThickness="0,0,0,0" FontFamily="72" Height="22">
                     <ComboBoxItem Content="Добавить в партию"/>
@@ -117,7 +125,7 @@
 
 
             </Grid>
-            <Grid x:Name="PostomatsGrid" Background="White">
+            <Grid x:Name="PostomatsGrid" Background="White" d:IsHidden="True" d:IsLocked="True">
                 <Label VerticalAlignment="Top" Height="31" FontFamily="72" FontWeight="Bold" FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="#FFECECEC" Content="Работа с Postomats"/>
                 <Grid x:Name="BronbGrid" Margin="173,31,0,23" Background="White" d:IsHidden="True">
                     <Grid.ColumnDefinitions>
@@ -178,9 +186,9 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid" d:IsHidden="True">
+            <Grid x:Name="HomeGrid">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
-                    <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
+                    <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsSelected="True" >
                         <Grid Background="White" Height="451">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -201,6 +209,8 @@
                                 <Label Content="Параметры" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" Canvas.Left="25" Canvas.Top="4"/>
                                 <TextBlock x:Name="BFcopy" Height="77" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Width="136" Canvas.Left="10" Canvas.Top="325"/>
                                 <Button x:Name="Clear_all_textB" Content="X" Canvas.Left="102" Canvas.Top="114" BorderThickness="0,0,0,0" Width="31" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Clear_all_textB_Click"/>
+                                <Button x:Name="AddRP" Content="+RP" Canvas.Left="15" Canvas.Top="239" BorderThickness="0,0,0,0" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center" Width="46" Click="AddRP_Click"/>
+                                <Button x:Name="AddRPforPVZ" Content="'RP'" Canvas.Left="87" Canvas.Top="239" BorderThickness="0,0,0,0" Height="25" Width="46" HorizontalAlignment="Left" VerticalAlignment="Center" Click="AddRPforPVZ_Click"/>
                             </Canvas>
                             <avalonEdit:TextEditor
 				                x:Name="TextBox"
@@ -312,6 +322,40 @@
 
 
                         </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+            <Grid x:Name="StoreGrid" Background="White" d:IsHidden="True">
+                <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
+                    <TabItem x:Name="RP_List1" Header="Импорт" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
+                        <Grid Background="White" Height="451">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <avalonEdit:TextEditor
+                                x:Name="TextBox1"
+                                FontFamily="Consolas"
+                                FontSize="14"
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="438,26,0,29" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="256"/>
+                            <TextBox x:Name="SearchWH" HorizontalAlignment="Left" Margin="10,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" FontFamily="72" Height="20"/>
+                            <Label Content="slug | name | address" HorizontalAlignment="Left" Margin="58,4,0,0" VerticalAlignment="Top" Width="129"/>
+                            <Label Content="номера без RP через запятую" HorizontalAlignment="Left" Margin="481,0,0,0" VerticalAlignment="Top" Width="208"/>
+                            <Canvas Margin="0,0,0,29" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139">
+                                <Button Content="Импорт" Width="112" HorizontalAlignment="Left" Canvas.Left="16" Canvas.Top="142" VerticalAlignment="Top" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20"/>
+                                <CheckBox Canvas.Left="10" Canvas.Top="62" HorizontalAlignment="Left" VerticalAlignment="Top" Width="96" Content="Возвратные"/>
+                                <Label Content="Параметры" Canvas.Left="33" FontWeight="Bold"/>
+                                <Label x:Name="Selected_NameWarh" Content="" Canvas.Left="8" Canvas.Top="31" HorizontalAlignment="Left" VerticalAlignment="Top" Width="122"/>
+                            </Canvas>
+                            <Button x:Name="SearchWarh" HorizontalAlignment="Left" Margin="240,30,0,0" VerticalAlignment="Top" Width="75" BorderThickness="0,0,0,0" Height="20" Content="Поиск"/>
+                            <DataGrid x:Name="WarhausesTable" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,55,0,29" HorizontalAlignment="Left" Width="433" IsReadOnly="True" SelectionChanged="WarhausesTable_SelectionChanged"/>
+
+                        </Grid>
+                    </TabItem>
+                    <TabItem Width="120" Height="30" Margin="-3,-2,3,2" >
+                        <Grid Margin="0,2,0,0"/>
                     </TabItem>
                 </TabControl>
             </Grid>
