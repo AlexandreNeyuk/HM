@@ -25,6 +25,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -81,7 +82,7 @@ namespace HM
 
             #region Начальные накстройки
             TB.Margin = new Thickness(0, 0, 0, 0); //выравниванеи TableControl 
-            grids = new List<Grid>() { PartyGrid, HomeGrid, PostomatsGrid, SettingsGrid, StoreGrid }; ///включение в список всех гридов-окон
+            grids = new List<Grid>() { PartyGrid, HomeGrid, PostomatsGrid, SettingsGrid, StoreGrid, RunnerGrid }; ///включение в список всех гридов-окон
             HM.Title += " " + Assembly.GetExecutingAssembly().GetName().Version.ToString(3); //версия в названии (менять в свовах проекта)
             TitleVersionText.Content = "v. " + Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
             //сразу нажатое окно брони 
@@ -176,7 +177,7 @@ namespace HM
             VisualMenu_Apply(); //применение сохраненных настроек к всплывающему меню
 
             #region Добавление обработки всех элементов меню (навердений мыши  и клики)
-            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home, StoreCanvas };
+            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home, StoreCanvas, RunnerCanvas };
             foreach (var item in MenuCanvas)
             {
                 item.MouseEnter += (a, e) => { item.Background = new SolidColorBrush(Colors.Gray); };
@@ -193,6 +194,7 @@ namespace HM
             PostomatsCanvas.MouseDown += (a, e) => { OpenGrid(PostomatsGrid); };
             SettingCanvas.MouseDown += (a, e) => { OpenGrid(SettingsGrid); };
             StoreCanvas.MouseDown += (a, e) => { OpenGrid(StoreGrid); };
+            RunnerCanvas.MouseDown += (a, e) => { OpenGrid(RunnerGrid); };
 
             //обработка кликов на пункты меню постаматов
             Bronirovanie_Canvas.MouseDown += (a, e) => { BronbGrid.IsEnabled = true; Bronirovanie_Canvas.Background = (Brush)new BrushConverter().ConvertFrom("#FF808080"); BronbGrid.Visibility = Visibility.Visible; SyncEngyGrid.Visibility = Visibility.Hidden; SyncEngyGrid.IsEnabled = false; Sync_Canvas.Background = new SolidColorBrush(Colors.Transparent); };
@@ -1778,11 +1780,103 @@ namespace HM
         /// Тут мы кидаем апдейт на склады в шиптор (CSM)
         /// </summary>
         /// <param name="nomera">nomera это ID РПшек через запятые</param>
-        void update_shiptor_for_treck_number (TextBox nomera)
+        void update_shiptor_for_treck_number(TextBox nomera)
         {
             dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = destination_warehouse_id, next_warehouse_id = destination_warehouse_id, current_status = 'packed', sent_at = NULL, returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({nomera.Text})");
 
         }
+
+        #endregion
+
+        #region Runner_Perepodgotovka_Import
+
+        /* /// <summary>
+         ///Запуск раннера с импортом и переподготовкой на склад
+         /// </summary>
+         /// <param name="txBx">TextBox - ID посылок для импорта, через запятую</param>
+         public void PostRun_Import(TextBox txBx)
+         {
+             //удалить запятые и начать импорт
+             List<string> list_RP = new List<string>(); // список номеров посылок без запятых
+
+             // Разбиваем текст на строки по разделителю-запятой
+             string[] arrStr = TextBox.Text.Split(new char[] { ',', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+             // Преобразуем массив строк в список
+             List<string> numbers = new List<string>(arrStr);
+
+             foreach (string number in numbers)
+             {
+                 if (!string.IsNullOrEmpty(number))
+                 {
+                     list_RP.Add(number.Replace(",", ""));
+                 }
+             }
+
+             //есть список для импорта в апи
+
+
+
+
+             for (int i = 0; i < list_RP.Count; i++)
+             {
+                 if (isStopped == false)
+                 {// раннен не был остановлен
+
+                     Stopwatch stopwatch = new Stopwatch();
+                     stopwatch.Start();
+                     using (var httpClient = new HttpClient())
+                     {
+                         var httpContent = new StringContent($@"{{
+                                                                   ""id"": ""JsonRpcClient.js"",
+                                                                   ""jsonrpc"": ""2.0"",
+                                                                   ""method"": ""sapCreatePackage"",
+                                                                   ""params"": [{chunks[Thread][i]}]
+                                                               }}");
+                         httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+                         using (var response = await httpClient.PostAsync("https://api.shiptor.ru/system/v1?key=SemEd5DexEk7Ub2YrVuyNavNutEh4Uh8TerSuwEnMev", httpContent))
+                         {
+                             if (response.IsSuccessStatusCode)
+                             {
+
+                                 ///получать сам ответ от запроса для логирования
+
+                                 await response.Content.ReadAsStringAsync();
+                                 stopwatch.Stop();
+                                 Label label = new Label();
+                                 label.Content = $"Iteration {i + 1} success. Response time: {stopwatch.ElapsedMilliseconds} ms";
+                                 MylistThread.Items.Add(label);
+
+
+                             }
+                             else
+                             {
+
+                                 var responseContent = await response.Content.ReadAsStringAsync();
+                                 // $@"Запрос вернул ответ с ошибкой: {response.StatusCode}; Error message: {responseContent}";
+                                 stopwatch.Stop();
+                                 Label label = new Label();
+                                 label.Content = $"Iteration {i + 1}. Error:{response.StatusCode}; Error message: {responseContent}.  Response time: {stopwatch.ElapsedMilliseconds} ms";
+                                 MylistThread.Items.Add(label);
+
+
+                             }
+                             //return await response.Content.ReadAsStringAsync();
+                         }
+                     }
+
+                 }
+                 else
+                 {
+                     //раннер будет остановлен
+
+                     break;
+
+                 }
+             }
+
+         }*/
 
         #endregion
 

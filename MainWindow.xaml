@@ -67,7 +67,7 @@
                 </Image>
                 <Label HorizontalAlignment="Center" VerticalAlignment="Top" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="20,10,5,5" Content="Партии" />
             </Canvas>
-            <Canvas x:Name="StoreCanvas" Width="146" HorizontalAlignment="Left" Margin="0,185,0,0" Height="32" VerticalAlignment="Top" ToolTip="Партии">
+            <Canvas x:Name="StoreCanvas" Width="146" HorizontalAlignment="Left" Margin="0,185,0,0" Height="32" VerticalAlignment="Top" ToolTip="Склады">
                 <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Canvas.Left="10" Canvas.Top="6" Source="/store.png" Stretch="Fill">
                     <Image.OpacityMask>
                         <ImageBrush ImageSource="/store.png"/>
@@ -91,9 +91,17 @@
                 </Image>
                 <Label HorizontalAlignment="Left" VerticalAlignment="Center" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="20,10,5,5" Content="Home" />
             </Canvas>
+            <Canvas x:Name="RunnerCanvas" Width="146" HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Margin="0,217,0,0" ToolTip="Runner">
+                <Image HorizontalAlignment="Left" Height="29" VerticalAlignment="Center" Width="25" Source="/runner_ico.png" Stretch="Fill" Canvas.Left="7">
+                    <Image.OpacityMask>
+                        <ImageBrush ImageSource="/runner_ico.png"/>
+                    </Image.OpacityMask>
+                </Image>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Top" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="20,10,5,5" Content="Runner" />
+            </Canvas>
         </Grid>
         <Grid x:Name="MajorGrid" Height="478" VerticalAlignment="Bottom">
-            <Grid x:Name="PartyGrid" Background="White" d:IsHidden="True" d:IsLocked="True">
+            <Grid x:Name="PartyGrid" Background="White" d:IsLocked="True" d:IsHidden="True">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии склада" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
                 <ComboBox x:Name="SelectAction" HorizontalAlignment="Right" Margin="0,153,24,0" VerticalAlignment="Top" Width="147" SelectedIndex="0" BorderThickness="0,0,0,0" FontFamily="72" Height="22">
                     <ComboBoxItem Content="Добавить в партию"/>
@@ -325,8 +333,8 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="StoreGrid" Background="White">
-                <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
+            <Grid x:Name="StoreGrid" Background="White" d:IsHidden="True">
+                <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2" BorderBrush="White" Background="White">
                     <TabItem x:Name="RP_List1" Header="Импорт" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="451">
                             <Grid.RowDefinitions>
@@ -371,6 +379,31 @@
                         <Grid Margin="0,2,0,0"/>
                     </TabItem>
                 </TabControl>
+            </Grid>
+            <Grid x:Name="RunnerGrid" Background="#FFF0F0F0">
+                <ListBox x:Name="List_JSONS" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Left" Width="196" Margin="0,71,0,25" Background="White" Foreground="Black" FontWeight="Bold" FontSize="14" BorderThickness="0,0,0,0"/>
+                <Canvas HorizontalAlignment="Right" Width="161" Background="White"/>
+                <TabControl Margin="196,44,161,23" Padding="0,0,0,0" BorderThickness="0,0,0,0">
+                    <TabItem Header="TabItem" Margin="-34,-2,-31,0" Width="90" Padding="6,2,3,2">
+                        <Grid Background="White" Height="387">
+                            <avalonEdit:TextEditor
+                                x:Name="TextBox1_importText_Copy"
+                                FontFamily="Consolas"
+                                FontSize="14"
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="TabItem" Margin="-38,-2,-35,0" Width="89.8" BorderBrush="#FFD8D8D8">
+                        <Grid Background="White">
+                            <avalonEdit:TextEditor
+                                x:Name="TextBox1_importText_Copy1"
+                                FontFamily="Consolas"
+                                FontSize="14"
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" Height="387"/>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                <Button Content="Button" HorizontalAlignment="Left" Margin="156,44,0,0" VerticalAlignment="Top" Height="27"/>
             </Grid>
 
         </Grid>

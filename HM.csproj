@@ -26,6 +26,7 @@
     <None Remove="Assets\win_max.png" />
     <None Remove="Assets\WIn_Min.png" />
     <None Remove="Dock_Left_Black.png" />
+    <None Remove="runner_ico.png" />
     <None Remove="store.png" />
   </ItemGroup>
 
@@ -48,6 +49,7 @@
     <Resource Include="Assets\win_max.png" />
     <Resource Include="Assets\WIn_Min.png" />
     <Resource Include="Dock_Left_Black.png" />
+    <Resource Include="runner_ico.png" />
     <Resource Include="store.png" />
   </ItemGroup>
 
