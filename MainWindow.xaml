@@ -382,9 +382,21 @@
             </Grid>
             <Grid x:Name="RunnerGrid" Background="#FFF0F0F0">
                 <ListBox x:Name="List_JSONS" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Left" Width="196" Margin="0,71,0,25" Background="White" Foreground="Black" FontWeight="Bold" FontSize="14" BorderThickness="0,0,0,0"/>
-                <Canvas HorizontalAlignment="Right" Width="161" Background="White"/>
+                <Canvas HorizontalAlignment="Right" Width="161" Background="White">
+                    <Button Content="Стоп!" Width="146" Background="#FFFFD3D3" HorizontalAlignment="Center" Height="70" Canvas.Left="8" Canvas.Top="181" BorderThickness="0,0,0,0" VerticalAlignment="Top"/>
+                    <Button Content="Пуск!" Width="146" HorizontalAlignment="Center" Canvas.Left="8" Canvas.Top="90" VerticalAlignment="Top" Height="70" BorderThickness="0,0,0,0" Background="#FFCFFFBA"/>
+                    <ComboBox Width="46" Height="20" BorderThickness="0,0,0,0" HorizontalAlignment="Center" Canvas.Left="58" Canvas.Top="41" VerticalAlignment="Top">
+                        <ComboBoxItem Content="1"/>
+                        <ComboBoxItem Content="2"/>
+                        <ComboBoxItem Content="3"/>
+                        <ComboBoxItem Content="4"/>
+                        <ComboBoxItem Content="5"/>
+                        <ComboBoxItem Content="6" IsSelected="True"/>
+                    </ComboBox>
+                    <Label Content="Количество потоков" Canvas.Top="10" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Width="126" Canvas.Left="18"/>
+                </Canvas>
                 <TabControl Margin="196,44,161,23" Padding="0,0,0,0" BorderThickness="0,0,0,0">
-                    <TabItem Header="TabItem" Margin="-34,-2,-31,0" Width="90" Padding="6,2,3,2">
+                    <TabItem Header="Посылки" Margin="-2,-2,2,0" Width="90" Padding="6,2,3,2">
                         <Grid Background="White" Height="387">
                             <avalonEdit:TextEditor
                                 x:Name="TextBox1_importText_Copy"
@@ -393,7 +405,7 @@
                                 SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled"/>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="TabItem" Margin="-38,-2,-35,0" Width="89.8" BorderBrush="#FFD8D8D8">
+                    <TabItem Header="Body" Margin="-38,-2,-35,0" Width="89.8" BorderBrush="#FFD8D8D8">
                         <Grid Background="White">
                             <avalonEdit:TextEditor
                                 x:Name="TextBox1_importText_Copy1"
@@ -403,7 +415,11 @@
                         </Grid>
                     </TabItem>
                 </TabControl>
-                <Button Content="Button" HorizontalAlignment="Left" Margin="156,44,0,0" VerticalAlignment="Top" Height="27"/>
+                <Button Content="+" HorizontalAlignment="Right" Margin="0,51,640,0" VerticalAlignment="Top" Height="20" Background="#FFD0FFFC" Width="30" RenderTransformOrigin="0.001,0.479" BorderThickness="0,0,0,0"/>
+                <Button Content="-" HorizontalAlignment="Right" Margin="0,51,806,0" VerticalAlignment="Top" Height="20" Width="30" Click="Button_Click_3" Background="#FFFFABAB" BorderThickness="0,0,0,0"/>
+                <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="Поиск..." VerticalAlignment="Top" Width="126" Height="20" Margin="35,51,0,0"/>
+                <TextBlock HorizontalAlignment="Left" Margin="196,28,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+                <Button Content="Изменить" HorizontalAlignment="Left" Margin="140,428,0,0" VerticalAlignment="Top" BorderThickness="0,0,0,0" Height="20"/>
             </Grid>
 
         </Grid>
