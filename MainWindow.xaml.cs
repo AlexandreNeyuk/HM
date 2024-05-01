@@ -547,6 +547,7 @@ namespace HM
                 TextBox.Text = TextBox.Text.TrimEnd(',', ' ', '\n');
             }
 
+            //копирование в Буфер обмена
             try { if (TextBox.Text != "") Clipboard.SetText(TextBox.Text); } catch { }
             BFcopy.Text = "Результат скопирован в буфер обмена";
             await Task.Delay(1000);
@@ -604,7 +605,7 @@ namespace HM
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AddRP_Click(object sender, RoutedEventArgs e)
+        async private void AddRP_Click(object sender, RoutedEventArgs e)
         {
             List<string> result = new List<string>();
 
@@ -622,13 +623,20 @@ namespace HM
                 }
             }
             TextBox.Text = string.Join(",\r\n", result);
+
+            //копирование в Буфер обмена
+            try { if (TextBox.Text != "") Clipboard.SetText(TextBox.Text); } catch { }
+            BFcopy.Text = "Результат скопирован в буфер обмена";
+            await Task.Delay(1000);
+            BFcopy.Text = null;
+
         }
         /// <summary>
         ///Добавление апострафоф дл ПВЗ
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AddRPforPVZ_Click(object sender, RoutedEventArgs e)
+        async private void AddRPforPVZ_Click(object sender, RoutedEventArgs e)
         {
 
             List<string> result = new List<string>();
@@ -647,6 +655,12 @@ namespace HM
                 }
             }
             TextBox.Text = string.Join(",\r\n", result);
+
+            //копирование в Буфер обмена
+            try { if (TextBox.Text != "") Clipboard.SetText(TextBox.Text); } catch { }
+            BFcopy.Text = "Результат скопирован в буфер обмена";
+            await Task.Delay(1000);
+            BFcopy.Text = null;
         }
 
         #endregion
