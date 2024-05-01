@@ -610,7 +610,7 @@ namespace HM
             List<string> result = new List<string>();
 
             // Разбиваем текст на строки по разделителю-запятой
-            string[] arrStr = TextBox.Text.Split(new char[] { ',', ' ', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] arrStr = TextBox.Text.Split(new char[] { ',', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
             // Преобразуем массив строк в список
             List<string> numbers = new List<string>(arrStr);
@@ -1712,8 +1712,8 @@ namespace HM
         #region Store
 
         #region Import
-        DataTable data;
-        int selected_id_warh;
+        DataTable data; //таблица со складами из поиска
+        int selected_id_warh; //выбранный ID выбранного склада 
 
         /// <summary>
         ///Поиск склада и отображение его в таблице складов с адресом и slug
@@ -1725,7 +1725,6 @@ namespace HM
             WarhausesTable.ItemsSource = data.DefaultView;
 
         }
-
         /// <summary>
         /// Отобрадение выборанного имени и ID нужной строки склада
         /// </summary>
@@ -1742,6 +1741,33 @@ namespace HM
 
             }
         }
+        /// <summary>
+        /// обработка нажатия на Enter в поле поиска склада (чтобы не жать кнопку каждый раз)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SearchWH_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SearchStoreinDB(SearchWH.Text); // Вызываем событие Click для yourButton
+                e.Handled = true; // Отменяем стандартное действие клавиши Enter
+            }
+        }
+
+        /// <summary>
+        /// 1.Функции обновления посылыок в шипторе (подготовка посылок в Шиптор для импорта)
+        /// </summary>
+        /// <param name="txBx">TextBox - ID посылок для импорта, через запятую</param>
+        public void UpdatesShiptor_InportStore(TextBox txBx)
+        {
+            dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = {selected_id_warh},next_warehouse_id = {selected_id_warh} where id in ({txBx.Text})");
+            dataBases.ConnectDB("Шиптор", $@"update package set ems_execution_mode = false where id in ({txBx.Text}) and ems_execution_mode = true");
+
+        }
+
+
+
 
 
         #endregion
