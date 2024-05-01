@@ -48,7 +48,7 @@
 
 
 
-        <Grid x:Name="SwitchPanelCanvas" Margin="0,30,0,0" HorizontalAlignment="Left" Width="162" d:IsLocked="True">
+        <Grid x:Name="SwitchPanelCanvas" Margin="0,30,0,0" HorizontalAlignment="Left" Width="162">
 
             <Label x:Name="TitleMenu" HorizontalAlignment="Left" Margin="6,15,0,0" VerticalAlignment="Top" FontFamily="72" Foreground="White" Content="Меню" FontSize="16"/>
             <Canvas x:Name="PostomatsCanvas"  Width="146" HorizontalAlignment="Left" Margin="0,120,0,0" Height="32" VerticalAlignment="Top" ToolTip="Постоматы">
@@ -325,7 +325,7 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="StoreGrid" Background="White" d:IsHidden="True">
+            <Grid x:Name="StoreGrid" Background="White">
                 <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
                     <TabItem x:Name="RP_List1" Header="Импорт" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="451">
@@ -336,11 +336,11 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <avalonEdit:TextEditor
-                                x:Name="TextBox1"
+                                x:Name="TextBox1_importText"
                                 FontFamily="Consolas"
                                 FontSize="14"
                                 SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="438,26,0,29" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="256"/>
-                            <TextBox x:Name="SearchWH" HorizontalAlignment="Left" Margin="10,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" FontFamily="72" Height="20"/>
+                            <TextBox x:Name="SearchWH" HorizontalAlignment="Left" Margin="10,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" FontFamily="72" Height="20" KeyDown="SearchWH_KeyDown"/>
                             <Label Content="slug | name | address" HorizontalAlignment="Left" Margin="58,4,0,0" VerticalAlignment="Top" Width="129"/>
                             <Label Content="номера без RP через запятую" HorizontalAlignment="Left" Margin="481,0,0,0" VerticalAlignment="Top" Width="208"/>
                             <Canvas Margin="0,0,0,29" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139">
