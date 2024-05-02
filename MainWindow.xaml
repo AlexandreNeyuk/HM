@@ -382,7 +382,7 @@
             </Grid>
             <Grid x:Name="RunnerGrid" Background="#FFF0F0F0">
                 <ListBox x:Name="List_JSONS" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Left" Width="196" Margin="0,71,0,25" Background="White" Foreground="Black" FontWeight="Bold" FontSize="14" BorderThickness="0,0,0,0"/>
-                <Canvas HorizontalAlignment="Right" Width="161" Background="White">
+                <Canvas HorizontalAlignment="Right" Width="161" Background="White" Margin="0,0,0,25">
                     <Button Content="Стоп!" Width="146" Background="#FFFFD3D3" HorizontalAlignment="Center" Height="70" Canvas.Left="8" Canvas.Top="181" BorderThickness="0,0,0,0" VerticalAlignment="Top"/>
                     <Button Content="Пуск!" Width="146" HorizontalAlignment="Center" Canvas.Left="8" Canvas.Top="90" VerticalAlignment="Top" Height="70" BorderThickness="0,0,0,0" Background="#FFCFFFBA"/>
                     <ComboBox Width="46" Height="20" BorderThickness="0,0,0,0" HorizontalAlignment="Center" Canvas.Left="58" Canvas.Top="41" VerticalAlignment="Top">
