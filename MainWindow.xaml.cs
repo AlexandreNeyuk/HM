@@ -28,6 +28,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Forms;
@@ -1163,6 +1164,20 @@ namespace HM
 
         #region Postomats
         Post post = new Post();
+        #endregion
+
+        #region knopka_body
+        /// <summary>
+        /// Кнопка изменения BODY и ссылки для постмана
+        /// </summary>
+        private void izmenit_body(object sender, RoutedEventArgs e)
+        { 
+
+        }
+
+
+        #endregion
+
         #region Bronirovanie
         /// <summary>
         /// Кнопка "Забронировать" + обновить вгх !!!пока не синхронная!!!
@@ -1307,7 +1322,7 @@ namespace HM
 
         #endregion
 
-        #endregion
+        
 
         #region MGK
 
@@ -1786,6 +1801,7 @@ namespace HM
 
         }
 
+
         #endregion
 
         #region Runner_Perepodgotovka_Import
@@ -1881,6 +1897,7 @@ namespace HM
         #endregion
 
         #endregion
+
 
 
     }
