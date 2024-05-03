@@ -180,7 +180,7 @@ namespace HM
             VisualMenu_Apply(); //применение сохраненных настроек к всплывающему меню
 
             #region Добавление обработки всех элементов меню (навердений мыши  и клики)
-            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home, StoreCanvas, RunnerCanvas, RemoveCanvas_Postman, AddCanvas_Postman, EditCanvas_Postman };
+            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home, StoreCanvas, RunnerCanvas, RemoveCanvas_Postman, AddCanvas_Postman, EditCanvas_Postman, SaveEdit_Postman };
             foreach (var item in MenuCanvas)
             {
                 item.MouseEnter += (a, e) => { item.Background = new SolidColorBrush(Colors.Gray); };
@@ -213,6 +213,8 @@ namespace HM
             AddCanvas_Postman.MouseDown += (a, e) => { Addrequest_inRegistry(); };
             RemoveCanvas_Postman.MouseDown += (a, e) => { DeletePost(); };
             List_JSONS.SelectionChanged += (a, e) => { LoadTextB(); };
+            SaveEdit_Postman.MouseDown += (a, e) => { EditPost_SaveButton(); };
+            EditCanvas_Postman.MouseDown += (a, e) => { EditPost_buttonSaveON(); };
 
             #endregion
 
@@ -1899,6 +1901,12 @@ namespace HM
 
         #region RunnerTool
 
+        //• Местные Общие Переменные
+        int ThreadComplited = 0; // текущее количество выполненных потоков (++ после выполнения каждого из потоков, пока не достигнет числа)
+        int VsegoThreads; //Общее количество запущенных потоков (присваивается до начала распределения потоков)
+        List<string> RPList_postman;//лист с цифрами от RP (с удаленныеми запятыми (если вообще они будут))
+        bool isStopped_Runner = false; // если будет остановлен раннен станет True, если нет то False
+
         /// <summary>
         ///Действия при выборе вкладок Раннера 
         /// </summary>
@@ -1927,6 +1935,24 @@ namespace HM
 
         }
 
+        /// <summary>
+        /// Поиск запросов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SearchText_PostmanPost_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (SearchText_PostmanPost.Text != "")
+            {
+                foreach (var item in List_JSONS.Items)
+                    if (item.ToString().ToUpper().Contains(SearchText_PostmanPost.Text.ToUpper()))
+                    {
+                        List_JSONS.SelectedItem = item;
+                        List_JSONS.ScrollIntoView(List_JSONS.Items.GetItemAt(List_JSONS.SelectedIndex));
+                    }
+            }
+        }
+
         #region Кнопки ADD, Delete, Edit в окне раннера
 
         /// <summary>
@@ -1945,6 +1971,9 @@ namespace HM
         /// </summary>
         public void DeletePost()
         {
+            Body_post_text.Text = "";
+            url_post_text.Text = "";
+
             using RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Posts_requests", true);
             if (List_JSONS.SelectedItem != null)
             {
@@ -1968,6 +1997,77 @@ namespace HM
                 }
             }
             LoadPosts();
+        }
+
+        /// <summary>
+        /// Метод реактинрования запросов апи для Postman - делает лоступными поля для редактирования
+        /// </summary>
+        public void EditPost_buttonSaveON()
+        {
+            string ssl = List_JSONS.SelectedItem?.ToString();
+            if (ssl != null)
+            {
+                //делаю поля не isReadOnly + делаю активной кнопку сохранения
+                Body_post_text.IsReadOnly = false;
+                url_post_text.IsReadOnly = false;
+                SaveEdit_Postman.IsEnabled = true;
+                SaveEdit_Postman.Visibility = Visibility.Visible;
+            }
+            else
+            {
+
+                MessageBox.Show("Выберите сначала запрос из списка для редактирования!");
+
+            }
+
+
+        }
+
+        /// <summary>
+        ///Сохранияет отредактированные данные в реестр и обновляет список запросов 
+        /// </summary>
+        public void EditPost_SaveButton()
+        {
+            //делаю поля  isReadOnly + делаю неактивной кнопку сохранения
+            Body_post_text.IsReadOnly = true;
+            url_post_text.IsReadOnly = true;
+            SaveEdit_Postman.IsEnabled = false;
+            SaveEdit_Postman.Visibility = Visibility.Hidden;
+
+            //сохраняю изменения в реестр 
+
+            string ssl = List_JSONS.SelectedItem?.ToString(); // выбраный запрос (там уже имя запроса)
+
+            if (ssl != null)
+            {
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM\Posts_requests"))
+                {
+                    if (ssl != "" && url_post_text.Text != "" && Body_post_text.Text != "")
+                    {
+                        key?.SetValue("Name_" + ssl, ssl);
+                        key?.SetValue("Url_" + ssl, url_post_text.Text);
+                        key?.SetValue("Body_" + ssl, Body_post_text.Text);
+
+                    }
+                    else MessageBox.Show("Необходимо заполнить все поля!");
+
+
+                }
+
+
+                SaveText_animPost.Visibility = Visibility.Visible;
+
+                // Устанавливаем таймер для автоматического закрытия надписи "Сохранено" через 2 секунды
+                DispatcherTimer timer = new DispatcherTimer();
+                timer.Interval = TimeSpan.FromSeconds(2);
+                timer.Tick += (sender, e) =>
+                {
+                    SaveText_animPost.Visibility = Visibility.Hidden;
+                    timer.Stop();
+                };
+                timer.Start();
+            }
+
         }
         #endregion
 
@@ -2054,12 +2154,244 @@ namespace HM
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void RunnerStart_Click(object sender, RoutedEventArgs e)
+        {
+            //если выбран метод и если поля метода не пустые!!
+            string ssl = List_JSONS.SelectedItem?.ToString();
+            if (ssl != null && url_post_text.Text != null && bodyTabItem != null && ListRP_postman.Text != null)
+            {
+
+                //•Распределяем по потокам на отдельные листы
+                //• запускаем раннеры в фоне по каждому элементу каждого листа вместо спецсимвола "{{R}}" = колву потоков и проверяем каждый раз не была ли нажата кнопка "стопа" а также не завершил ли каждый поток проход
+
+                RunnerStart.IsEnabled = false; //Отключение кнопки "пуск"
+                RunnerStop.IsEnabled = true; //Включение кнопки "Стоп"
+                RunnerStop.Background = (Brush)new BrushConverter().ConvertFrom("#FFC51308");
+                RunnerStop.Foreground = new SolidColorBrush(Colors.White);
+
+                //• Формируем корректный список из RP
+
+                //Убираем все пустые строки
+                // ListRP_postman.Text.Split(",\n").ToList();
+                string[] lines = ListRP_postman.Text.Split(new[] { "\r\n", "\r", "\n", "," }, StringSplitOptions.None);
+                lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+                ListRP_postman.Text = string.Join(Environment.NewLine, lines);
+
+                if (ListRP_postman.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
+                    SelectorThreads_postman.SelectedIndex = 0;
+                List<string> listRP = new List<string>(To_List(ListRP_postman)); //лист со всеми rp
+
+
+                //•Делим списки RP для нашего числа потоков 
+                int chunkSize_post = listRP.Count / (ThreadsSelect.SelectedIndex + 1);
+                VsegoThreads = (SelectorThreads_postman.SelectedIndex + 1);
+                ThreadComplited = 0;
+                List<List<string>> chunks = new List<List<string>>();
+                for (int i = 0; i < listRP.Count; i += chunkSize_post)
+                {
+                    if ((listRP.Count - (chunkSize_post * (chunks.Count + 1))) < listRP.Count / 10)
+                    {
+
+                        //берем все до конца с текущего I 
+                        chunks.Add(listRP.GetRange(i, listRP.Count - i));
+                        break;
+                    }
+                    else
+                    {
+                        chunks.Add(listRP.GetRange(i, Math.Min(chunkSize_post, listRP.Count - i)));
+                    }
+
+                }
+
+                //• получаю данне об post-запросе (url и body)
+                string selectPost = List_JSONS.SelectedItem?.ToString(); // выбраный запрос (там уже имя запроса)
+                string urlP = "";
+                string bodyP = "";
+                if (selectPost != null)
+                {
+
+                    //если чтото выбрано, деалем активной кнопку Удалить
+                    RemoveCanvas_Postman.Opacity = 100;
+                    RemoveCanvas_Postman.IsEnabled = true;
+
+
+                    Post_pull_Up_Registry(selectPost, ref urlP, ref bodyP);
+
+                }
+
+
+
+                //• Запуск раннеров по колву потоков /Распределитель потоков
+                for (int i = 0; i < (SelectorThreads_postman.SelectedIndex + 1); i++)
+                {
+
+                    //• Переключение TabControl`ов на таб с динамичными вкладками по потокам 
+                    TabPostman.Visibility = Visibility.Hidden;
+                    TabPostman_Responses.Visibility = Visibility.Visible;
+                    //создаем listView`s по количеству потоков в tabControl
+
+                    // создаем новую вкладку
+                    System.Windows.Controls.TabItem tabItem = new System.Windows.Controls.TabItem();
+                    tabItem.Header = $"Поток {i + 1}"; // задаем заголовок вкладки
+
+                    // создаем новый Grid для вкладки
+                    Grid grid = new Grid();
+                    tabItem.Content = grid; // добавляем Grid в содержимое вкладки
+
+                    // создаем новый ListBox для Grid
+                    ListBox listBox = new ListBox();
+                    listBox.Name = $"listBox{i + 1}"; // задаем имя ListBox на основе индекса вкладки
+                    grid.Children.Add(listBox); // добавляем ListBox в Grid
+
+                    // добавляем вкладку в TabControl
+                    TabPostman_Responses.Items.Add(tabItem);
+
+
+                    //выбираем ЛисВью в который будем писать, нужный url, body, номер потока, и колво посылок для этого потока и запускаем раннер                     
+
+                    RuunerPost_Postman(listBox, urlP, bodyP, i, chunks);
+
+                }
+
+
+
+            }
+            else
+            {
+                MessageBox.Show("Проверьте : либо не выбран метод, либо поля некорректно заполнены (пустые)!");
+
+            }
+        }
+
+        /// <summary>
+        /// Раннер
+        /// </summary>
+        /// <param name="Thread">Поток</param>
+        /// <param name="chunks">Чанк посылок</param>
+        /// <param name="url">Url нужного запроса</param>
+        ///<param name="body">Body нужного запроса</param>
+        ///<param name="MyList">Лист для вывода конкретного потока</param>
+        async void RuunerPost_Postman(ListBox MyList, string url, string body, int Thread, List<List<string>> chunks)
         {
 
+            for (int i = 0; i < chunks[Thread].Count; i++)
+            {
+                if (isStopped_Runner == false)
+                {// раннен не был остановлен
+
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+                    using (var httpClient = new HttpClient())
+                    {
+                        var httpContent = new StringContent(body.Replace("{{R}}", chunks[Thread][i]));
+
+                        /*        $@"{{
+                                                                    ""id"": ""JsonRpcClient.js"",
+                                                                    ""jsonrpc"": ""2.0"",
+                                                                    ""method"": ""sapCreatePackage"",
+                                                                    ""params"": [{chunks[Thread][i]}]
+                                                                }}");*/
+                        httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+                        using (var response = await httpClient.PostAsync(url, httpContent))
+                        {
+                            if (response.IsSuccessStatusCode)
+                            {
+
+                                ///получать сам ответ от запроса для логирования
+
+                                await response.Content.ReadAsStringAsync();
+                                stopwatch.Stop();
+                                Label label = new Label();
+                                label.Content = $"Iteration {i + 1} success. Response time: {stopwatch.ElapsedMilliseconds} ms";
+                                MyList.Items.Add(label);
+
+
+                            }
+                            else
+                            {
+
+                                var responseContent = await response.Content.ReadAsStringAsync();
+                                // $@"Запрос вернул ответ с ошибкой: {response.StatusCode}; Error message: {responseContent}";
+                                stopwatch.Stop();
+                                Label label = new Label();
+                                label.Content = $"Iteration {i + 1}. Error:{response.StatusCode}; Error message: {responseContent}.  Response time: {stopwatch.ElapsedMilliseconds} ms";
+                                MyList.Items.Add(label);
+
+
+                            }
+                            //return await response.Content.ReadAsStringAsync();
+                        }
+                    }
+                    MyList.ScrollIntoView(MyList.Items.GetItemAt(i));
+                }
+                else
+                {
+                    //раннер будет остановлен
+
+                    break;
+
+                }
+            }
+            checkFinallyThreads();
 
         }
 
+        /// <summary>
+        /// Чек финала потоков Postman
+        /// </summary>
+        void checkFinallyThreads()
+        {
+            ThreadComplited++;
+            if (ThreadComplited == VsegoThreads)
+            {
+
+                if (isStopped_Runner == false)
+                {     //если потоки завершились и кнопка остановки не прожималась то выдваем звук конца и возвращаем кнопки запуска и стопа на место для след запусков           
+
+                    //• Звук уведомление о финале файла
+                    using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                    using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                        new SoundPlayer(gzOut).Play();
+
+                    RunnerStart.IsEnabled = true;
+                    RunnerStop.IsEnabled = false;
+                    RunnerStop.Foreground = new SolidColorBrush(Colors.Black);
+                    TabPostman.Visibility = Visibility.Visible;
+                    TabPostman_Responses.Visibility = Visibility.Hidden;
+
+
+                }
+                else
+                {
+                    //кнопка остановки прожималась и остановились все потоки 
+                    MessageBox.Show("Раннер остановлен");
+                    isStopped_Runner = true;
+                    RunnerStart.IsEnabled = true;
+                    RunnerStop.IsEnabled = false;
+                    RunnerStop.Foreground = new SolidColorBrush(Colors.Black);
+                    TabPostman.Visibility = Visibility.Visible;
+                    TabPostman_Responses.Visibility = Visibility.Hidden;
+
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Кнопка "Стоп"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RunnerStop_Click(object sender, RoutedEventArgs e)
+        {
+            isStopped_Runner = true;
+            RunnerStart.IsEnabled = true;
+            RunnerStop.IsEnabled = false;
+            RunnerStop.Foreground = new SolidColorBrush(Colors.Black);
+            TabPostman.Visibility = Visibility.Visible;
+            TabPostman_Responses.Visibility = Visibility.Hidden;
+        }
 
         #endregion
 
