@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <None Remove="7070.png" />
+    <None Remove="add.png" />
     <None Remove="Assets\close_EnterM.png" />
     <None Remove="Assets\close_LeaveM.png" />
     <None Remove="Assets\Home.png" />
@@ -27,8 +28,10 @@
     <None Remove="Assets\win_max.png" />
     <None Remove="Assets\WIn_Min.png" />
     <None Remove="Dock_Left_Black.png" />
+    <None Remove="Pen.png" />
     <None Remove="runner_ico.png" />
     <None Remove="store.png" />
+    <None Remove="trash.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +44,7 @@
 
   <ItemGroup>
     <Resource Include="7070.png" />
+    <Resource Include="add.png" />
     <Resource Include="Assets\close_EnterM.png" />
     <Resource Include="Assets\close_LeaveM.png" />
     <Content Include="Assets\48_48.ico" />
@@ -51,8 +55,10 @@
     <Resource Include="Assets\win_max.png" />
     <Resource Include="Assets\WIn_Min.png" />
     <Resource Include="Dock_Left_Black.png" />
+    <Resource Include="Pen.png" />
     <Resource Include="runner_ico.png" />
     <Resource Include="store.png" />
+    <Resource Include="trash.png" />
   </ItemGroup>
 
   <ItemGroup>

@@ -39,6 +39,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 using Brush = System.Windows.Media.Brush;
 using Clipboard = System.Windows.Clipboard;
 using Label = System.Windows.Controls.Label;
@@ -88,6 +89,7 @@ namespace HM
             TitleVersionText.Content = "v. " + Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
             //сразу нажатое окно брони 
             BronbGrid.IsEnabled = true; Bronirovanie_Canvas.Background = (Brush)new BrushConverter().ConvertFrom("#FF808080"); BronbGrid.Visibility = Visibility.Visible; SyncEngyGrid.Visibility = Visibility.Hidden; SyncEngyGrid.IsEnabled = false; Sync_Canvas.Background = new SolidColorBrush(Colors.Transparent);
+
             #endregion
 
             #region Regisrty Staff Загрузка Настроек из реестра
@@ -178,7 +180,7 @@ namespace HM
             VisualMenu_Apply(); //применение сохраненных настроек к всплывающему меню
 
             #region Добавление обработки всех элементов меню (навердений мыши  и клики)
-            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home, StoreCanvas, RunnerCanvas };
+            MenuCanvas = new List<Canvas>() { SettingCanvas, PostomatsCanvas, PartyCanvas, Home, StoreCanvas, RunnerCanvas, RemoveCanvas_Postman, AddCanvas_Postman, EditCanvas_Postman };
             foreach (var item in MenuCanvas)
             {
                 item.MouseEnter += (a, e) => { item.Background = new SolidColorBrush(Colors.Gray); };
@@ -195,7 +197,7 @@ namespace HM
             PostomatsCanvas.MouseDown += (a, e) => { OpenGrid(PostomatsGrid); };
             SettingCanvas.MouseDown += (a, e) => { OpenGrid(SettingsGrid); };
             StoreCanvas.MouseDown += (a, e) => { OpenGrid(StoreGrid); };
-            RunnerCanvas.MouseDown += (a, e) => { OpenGrid(RunnerGrid); };
+            RunnerCanvas.MouseDown += (a, e) => { OpenGrid(RunnerGrid); LoadPosts(); };
 
             //обработка кликов на пункты меню постаматов
             Bronirovanie_Canvas.MouseDown += (a, e) => { BronbGrid.IsEnabled = true; Bronirovanie_Canvas.Background = (Brush)new BrushConverter().ConvertFrom("#FF808080"); BronbGrid.Visibility = Visibility.Visible; SyncEngyGrid.Visibility = Visibility.Hidden; SyncEngyGrid.IsEnabled = false; Sync_Canvas.Background = new SolidColorBrush(Colors.Transparent); };
@@ -206,6 +208,12 @@ namespace HM
 
             //Обработка кнопок в Склады-Импорт
             SearchWarh.Click += (a, e) => { SearchStoreinDB(SearchWH.Text); };
+
+            //Кнопки раннера
+            AddCanvas_Postman.MouseDown += (a, e) => { Addrequest_inRegistry(); };
+            RemoveCanvas_Postman.MouseDown += (a, e) => { DeletePost(); };
+            List_JSONS.SelectionChanged += (a, e) => { LoadTextB(); };
+
             #endregion
 
             OpenGrid(HomeGrid); //открытие начальной страницы
@@ -1166,17 +1174,7 @@ namespace HM
         Post post = new Post();
         #endregion
 
-        #region knopka_body
-        /// <summary>
-        /// Кнопка изменения BODY и ссылки для постмана
-        /// </summary>
-        private void izmenit_body(object sender, RoutedEventArgs e)
-        { 
 
-        }
-
-
-        #endregion
 
         #region Bronirovanie
         /// <summary>
@@ -1322,7 +1320,7 @@ namespace HM
 
         #endregion
 
-        
+
 
         #region MGK
 
@@ -1802,6 +1800,7 @@ namespace HM
         }
 
 
+
         #endregion
 
         #region Runner_Perepodgotovka_Import
@@ -1898,6 +1897,171 @@ namespace HM
 
         #endregion
 
+        #region RunnerTool
+
+        /// <summary>
+        ///Действия при выборе вкладок Раннера 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TabPostman_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            System.Windows.Controls.TabControl tabControl = sender as System.Windows.Controls.TabControl;
+            System.Windows.Controls.TabItem selectedTab = tabControl.SelectedItem as System.Windows.Controls.TabItem;
+
+            if (selectedTab != null)
+            {
+                switch (selectedTab.Name)
+                {
+                    case "ListRP_Postman_Tab1":
+                        // Код для обработки выбора первой вкладки
+                        EditCanvas_Postman.Visibility = Visibility.Hidden; EditCanvas_Postman.IsEnabled = false;
+                        break;
+                    case "bodyTabItem":
+                        // Код для обработки выбора второй вкладки
+                        EditCanvas_Postman.Visibility = Visibility.Visible; EditCanvas_Postman.IsEnabled = true;
+                        break;
+
+                }
+            }
+
+        }
+
+        #region Кнопки ADD, Delete, Edit в окне раннера
+
+        /// <summary>
+        /// Метод для добавления в реестр запроса
+        /// </summary>
+        public void Addrequest_inRegistry()
+        {
+            AddPost_request AddPostRq = new AddPost_request(this);
+            AddPostRq.Show();
+
+
+        }
+
+        /// <summary>
+        /// Удаление выбранного Запроса из реестра и обновление списка запросов
+        /// </summary>
+        public void DeletePost()
+        {
+            using RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Posts_requests", true);
+            if (List_JSONS.SelectedItem != null)
+            {
+                foreach (var item in List_JSONS.Items) //шарапово из лсита на форме 
+                {
+                    //ищу выбранный элемент в реестре
+                    foreach (var post in key?.GetValueNames()) //Name_... 
+                    {
+                        if (post.Contains(List_JSONS.SelectedItem.ToString()))
+                        {
+                            string founded = post.Replace(" ", "").Replace("Name_", "").Replace("Url_", "").Replace("Body_", "");
+                            if (List_JSONS.SelectedItem.ToString().Replace(" ", "").Replace("Name_", "").Replace("Url_", "").Replace("Body_", "") == founded)
+                            {
+                                key.DeleteValue(post);
+
+                            }
+
+                        }
+                    }
+
+                }
+            }
+            LoadPosts();
+        }
+        #endregion
+
+        /// <summary>
+        /// Загрузка данных в поля из реестра
+        /// </summary>
+        public void LoadTextB()
+        {
+
+
+            string ssl = List_JSONS.SelectedItem?.ToString(); // выбраный запрос (там уже имя запроса)
+            if (ssl != null)
+            {
+
+                //если чтото выбрано, деалем активной кнопку Удалить
+                RemoveCanvas_Postman.Opacity = 100;
+                RemoveCanvas_Postman.IsEnabled = true;
+
+                string url = url_post_text.Text;
+                string body = Body_post_text.Text;
+                Post_pull_Up_Registry(ssl, ref url, ref body);
+
+                url_post_text.Text = url;
+                Body_post_text.Text = body;
+            }
+
+        }
+
+
+        /// <summary>
+        /// Метод, подтягивающий данные о Post-запросе из реестра (url и Body запроса) для того чтобы записать их в поля или выполнить
+        /// </summary>
+        /// <param name="url">Сюда будет записан url запроса</param>
+        /// <param name="bodyPost">Сюда будет записан Body запроса</param>
+        /// /// <param name="namePost">Сюда нужно вписать имя запроса</param>
+        public void Post_pull_Up_Registry(string namePost, ref string url, ref string bodyPost)
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Posts_requests"))
+            {
+
+                foreach (var item in key?.GetValueNames())
+                {
+                    if (item.Contains(namePost))
+                    {
+                        string founded = item.Replace(" ", "").Replace("Url_", "").Replace("Body_", "");
+                        if (founded == namePost.Replace(" ", ""))
+                        {
+                            //получаем значения url и body переменных из реестра в соответствующие переменные
+                            if (item.Contains("Url_")) url = key?.GetValue(item).ToString();
+                            if (item.Contains("Body_")) bodyPost = key?.GetValue(item).ToString();
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+
+        /// <summary>
+        ///Загрузка имен Запросов в лист из реестра сразу в конкретный лист List_JSONS
+        /// </summary>
+        public void LoadPosts()
+        {
+            List<string> Posts_Name = new List<string>();
+            using RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Posts_requests");
+
+            foreach (var item in key?.GetValueNames())
+            {
+                if (item.Contains("Name_"))
+                    Posts_Name.Add(key.GetValue(item).ToString());
+
+            }
+
+
+            //Hosts.Add(key.ToString());
+            Posts_Name = Posts_Name.OrderBy(item => item).ToList();
+            List_JSONS.ItemsSource = Posts_Name;
+
+        }
+
+        /// <summary>
+        ///Кнопка запуска раннера"Пуск"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+
+
+        }
+
+
+        #endregion
 
 
     }

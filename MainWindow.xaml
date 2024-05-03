@@ -380,56 +380,70 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="RunnerGrid" Background="#FFF0F0F0">
-                <ListBox x:Name="List_JSONS" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Left" Width="196" Margin="0,61,0,25" Background="White" Foreground="Black" FontWeight="Bold" FontSize="14" BorderThickness="0,0,0,0"/>
-                <Canvas HorizontalAlignment="Right" Width="161" Background="White" Margin="0,0,0,25">
-                    <Button Content="Стоп!" Width="45" Background="#FFFFD3D3" HorizontalAlignment="Center" Height="25" Canvas.Left="106" Canvas.Top="36" BorderThickness="0,0,0,0" VerticalAlignment="Top"/>
-                    <Button Content="Пуск!" Width="45" HorizontalAlignment="Center" Canvas.Left="10" Canvas.Top="36" VerticalAlignment="Top" Height="25" BorderThickness="0,0,0,0" Background="#FFCFFFBA"/>
-                    <ComboBox Width="45" Height="25" BorderThickness="0,0,0,0" HorizontalAlignment="Center" Canvas.Left="58" Canvas.Top="36" VerticalAlignment="Top">
+            <Grid x:Name="RunnerGrid" Background="#FF6B6B6B">
+                <ListBox x:Name="List_JSONS" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Left" Width="196" Margin="0,52,0,23" Background="White" Foreground="Black" FontWeight="Bold" FontSize="14" BorderThickness="0,0,0,0"/>
+                <Canvas HorizontalAlignment="Right" Width="161" Background="#FFF0F0F0" Margin="0,0,0,23">
+                    <Button Content="Стоп!" Width="60" Background="#FFFFD3D3" HorizontalAlignment="Center" Height="25" Canvas.Left="91" Canvas.Top="36" BorderThickness="0,0,0,0" VerticalAlignment="Center"/>
+                    <Button Content="Пуск!" Width="70" HorizontalAlignment="Left" Canvas.Left="10" Canvas.Top="36" VerticalAlignment="Center" Height="25" BorderThickness="0,0,0,0" Background="#FFCFFFBA" Click="Button_Click_3"/>
+                    <ComboBox Width="45" Height="25" BorderThickness="0,0,0,0" HorizontalAlignment="Center" Canvas.Left="58" Canvas.Top="98" VerticalAlignment="Top">
                         <ComboBoxItem Content="1"/>
                         <ComboBoxItem Content="2"/>
                         <ComboBoxItem Content="3"/>
                         <ComboBoxItem Content="4"/>
                         <ComboBoxItem Content="5"/>
-                        <ComboBoxItem Content="6" IsSelected="True"/>
+                        <ComboBoxItem Content="6"/>
                         <ComboBoxItem Content="7"/>
                         <ComboBoxItem Content="8"/>
-                        <ComboBoxItem Content="9"/>
+                        <ComboBoxItem Content="9" IsSelected="True"/>
                         <ComboBoxItem Content="10"/>
                         <ComboBoxItem Content="11"/>
                         <ComboBoxItem Content="12"/>
                     </ComboBox>
-                    <Label Content="Количество потоков" Canvas.Top="10" HorizontalAlignment="Center" VerticalAlignment="Center" Height="26" Width="126" Canvas.Left="18"/>
+                    <Label Content="Количество потоков" Canvas.Top="72" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Width="126" Canvas.Left="18"/>
                 </Canvas>
-                <TabControl Margin="196,39,161,23" Padding="0,0,0,0" BorderThickness="0,0,0,0">
-                    <TabItem Header="Посылки" Margin="-2,-2,2,0" Width="90" Padding="6,2,3,2">
-                        <Grid Background="White" Height="387">
+                <TabControl x:Name="TabPostman" Margin="196,29,161,23" Padding="0,0,0,0" BorderThickness="0,0,0,0" SelectionChanged="TabPostman_SelectionChanged">
+                    <TabItem x:Name="ListRP_Postman_Tab1" Header="Посылки" Margin="-2,-2,2,0" Width="90" Padding="6,2,3,2" ToolTip="Посылки для раннера">
+                        <Grid Background="White" Height="399">
                             <avalonEdit:TextEditor
                                 x:Name="TextBox1_importText_Copy"
                                 FontFamily="Consolas"
                                 FontSize="14"
-                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" Margin="0,-1,0,0"/>
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled"/>
                         </Grid>
                     </TabItem>
-                    <TabItem x:Name="body" Header="Body" Margin="-38,-2,-35,0" Width="89.8" BorderBrush="#FFD8D8D8">
-                        <Grid Background="White">
+                    <TabItem x:Name="bodyTabItem" Header="Body" Margin="-38,-2,-35,0" Width="89.8" BorderBrush="#FFD8D8D8" ToolTip="Тело запроса">
+                        <Grid Background="White" Height="399">
                             <avalonEdit:TextEditor
-                                x:Name="TextBox1_importText_Copy1"
+                                x:Name="Body_post_text"
                                 FontFamily="Consolas"
                                 FontSize="14"
-                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,1"/>
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" Height="399" IsReadOnly="True"/>
                         </Grid>
                     </TabItem>
                 </TabControl>
-                <Button Content="+" Margin="0,39,0,0" VerticalAlignment="Top" Height="22" Background="#FFD0FFFC" RenderTransformOrigin="0.001,0.479" BorderThickness="0,0,0,0" HorizontalAlignment="Left" Width="22"/>
-                <Button Content="-" Margin="174,39,0,0" VerticalAlignment="Top" Height="22" Background="#FFFFABAB" BorderThickness="0,0,0,0" HorizontalAlignment="Left" Width="22"/>
-                <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="Поиск..." VerticalAlignment="Top" Width="196" Height="20" Margin="0,19,0,0"/>
-                <Button x:Name="Redaktirovanie_button" Content="" Margin="0,39,161,0" BorderThickness="0,0,0,0" BorderBrush="White" Foreground="White" HorizontalAlignment="Right" Width="22" Height="22" VerticalAlignment="Top">
-                    <Button.Background>
-                        <ImageBrush ImageSource="/7070.png"/>
-                    </Button.Background>
-                </Button>
-                <TextBox TextWrapping="Wrap" Text="Тут будет ваш URL..." Margin="196,19,161,439"/>
+                <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="Поиск..." VerticalAlignment="Top" Width="196" Height="29" VerticalContentAlignment="Center"/>
+                <TextBox x:Name="url_post_text" Margin="196,0,161,449" Foreground="White" Background="#FF757575" BorderBrush="#FF5C82F3" FontWeight="Bold" VerticalContentAlignment="Center" Padding="5,0,0,0" IsReadOnly="True" Text="URL..."/>
+                <Canvas x:Name="RemoveCanvas_Postman" Margin="170,29,640,426" Width="26" IsEnabled="False" Opacity="0.5">
+                    <Image Height="20" Canvas.Left="3" Canvas.Top="2" Width="20" Source="/trash.png">
+                        <Image.OpacityMask>
+                            <ImageBrush ImageSource="/trash.png"/>
+                        </Image.OpacityMask>
+                    </Image>
+                </Canvas>
+                <Canvas x:Name="AddCanvas_Postman" Margin="142,29,668,426" Width="26">
+                    <Image Height="15" Canvas.Left="6" Canvas.Top="4" Source="/add.png" Width="15">
+                        <Image.OpacityMask>
+                            <ImageBrush ImageSource="/add.png"/>
+                        </Image.OpacityMask>
+                    </Image>
+                </Canvas>
+                <Canvas x:Name="EditCanvas_Postman" Margin="0,29,166,427" Width="22" HorizontalAlignment="Right">
+                    <Image Height="18" Canvas.Left="2" Canvas.Top="2" Width="18" Source="/Pen.png">
+                        <Image.OpacityMask>
+                            <ImageBrush ImageSource="/Pen.png"/>
+                        </Image.OpacityMask>
+                    </Image>
+                </Canvas>
             </Grid>
 
         </Grid>

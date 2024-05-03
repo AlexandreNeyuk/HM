@@ -1,0 +1,27 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HM"
+        xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit" x:Class="HM.AddPost_request"
+        mc:Ignorable="d"
+        Title="AddPost_request" Height="483" Width="424" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Label Content="Имя запроса " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="name_post" Margin="10,41,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="20"/>
+        <Label Content="Url" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="url_post" Margin="10,98,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Grid.IsSharedSizeScope="True" VerticalContentAlignment="Center"/>
+        <Label Content="Body" HorizontalAlignment="Left" Margin="10,148,0,0" VerticalAlignment="Top"/>
+
+        <avalonedit:TextEditor
+        x:Name="body_post"
+        FontFamily="Consolas"
+        FontSize="14"
+        SyntaxHighlighting="C#" LineNumbersForeground="#FF0E5A94" Background="White" Foreground="Black" WordWrap="True" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" Margin="0,175,0,0" BorderThickness="0,1,0,1" BorderBrush="#FF0E5A94" Height="232" VerticalAlignment="Top"/>
+        <Button Content="Сохранить" HorizontalAlignment="Left" Margin="220,413,0,0" BorderThickness="0,0,0,0" Width="75" Click="Button_Click" Height="20" VerticalAlignment="Top"/>
+        <Button Content="Отмена" HorizontalAlignment="Left" Margin="320,413,0,0" BorderThickness="0,0,0,0" Width="75" Click="Button_Click_1" Height="20" VerticalAlignment="Top"/>
+        <Label x:Name="L" Content="* {{R}} - данный символ для списка!!!" Margin="0,148,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="222"/>
+
+    </Grid>
+</Window>
