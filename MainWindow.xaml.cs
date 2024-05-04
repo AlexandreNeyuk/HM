@@ -2283,7 +2283,8 @@ namespace HM
                     stopwatch.Start();
                     using (var httpClient = new HttpClient())
                     {
-                        var httpContent = new StringContent(body.Replace("{{R}}", chunks[Thread][i]));
+                        string bodyZapros = body.Replace("{{R}}", chunks[Thread][i]);
+                        var httpContent = new StringContent(bodyZapros);
 
                         /*        $@"{{
                                                                     ""id"": ""JsonRpcClient.js"",
