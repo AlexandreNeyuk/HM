@@ -2183,7 +2183,7 @@ namespace HM
 
 
                 //•Делим списки RP для нашего числа потоков 
-                int chunkSize_post = listRP.Count / (ThreadsSelect.SelectedIndex + 1);
+                int chunkSize_post = listRP.Count / (SelectorThreads_postman.SelectedIndex + 1);
                 VsegoThreads = (SelectorThreads_postman.SelectedIndex + 1);
                 ThreadComplited = 0;
                 List<List<string>> chunks = new List<List<string>>();
