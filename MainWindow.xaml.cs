@@ -1797,6 +1797,7 @@ namespace HM
         /// <param name="nomera">nomera это ID РПшек через запятые</param>
         void update_shiptor_for_treck_number(TextBox nomera)
         {
+            //апдейт сделать красиво
             dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = destination_warehouse_id, next_warehouse_id = destination_warehouse_id, current_status = 'packed', sent_at = NULL, returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({nomera.Text})");
 
         }
@@ -2395,6 +2396,8 @@ namespace HM
         }
 
         #endregion
+
+
 
 
     }
