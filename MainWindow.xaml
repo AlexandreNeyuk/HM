@@ -425,7 +425,7 @@
                         </Grid>
                     </TabItem>
                 </TabControl>
-                <TextBox x:Name="SearchText_PostmanPost" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Поиск..." VerticalAlignment="Top" Width="196" Height="29" VerticalContentAlignment="Center" TextChanged="SearchText_PostmanPost_TextChanged"/>
+                <TextBox x:Name="SearchText_PostmanPost" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="196" Height="29" VerticalContentAlignment="Center" TextChanged="SearchText_PostmanPost_TextChanged"/>
                 <TextBox x:Name="url_post_text" Margin="196,0,161,449" Foreground="White" Background="#FF757575" BorderBrush="#FF5C82F3" FontWeight="Bold" VerticalContentAlignment="Center" Padding="5,0,0,0" IsReadOnly="True" Text="URL..."/>
                 <Canvas x:Name="RemoveCanvas_Postman" Margin="170,29,640,426" Width="26" IsEnabled="False" Opacity="0.5">
                     <Image Height="20" Canvas.Left="3" Canvas.Top="2" Width="20" Source="/trash.png">

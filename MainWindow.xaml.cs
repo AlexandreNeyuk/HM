@@ -216,6 +216,7 @@ namespace HM
             SaveEdit_Postman.MouseDown += (a, e) => { EditPost_SaveButton(); };
             EditCanvas_Postman.MouseDown += (a, e) => { EditPost_buttonSaveON(); };
 
+
             #endregion
 
             OpenGrid(HomeGrid); //открытие начальной страницы
@@ -1943,6 +1944,7 @@ namespace HM
         /// <param name="e"></param>
         private void SearchText_PostmanPost_TextChanged(object sender, TextChangedEventArgs e)
         {
+
             if (SearchText_PostmanPost.Text != "")
             {
                 foreach (var item in List_JSONS.Items)
@@ -2157,6 +2159,8 @@ namespace HM
         /// <param name="e"></param>
         private void RunnerStart_Click(object sender, RoutedEventArgs e)
         {
+            //очищать старые раны (потоки в таблице и записи)
+            TabPostman_Responses.Items.Clear();
             //если выбран метод и если поля метода не пустые!!
             string ssl = List_JSONS.SelectedItem?.ToString();
             if (ssl != null && url_post_text.Text != null && bodyTabItem != null && ListRP_postman.Text != null)
@@ -2184,7 +2188,7 @@ namespace HM
 
 
                 //•Делим списки RP для нашего числа потоков 
-                int chunkSize_post = listRP.Count / (ThreadsSelect.SelectedIndex + 1);
+                int chunkSize_post = listRP.Count / (SelectorThreads_postman.SelectedIndex + 1);
                 VsegoThreads = (SelectorThreads_postman.SelectedIndex + 1);
                 ThreadComplited = 0;
                 List<List<string>> chunks = new List<List<string>>();
@@ -2394,6 +2398,9 @@ namespace HM
             TabPostman.Visibility = Visibility.Visible;
             TabPostman_Responses.Visibility = Visibility.Hidden;
         }
+
+
+
 
         #endregion
 
