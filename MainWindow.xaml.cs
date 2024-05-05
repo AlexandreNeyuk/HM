@@ -92,7 +92,7 @@ namespace HM
 
             #endregion
 
-            #region Regisrty Staff Загрузка Настроек из реестра
+            #region начальная настройка веток реестра для работы !!!! Regisrty Staff Загрузка Настроек из реестра
             ///Пересоздание корня настроек в реестре + синхрон с реестром настроек--
             using RegistryKey registry = Registry.CurrentUser.CreateSubKey(@"Software\HM\Settings");
             using RegistryKey registry1 = Registry.CurrentUser.CreateSubKey(@"Software\HM\Hosts");
