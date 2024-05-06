@@ -35,6 +35,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -812,7 +813,7 @@ namespace HM
                                         string RPid = RP_Party.Text.Replace("\r\n", "");
 
                                         //удаляю из партии в шипторе и корректировка статусов посылок на "УПАКОВАНА"
-                                        dataBases.ConnectDB("Шиптор", $@"UPDATE public.package SET return_id = NULL, current_status='packed', sent_at = NULL,  returned_at = NULL, returning_to_warehouse_at = NULL, packed_since = now()   WHERE id in ({RPid})");
+                                        dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now()   WHERE id in ({RPid})");
                                         dataBases.ConnectDB("Шиптор", $@"UPDATE package_departure SET package_action = NULL  WHERE package_id in ({RPid})");
 
                                         //удаление из партии склада 
@@ -1867,8 +1868,8 @@ namespace HM
         }
 
         void otchet_CSM(TextEditor otchet_CSM)
-        { 
-            
+        {
+
         }
 
         #endregion
@@ -2474,37 +2475,37 @@ namespace HM
 
             for (int i = 0; i < chunks[Thread].Count; i++)
             {
-                    using (var httpClient = new HttpClient())
+                using (var httpClient = new HttpClient())
+                {
+                    string bodyZapros = body.Replace("{{R}}", chunks[Thread][i]);
+                    var httpContent = new StringContent(bodyZapros);
+
+                    /*        $@"{{
+                                                                ""id"": ""JsonRpcClient.js"",
+                                                                ""jsonrpc"": ""2.0"",
+                                                                ""method"": ""sapCreatePackage"",
+                                                                ""params"": [{chunks[Thread][i]}]
+                                                            }}");*/
+                    httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+                    using (var response = await httpClient.PostAsync(url, httpContent))
                     {
-                        string bodyZapros = body.Replace("{{R}}", chunks[Thread][i]);
-                        var httpContent = new StringContent(bodyZapros);
-
-                        /*        $@"{{
-                                                                    ""id"": ""JsonRpcClient.js"",
-                                                                    ""jsonrpc"": ""2.0"",
-                                                                    ""method"": ""sapCreatePackage"",
-                                                                    ""params"": [{chunks[Thread][i]}]
-                                                                }}");*/
-                        httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-
-                        using (var response = await httpClient.PostAsync(url, httpContent))
+                        if (response.IsSuccessStatusCode)
                         {
-                            if (response.IsSuccessStatusCode)
-                            {
 
-                                ///получать сам ответ от запроса для логирования
+                            ///получать сам ответ от запроса для логирования
 
-                                await response.Content.ReadAsStringAsync();
-                            }
-                            else
-                            {
-
-                                var responseContent = await response.Content.ReadAsStringAsync();
-                                // $@"Запрос вернул ответ с ошибкой: {response.StatusCode}; Error message: {responseContent}";
-                            }
-                            //return await response.Content.ReadAsStringAsync();
+                            await response.Content.ReadAsStringAsync();
                         }
-                    }                
+                        else
+                        {
+
+                            var responseContent = await response.Content.ReadAsStringAsync();
+                            // $@"Запрос вернул ответ с ошибкой: {response.StatusCode}; Error message: {responseContent}";
+                        }
+                        //return await response.Content.ReadAsStringAsync();
+                    }
+                }
             }
             checkFinallyThreads();
 
@@ -2514,8 +2515,24 @@ namespace HM
 
         #endregion
 
+        #region izmenenie statusov
 
+        public void ustanovka_upakovano(TextEditor upakovka)
+        {
+            //установка упаковано
+            dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = destination_warehouse_id, next_warehouse_id = destination_warehouse_id, current_status = 'packed', sent_at = NULL, returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({upakovka.Text})");
+        }
+        public void ustanovka_otpravleno(TextEditor otpravleno)
+        {
+            //установка отправлено
+            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'sent', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null where id in ({otpravleno.Text})");
+        }
+        public void ustanovka_ojidaet_resheniya(TextEditor ojidaet_resheniya)
+        {
+            //установка ожидает решения по возврату
+            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned_to_warehouse', returned_at = now(), lost_at = null, removed_at = null, reported_at = null where id in ({ojidaet_resheniya.Text})");
+        }
 
-
+        #endregion
     }
 }
