@@ -369,13 +369,10 @@
                                 FontFamily="Consolas"
                                 FontSize="14"
                                 SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="10,31,0,33" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="406"/>
-                            <Button Content="Сделать" Margin="0,366,10,0" Height="20" Width="400" HorizontalAlignment="Right" VerticalAlignment="Top" BorderThickness="0,0,0,0"/>
-                            <CheckBox Content="Подготовить посылку для присвоения трек-номера" HorizontalAlignment="Right" Margin="0,346,10,0" Height="15" VerticalAlignment="Top"/>
-                            <CheckBox Content="Переподготовка/переимпорт" HorizontalAlignment="Left" Margin="639,326,0,0" VerticalAlignment="Top"/>
+                            <Button Content="Сделать" Margin="0,393,10,0" Height="20" VerticalAlignment="Top" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="209"/>
                             <Label Content="Сюда список посылок для присвоения трек номеров (без RP и с запятыми)" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
-                            <Button Content="Сформировать отчёт (выбери путь)" Margin="0,391,10,0" HorizontalAlignment="Right" Width="400" Height="22" VerticalAlignment="Top"/>
-                            <CheckBox Content="Вывести отчёт" HorizontalAlignment="Left" Margin="724,286,0,0" VerticalAlignment="Top"/>
-                            <CheckBox Content="Вывести отчёт (для задачи)" HorizontalAlignment="Left" Margin="653,306,0,0" VerticalAlignment="Top"/>
+                            <CheckBox Content="Отчёт" HorizontalAlignment="Left" Margin="771,348,0,0" VerticalAlignment="Top"/>
+                            <Button Content="Выбрать расположение отчёта" HorizontalAlignment="Left" Margin="614,368,0,0" VerticalAlignment="Top" Width="209"/>
                         </Grid>
                     </TabItem>
                     <TabItem Width="120" Height="30" Margin="-3,-2,3,2" >
@@ -383,7 +380,7 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="RunnerGrid" Background="#FF6B6B6B">
+            <Grid x:Name="RunnerGrid" Background="#FF6B6B6B" d:IsHidden="True">
                 <ListBox x:Name="List_JSONS" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Left" Width="196" Margin="0,52,0,23" Background="White" Foreground="Black" FontWeight="Bold" FontSize="14" BorderThickness="0,0,0,0"/>
                 <Canvas HorizontalAlignment="Right" Width="161" Background="#FFF0F0F0" Margin="0,0,0,23">
                     <Button x:Name="RunnerStop" Content="Стоп!" Width="60" HorizontalAlignment="Center" Height="25" Canvas.Left="91" Canvas.Top="36" BorderThickness="0,0,0,0" VerticalAlignment="Center" IsEnabled="False" Click="RunnerStop_Click"/>

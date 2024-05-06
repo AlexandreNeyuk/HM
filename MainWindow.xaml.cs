@@ -1792,20 +1792,84 @@ namespace HM
 
         #endregion
 
-        #region CSM
-
+        #region CSM 
+        //1. делаем апдейт в бидэ "апдейт сделать красиво"
+        //2. переподготавливаем список посылок
+        //3. создаём отчёт
         /// <summary>
         /// Тут мы кидаем апдейт на склады в шиптор (CSM)
         /// </summary>
         /// <param name="nomera">nomera это ID РПшек через запятые</param>
-        void update_shiptor_for_treck_number(TextBox nomera)
+        void update_shiptor_for_treck_number(TextEditor nomera)
         {
             //апдейт сделать красиво
             dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = destination_warehouse_id, next_warehouse_id = destination_warehouse_id, current_status = 'packed', sent_at = NULL, returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({nomera.Text})");
 
         }
 
+        int VsegoThreads_perepodgotovka, ThreadComplited_perepodgotovka; //переменные для метода переподготовки 1. Всего потоков. 2. всего выполненных потоков.
+        /// <summary>
+        ///    Запуск переподготовки посылок для CSMа
+        /// </summary>
+        /// <param name="spisok_RP">spisok_RP это ID РПшек через запятые</param>
+        void perepodgotovka_posilok(TextEditor spisok_RP)
+        {
+            //Убираем все пустые строки
+            // ListRP_postman.Text.Split(",\n").ToList();
+            string[] lines = spisok_RP.Text.Split(new[] { "\r\n", "\r", "\n", "," }, StringSplitOptions.None);
+            lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+            spisok_RP.Text = string.Join(Environment.NewLine, lines);
+            int kol_vo_potokov = 6;
+            if (spisok_RP.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
+                kol_vo_potokov = 1;
+            List<string> listRP = new List<string>(To_List(spisok_RP)); //лист со всеми rp
 
+
+            //•Делим списки RP для нашего числа потоков 
+            int chunkSize_perepodgotovka = listRP.Count / kol_vo_potokov;
+            VsegoThreads_perepodgotovka = kol_vo_potokov;
+            ThreadComplited_perepodgotovka = 0;
+            List<List<string>> chunks = new List<List<string>>();
+            for (int i = 0; i < listRP.Count; i += chunkSize_perepodgotovka)
+            {
+                if ((listRP.Count - (chunkSize_perepodgotovka * (chunks.Count + 1))) < listRP.Count / 10)
+                {
+
+                    //берем все до конца с текущего I 
+                    chunks.Add(listRP.GetRange(i, listRP.Count - i));
+                    break;
+                }
+                else
+                {
+                    chunks.Add(listRP.GetRange(i, Math.Min(chunkSize_perepodgotovka, listRP.Count - i)));
+                }
+
+            }
+
+            //• получаю данне об post-запросе (url и body)
+            string urlP = "https://api.shiptor.ru/system/v1?key=SemEd5DexEk7Ub2YrVuyNavNutEh4Uh8TerSuwEnMev";
+            string bodyP = $@"{{
+  ""id"": ""JsonRpcClient.js"",
+  ""jsonrpc"": ""2.0"",
+  ""method"": ""delivery.importPackage"",
+  ""params"": [{{{{R}}}}]
+}}";
+
+            //• Запуск раннеров по колву потоков /Распределитель потоков
+            for (int i = 0; i < kol_vo_potokov; i++)
+            {
+
+                //выбираем ЛисВью в который будем писать, нужный url, body, номер потока, и колво посылок для этого потока и запускаем раннер                     
+
+                RuunerPost_Postman(urlP, bodyP, i, chunks);
+
+            }
+        }
+
+        void otchet_CSM(TextEditor otchet_CSM)
+        { 
+            
+        }
 
         #endregion
 
@@ -2257,16 +2321,11 @@ namespace HM
                     //выбираем ЛисВью в который будем писать, нужный url, body, номер потока, и колво посылок для этого потока и запускаем раннер                     
 
                     RuunerPost_Postman(listBox, urlP, bodyP, i, chunks);
-
                 }
-
-
-
             }
             else
             {
                 MessageBox.Show("Проверьте : либо не выбран метод, либо поля некорректно заполнены (пустые)!");
-
             }
         }
 
@@ -2345,6 +2404,8 @@ namespace HM
 
         }
 
+
+
         /// <summary>
         /// Чек финала потоков Postman
         /// </summary>
@@ -2401,6 +2462,53 @@ namespace HM
             TabPostman_Responses.Visibility = Visibility.Hidden;
         }
 
+        /// <summary>
+        /// ранер для переподготовки (фоновый)
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="body"></param>
+        /// <param name="Thread"></param>
+        /// <param name="chunks"></param>
+        async void RuunerPost_Postman(string url, string body, int Thread, List<List<string>> chunks)
+        {
+
+            for (int i = 0; i < chunks[Thread].Count; i++)
+            {
+                    using (var httpClient = new HttpClient())
+                    {
+                        string bodyZapros = body.Replace("{{R}}", chunks[Thread][i]);
+                        var httpContent = new StringContent(bodyZapros);
+
+                        /*        $@"{{
+                                                                    ""id"": ""JsonRpcClient.js"",
+                                                                    ""jsonrpc"": ""2.0"",
+                                                                    ""method"": ""sapCreatePackage"",
+                                                                    ""params"": [{chunks[Thread][i]}]
+                                                                }}");*/
+                        httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+                        using (var response = await httpClient.PostAsync(url, httpContent))
+                        {
+                            if (response.IsSuccessStatusCode)
+                            {
+
+                                ///получать сам ответ от запроса для логирования
+
+                                await response.Content.ReadAsStringAsync();
+                            }
+                            else
+                            {
+
+                                var responseContent = await response.Content.ReadAsStringAsync();
+                                // $@"Запрос вернул ответ с ошибкой: {response.StatusCode}; Error message: {responseContent}";
+                            }
+                            //return await response.Content.ReadAsStringAsync();
+                        }
+                    }                
+            }
+            checkFinallyThreads();
+
+        }
 
 
 
