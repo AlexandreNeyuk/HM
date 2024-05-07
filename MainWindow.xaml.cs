@@ -2516,12 +2516,19 @@ namespace HM
         #endregion
 
         #region izmenenie statusov
-
+        /// <summary>
+        /// устанавливает упакована/готова к отправке в шипторе
+        /// </summary>
+        /// <param name="upakovka">устанавливает упакована/готова к отправке в шипторе</param>
         public void ustanovka_upakovano(TextEditor upakovka)
         {
             //установка упаковано
-            dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = destination_warehouse_id, next_warehouse_id = destination_warehouse_id, current_status = 'packed', sent_at = NULL, returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({upakovka.Text})");
+            dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({upakovka.Text})");
         }
+        /// <summary>
+        /// устанавливает статус отправлено/отправлено в шипторе
+        /// </summary>
+        /// <param name="otpravleno">устанавливает статус отправлено/отправлено в шипторе</param>
         public void ustanovka_otpravleno(TextEditor otpravleno)
         {
             //установка отправлено
