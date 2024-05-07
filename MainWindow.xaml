@@ -378,9 +378,9 @@
                             <Label Content="номера без RP через запятую" HorizontalAlignment="Left" Margin="481,0,0,0" VerticalAlignment="Top" Width="208"/>
                             <Canvas Margin="0,0,0,29" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139">
                                 <Button x:Name="Import_button" Content="Импорт" Width="112" HorizontalAlignment="Left" Canvas.Left="16" Canvas.Top="142" VerticalAlignment="Top" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20" Click="Import_button_Click"/>
-                                <CheckBox Canvas.Left="10" Canvas.Top="62" HorizontalAlignment="Left" VerticalAlignment="Top" Width="96" Content="Возвратные"/>
                                 <Label Content="Параметры" Canvas.Left="33" FontWeight="Bold"/>
-                                <Label x:Name="Selected_NameWarh" Content="" Canvas.Left="8" Canvas.Top="31" HorizontalAlignment="Left" VerticalAlignment="Top" Width="122"/>
+                                <Label x:Name="Selected_NameWarh" Canvas.Left="10" Canvas.Top="64" HorizontalAlignment="Left" VerticalAlignment="Top" Width="122" FontWeight="Bold" Height="26" HorizontalContentAlignment="Center"/>
+                                <Label Canvas.Left="10" Canvas.Top="33" Width="122" FontWeight="Bold" Height="26" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Склад" HorizontalContentAlignment="Center"/>
                             </Canvas>
                             <Button x:Name="SearchWarh" HorizontalAlignment="Left" Margin="240,30,0,0" VerticalAlignment="Top" Width="75" BorderThickness="0,0,0,0" Height="20" Content="Поиск"/>
                             <DataGrid x:Name="WarhausesTable" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,55,0,29" HorizontalAlignment="Left" Width="433" IsReadOnly="True" SelectionChanged="WarhausesTable_SelectionChanged"/>
