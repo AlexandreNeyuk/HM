@@ -144,7 +144,7 @@ namespace HM
                     catch (Exception ex)
                     {
                         nc.Close();
-                        MessageBox.Show("Коннект точно пошел по пизде! - Ошибка : " + ex.Message);
+                        MessageBox.Show("Ошибка подключения: " + ex.Message);
                         //Код обработки ошибок
                     }
                 }

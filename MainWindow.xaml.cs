@@ -1780,15 +1780,37 @@ namespace HM
         /// 1.Функции обновления посылыок в шипторе (подготовка посылок в Шиптор для импорта)
         /// </summary>
         /// <param name="txBx">TextBox - ID посылок для импорта, через запятую</param>
-        public void UpdatesShiptor_InportStore(TextBox txBx)
+        public void UpdatesShiptor_InportStore(TextEditor txBx)
         {
-            dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = {selected_id_warh},next_warehouse_id = {selected_id_warh} where id in ({txBx.Text})");
-            dataBases.ConnectDB("Шиптор", $@"update package set ems_execution_mode = false where id in ({txBx.Text}) and ems_execution_mode = true");
+            if (selected_id_warh != null)
+            {
+                /// если выбран скалд то пишу в его шиптор посылкам
+                dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = {selected_id_warh},next_warehouse_id = {selected_id_warh} where id in ({txBx.Text})");
+                dataBases.ConnectDB("Шиптор", $@"update package set ems_execution_mode = false where id in ({txBx.Text}) and ems_execution_mode = true");
+
+            }
+            else
+            {
+
+                MessageBox.Show("Не выбран склад!!!");
+
+            }
 
         }
 
+        /// <summary>
+        /// Кнопка "Импорт"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Import_button_Click(object sender, RoutedEventArgs e)
+        {
 
+            //Обновляю в шипторе корректные склады
+            UpdatesShiptor_InportStore(TextBox1_importText);
+            perepodgotovka_posilok(TextBox1_importText);
 
+        }
 
 
         #endregion
@@ -1808,7 +1830,8 @@ namespace HM
 
         }
 
-        int VsegoThreads_perepodgotovka, ThreadComplited_perepodgotovka; //переменные для метода переподготовки 1. Всего потоков. 2. всего выполненных потоков.
+        int VsegoThreads_perepodgotovka;
+        int ThreadComplited_perepodgotovka = 0; //переменные для метода переподготовки 1. Всего потоков. 2. всего выполненных потоков.
         /// <summary>
         ///    Запуск переподготовки посылок для CSMа
         /// </summary>
@@ -1874,97 +1897,7 @@ namespace HM
 
         #endregion
 
-        #region Runner_Perepodgotovka_Import
 
-        /* /// <summary>
-         ///Запуск раннера с импортом и переподготовкой на склад
-         /// </summary>
-         /// <param name="txBx">TextBox - ID посылок для импорта, через запятую</param>
-         public void PostRun_Import(TextBox txBx)
-         {
-             //удалить запятые и начать импорт
-             List<string> list_RP = new List<string>(); // список номеров посылок без запятых
-
-             // Разбиваем текст на строки по разделителю-запятой
-             string[] arrStr = TextBox.Text.Split(new char[] { ',', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-
-             // Преобразуем массив строк в список
-             List<string> numbers = new List<string>(arrStr);
-
-             foreach (string number in numbers)
-             {
-                 if (!string.IsNullOrEmpty(number))
-                 {
-                     list_RP.Add(number.Replace(",", ""));
-                 }
-             }
-
-             //есть список для импорта в апи
-
-
-
-
-             for (int i = 0; i < list_RP.Count; i++)
-             {
-                 if (isStopped == false)
-                 {// раннен не был остановлен
-
-                     Stopwatch stopwatch = new Stopwatch();
-                     stopwatch.Start();
-                     using (var httpClient = new HttpClient())
-                     {
-                         var httpContent = new StringContent($@"{{
-                                                                   ""id"": ""JsonRpcClient.js"",
-                                                                   ""jsonrpc"": ""2.0"",
-                                                                   ""method"": ""sapCreatePackage"",
-                                                                   ""params"": [{chunks[Thread][i]}]
-                                                               }}");
-                         httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-
-                         using (var response = await httpClient.PostAsync("https://api.shiptor.ru/system/v1?key=SemEd5DexEk7Ub2YrVuyNavNutEh4Uh8TerSuwEnMev", httpContent))
-                         {
-                             if (response.IsSuccessStatusCode)
-                             {
-
-                                 ///получать сам ответ от запроса для логирования
-
-                                 await response.Content.ReadAsStringAsync();
-                                 stopwatch.Stop();
-                                 Label label = new Label();
-                                 label.Content = $"Iteration {i + 1} success. Response time: {stopwatch.ElapsedMilliseconds} ms";
-                                 MylistThread.Items.Add(label);
-
-
-                             }
-                             else
-                             {
-
-                                 var responseContent = await response.Content.ReadAsStringAsync();
-                                 // $@"Запрос вернул ответ с ошибкой: {response.StatusCode}; Error message: {responseContent}";
-                                 stopwatch.Stop();
-                                 Label label = new Label();
-                                 label.Content = $"Iteration {i + 1}. Error:{response.StatusCode}; Error message: {responseContent}.  Response time: {stopwatch.ElapsedMilliseconds} ms";
-                                 MylistThread.Items.Add(label);
-
-
-                             }
-                             //return await response.Content.ReadAsStringAsync();
-                         }
-                     }
-
-                 }
-                 else
-                 {
-                     //раннер будет остановлен
-
-                     break;
-
-                 }
-             }
-
-         }*/
-
-        #endregion
 
         #endregion
 
@@ -2517,22 +2450,39 @@ namespace HM
 
         #region izmenenie statusov
 
-        public void ustanovka_upakovano(TextEditor upakovka)
+
+        public void Select_status_Posilki(TextEditor RP_list_for_change_status, System.Windows.Controls.ComboBox status)
         {
-            //установка упаковано
-            dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = destination_warehouse_id, next_warehouse_id = destination_warehouse_id, current_status = 'packed', sent_at = NULL, returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({upakovka.Text})");
-        }
-        public void ustanovka_otpravleno(TextEditor otpravleno)
-        {
-            //установка отправлено
-            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'sent', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null where id in ({otpravleno.Text})");
-        }
-        public void ustanovka_ojidaet_resheniya(TextEditor ojidaet_resheniya)
-        {
-            //установка ожидает решения по возврату
-            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned_to_warehouse', returned_at = now(), lost_at = null, removed_at = null, reported_at = null where id in ({ojidaet_resheniya.Text})");
+            switch (status.SelectedIndex)
+            {
+                //статус упаковано
+                case 0:
+                    //  dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = destination_warehouse_id, next_warehouse_id = destination_warehouse_id, current_status = 'packed', sent_at = NULL, returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({upakovka.Text})");
+
+                    break;
+                default:
+                    break;
+            }
         }
 
+        /*    public void ustanovka_upakovano(TextEditor upakovka)
+            {
+                //установка упаковано
+                dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = destination_warehouse_id, next_warehouse_id = destination_warehouse_id, current_status = 'packed', sent_at = NULL, returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({upakovka.Text})");
+            }
+            public void ustanovka_otpravleno(TextEditor otpravleno)
+            {
+                //установка отправлено
+                dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'sent', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null where id in ({otpravleno.Text})");
+            }
+            public void ustanovka_ojidaet_resheniya(TextEditor ojidaet_resheniya)
+            {
+                //установка ожидает решения по возврату
+                dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned_to_warehouse', returned_at = now(), lost_at = null, removed_at = null, reported_at = null where id in ({ojidaet_resheniya.Text})");
+            }*/
+
         #endregion
+
+
     }
 }
