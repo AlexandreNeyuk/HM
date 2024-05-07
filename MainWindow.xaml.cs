@@ -1742,7 +1742,7 @@ namespace HM
         /// <param name="TextSearchWarh">Тескт из поля поиска</param>
         public void SearchStoreinDB(string TextSearchWarh)
         {
-            data = dataBases.ConnectDB("Шиптор", $@"select id, slug, name, address from warehouse where name  ilike ('%{TextSearchWarh}%') or slug ilike ('%{TextSearchWarh}%') or address ilike ('%{TextSearchWarh}%') order by name");
+            data = dataBases.ConnectDB("Шиптор", $@"select id, slug, name, address from warehouse where name  ilike ('%{TextSearchWarh}%') or slug ilike ('%{TextSearchWarh}%') or address ilike ('%{TextSearchWarh}%') order by id");
             WarhausesTable.ItemsSource = data.DefaultView;
 
         }
