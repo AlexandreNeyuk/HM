@@ -1805,10 +1805,19 @@ namespace HM
         /// <param name="e"></param>
         private void Import_button_Click(object sender, RoutedEventArgs e)
         {
+            if (TextBox1_importText.Text != "")
+            {
+                //Обновляю в шипторе корректные склады
+                UpdatesShiptor_InportStore(TextBox1_importText);
+                perepodgotovka_posilok(TextBox1_importText);
+            }
+            else
+            {
 
-            //Обновляю в шипторе корректные склады
-            UpdatesShiptor_InportStore(TextBox1_importText);
-            perepodgotovka_posilok(TextBox1_importText);
+                MessageBox.Show("Список посылок пуст!");
+
+            }
+
 
         }
 
