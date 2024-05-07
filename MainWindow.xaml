@@ -396,7 +396,7 @@
                                 SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="10,31,0,33" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="406"/>
                             <Button Content="Сделать" Margin="0,393,10,0" Height="20" VerticalAlignment="Top" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="209"/>
                             <Label Content="Сюда список посылок для присвоения трек номеров (без RP и с запятыми)" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
-                            <CheckBox Content="Отчёт" Margin="771,348,10,0" VerticalAlignment="Top"/>
+                            <CheckBox Content="Отчёт" Margin="0,348,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="52"/>
                             <Button Content="Выбрать расположение отчёта" HorizontalAlignment="Right" Margin="0,368,10,0" VerticalAlignment="Top" Width="209"/>
                         </Grid>
                     </TabItem>
