@@ -1842,7 +1842,7 @@ namespace HM
         int VsegoThreads_perepodgotovka;
         int ThreadComplited_perepodgotovka = 0; //переменные для метода переподготовки 1. Всего потоков. 2. всего выполненных потоков.
         /// <summary>
-        ///    Запуск переподготовки посылок для CSMа
+        ///    Запуск переподготовки посылок
         /// </summary>
         /// <param name="spisok_RP">spisok_RP это ID РПшек через запятые</param>
         void perepodgotovka_posilok(TextEditor spisok_RP)
@@ -1856,6 +1856,36 @@ namespace HM
             if (spisok_RP.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
                 kol_vo_potokov = 1;
             List<string> listRP = new List<string>(To_List(spisok_RP)); //лист со всеми rp
+
+            #region RP_Stats
+            /////////////--------------------------------
+            ////////////-----------запись кол-ва в реестр для статы--------------
+            int statsRP = 0;
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM"))
+            {
+
+                foreach (var item in key?.GetValueNames())
+                {
+                    if (item.Contains("RP_post_stats_"))
+                    {
+                        statsRP = (int)key?.GetValue(item);
+
+                    }
+                }
+            }
+
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM"))
+            {
+                if (listRP.Count != 0)
+                {
+                    key?.SetValue("RP_post_stats_", listRP.Count + statsRP);
+
+                }
+            }
+            //////////------------------------------------------
+            #endregion
+
+
 
 
             //•Делим списки RP для нашего числа потоков 
@@ -2194,6 +2224,34 @@ namespace HM
                 if (ListRP_postman.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
                     SelectorThreads_postman.SelectedIndex = 0;
                 List<string> listRP = new List<string>(To_List(ListRP_postman)); //лист со всеми rp
+
+                #region RP_Stats
+                /////////////--------------------------------
+                ////////////-----------запись кол-ва в реестр для статы--------------
+                int statsRP = 0;
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM"))
+                {
+
+                    foreach (var item in key?.GetValueNames())
+                    {
+                        if (item.Contains("RP_post_stats_"))
+                        {
+                            statsRP = (int)key?.GetValue(item);
+
+                        }
+                    }
+                }
+
+                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM"))
+                {
+                    if (listRP.Count != 0)
+                    {
+                        key?.SetValue("RP_post_stats_", listRP.Count + statsRP);
+
+                    }
+                }
+                //////////------------------------------------------
+                #endregion
 
 
                 //•Делим списки RP для нашего числа потоков 
