@@ -97,6 +97,7 @@ namespace HM
             ///Пересоздание корня настроек в реестре + синхрон с реестром настроек--
             using RegistryKey registry = Registry.CurrentUser.CreateSubKey(@"Software\HM\Settings");
             using RegistryKey registry1 = Registry.CurrentUser.CreateSubKey(@"Software\HM\Hosts");
+            using RegistryKey registry2 = Registry.CurrentUser.CreateSubKey(@"Software\HM");
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM\Posts_requests")) ;
 
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Settings"))
