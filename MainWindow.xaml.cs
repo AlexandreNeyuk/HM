@@ -739,7 +739,7 @@ namespace HM
             if (Party.Text != "")
             {
                 string paty = Party.Text; //партия 
-                if (paty.Contains("R_RET")) paty = paty.Replace("R_RET", "");
+                if (paty.Contains("R_RET") || paty.Contains("RET")) paty = paty.Replace("R_RET", "").Replace("RET", "");
                 List<string> StockID = dataBases.ConnectDB("Шиптор", $@"select * from package_return pr where id in ({paty})").AsEnumerable().Select(x => x["stock_id"].ToString()).ToList();
                 //проверка существования в шипторе И ИМЕНИ СКЛАДА в шипе и меняем в заголовке имени склада 
                 List<string> StockName = new List<string>();
@@ -785,6 +785,14 @@ namespace HM
                                             string Cvalues = string.Join(",", values);
                                             //сама запись в партию в бд:
                                             dataBases.ConnectDB(StockName[0], $@"INSERT into public.package_return_item(package_id, package_return_id) values {Cvalues}");
+
+                                            //если выбраны корректировки статусов, то выполняю и их 
+                                            if (CheckBox_CorrectStatus_Party.IsChecked == true)
+                                            {
+                                                dataBases.ConnectDB("Шиптор", $@"update public.package set current_status = 'to_return', returned_at = now() WHERE id in ({RPid})");
+                                                dataBases.ConnectDB(StockName[0], $@"update public.package set status = 'in_package_return' where package_fid in ({RPid})");
+
+                                            }
 
                                             MessageBox.Show($@"В партию добалено!");
                                             RP_Party.Text = null;
@@ -964,6 +972,28 @@ namespace HM
             }
         }
 
+        /// <summary>
+        ////ВЫбор добавления или удаления из партии (для того чтобы выбрать чек бокс со статусами)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SelectAction_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (SelectAction.SelectedIndex == 0)
+            {
+                //если выбрано только добавление в партию 
+                CheckBox_CorrectStatus_Party.IsEnabled = true;
+
+            }
+            else
+            {
+                //если выбрано удаление 
+                CheckBox_CorrectStatus_Party.IsEnabled = false;
+                CheckBox_CorrectStatus_Party.IsChecked = false;
+
+            }
+
+        }
         #endregion
 
         #region Tools
@@ -2532,6 +2562,7 @@ namespace HM
                     break;
             }
         }
+
 
         /*    public void ustanovka_upakovano(TextEditor upakovka)
             {

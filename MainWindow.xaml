@@ -101,9 +101,10 @@
             </Canvas>
         </Grid>
         <Grid x:Name="MajorGrid" Height="478" VerticalAlignment="Bottom">
-            <Grid x:Name="PartyGrid" Background="White" d:IsLocked="True" d:IsHidden="True">
+            <Grid x:Name="PartyGrid" Background="White">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии склада" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
-                <ComboBox x:Name="SelectAction" HorizontalAlignment="Right" Margin="0,153,24,0" VerticalAlignment="Top" Width="147" SelectedIndex="0" BorderThickness="0,0,0,0" FontFamily="72" Height="22">
+                <CheckBox x:Name="CheckBox_CorrectStatus_Party" Content="Скорректировать статусы" Margin="0,298,17,0" VerticalAlignment="Top" ToolTip="Если вырано, скорректируются дополнительно статусы на возвратные как на складе, так и в Шиптор у отправлений" HorizontalAlignment="Right" Width="161"/>
+                <ComboBox x:Name="SelectAction" HorizontalAlignment="Right" Margin="0,153,24,0" VerticalAlignment="Top" Width="147" SelectedIndex="0" BorderThickness="0,0,0,0" FontFamily="72" Height="22" SelectionChanged="SelectAction_SelectionChanged">
                     <ComboBoxItem Content="Добавить в партию"/>
                     <ComboBoxItem Content="Удалить из партии"/>
                 </ComboBox>
@@ -358,7 +359,7 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="StoreGrid" Background="White">
+            <Grid x:Name="StoreGrid" Background="White" d:IsHidden="True">
                 <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2" BorderBrush="White" Background="White">
                     <TabItem x:Name="RP_List1" Header="Импорт" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="451">
