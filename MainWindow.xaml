@@ -405,12 +405,12 @@
                             <Label Content="Сюда список посылок для присвоения трек номеров (без RP и с запятыми)" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
                             <Canvas Margin="609,0,0,23">
                                 <Button Content="Сделать" Height="20" BorderThickness="0,0,0,0" Width="104" HorizontalAlignment="Left" Canvas.Left="60" Canvas.Top="253" VerticalAlignment="Top"/>
-                                <CheckBox x:Name="CheckBox_Otchet_CSM" Content="Отчёт" Width="74" HorizontalAlignment="Left" Canvas.Left="10" Canvas.Top="47" VerticalAlignment="Center" Checked="CheckBox_Otchet_CSM_Checked" Unchecked="CheckBox_Otchet_CSM_Unchecked"/>
-                                <Button x:Name="button_Raspologenie_Otchet_CSM" Content="Расположение" Width="119" HorizontalAlignment="Left" Canvas.Left="52" Canvas.Top="178" VerticalAlignment="Top" Height="20" BorderThickness="0,0,0,0" IsEnabled="False" Click="button_Raspologenie_Otchet_CSM_Click"/>
-                                <TextBox x:Name="TextBox_Name_Otchet_CSM" Canvas.Left="7" TextWrapping="Wrap" Canvas.Top="93" Width="212" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" IsEnabled="False"/>
-                                <Label x:Name="Label_Name_Otchet_CSM" Canvas.Left="62" Canvas.Top="67" Content="Имя файла" HorizontalAlignment="Left" VerticalAlignment="Center" Width="99" HorizontalContentAlignment="Center" IsEnabled="False"/>
-                                <TextBox x:Name="TextBox_Raspologenie_Otchet_CSM" Canvas.Left="7" TextWrapping="Wrap" Canvas.Top="142" Width="212" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" IsReadOnly="True" IsEnabled="False"/>
-                                <Label x:Name="Label_Raspologenie_Otchet_CSM" Canvas.Left="48" Canvas.Top="116" Content="Расположение" HorizontalAlignment="Left" VerticalAlignment="Center" Width="129" HorizontalContentAlignment="Center" IsEnabled="False"/>
+                                <CheckBox Content="Отчёт" Width="74" HorizontalAlignment="Left" Canvas.Left="10" Canvas.Top="47" VerticalAlignment="Center"/>
+                                <Button Content="Расположение" Width="119" HorizontalAlignment="Left" Canvas.Left="52" Canvas.Top="178" VerticalAlignment="Top" Height="20" BorderThickness="0,0,0,0"/>
+                                <TextBox Canvas.Left="7" TextWrapping="Wrap" Canvas.Top="93" Width="212" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20"/>
+                                <Label Canvas.Left="62" Canvas.Top="67" Content="Имя файла" HorizontalAlignment="Left" VerticalAlignment="Center" Width="99" HorizontalContentAlignment="Center"/>
+                                <TextBox Canvas.Left="7" TextWrapping="Wrap" Canvas.Top="142" Width="212" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20"/>
+                                <Label Canvas.Left="48" Canvas.Top="116" Content="Расположение" HorizontalAlignment="Left" VerticalAlignment="Center" Width="129" HorizontalContentAlignment="Center"/>
                                 <Label Canvas.Left="65" Content="Параметры" Width="99" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                                 <CheckBox x:Name="CheckBox_Otchet_dlya_sebya_CSM" Content="Отчёт для себя" Width="103" Canvas.Left="111" Canvas.Top="47" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             </Canvas>

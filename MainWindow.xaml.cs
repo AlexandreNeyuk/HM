@@ -1840,6 +1840,10 @@ namespace HM
                 //Обновляю в шипторе корректные склады
                 UpdatesShiptor_InportStore(TextBox1_importText);
                 perepodgotovka_posilok(TextBox1_importText);
+                //• Звук уведомление о финале 
+                using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                    new SoundPlayer(gzOut).Play();
             }
             else
             {
@@ -2687,8 +2691,6 @@ namespace HM
                     break;
             }
         }
-
-
 
 
 
