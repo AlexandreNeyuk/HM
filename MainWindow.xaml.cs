@@ -822,7 +822,7 @@ namespace HM
                                         string RPid = RP_Party.Text.Replace("\r\n", "");
 
                                         //удаляю из партии в шипторе и корректировка статусов посылок на "УПАКОВАНА"
-                                        dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now()   WHERE id in ({RPid})");
+                                        dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now(), return_id=null   WHERE id in ({RPid})");
                                         dataBases.ConnectDB("Шиптор", $@"UPDATE package_departure SET package_action = NULL  WHERE package_id in ({RPid})");
 
                                         //удаление из партии склада 
