@@ -193,7 +193,7 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid">
+            <Grid x:Name="HomeGrid" d:IsHidden="True">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsSelected="True" >
                         <Grid Background="White" Height="451">
@@ -405,7 +405,7 @@
                             <Label Content="Сюда список посылок для присвоения трек номеров (без RP и с запятыми)" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
                             <Canvas Margin="609,0,0,23">
                                 <Button Content="Сделать" Height="20" BorderThickness="0,0,0,0" Width="104" HorizontalAlignment="Left" Canvas.Left="60" Canvas.Top="253" VerticalAlignment="Top"/>
-                                <CheckBox Content="Отчёт" Width="74" HorizontalAlignment="Left" Canvas.Left="10" Canvas.Top="47" VerticalAlignment="Center"/>
+                                <CheckBox Content="Отчёт" Width="74" HorizontalAlignment="Left" Canvas.Left="10" Canvas.Top="47" VerticalAlignment="Center" Checked="CheckBox_Checked"/>
                                 <Button Content="Расположение" Width="119" HorizontalAlignment="Left" Canvas.Left="52" Canvas.Top="178" VerticalAlignment="Top" Height="20" BorderThickness="0,0,0,0"/>
                                 <TextBox Canvas.Left="7" TextWrapping="Wrap" Canvas.Top="93" Width="212" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20"/>
                                 <Label Canvas.Left="62" Canvas.Top="67" Content="Имя файла" HorizontalAlignment="Left" VerticalAlignment="Center" Width="99" HorizontalContentAlignment="Center"/>

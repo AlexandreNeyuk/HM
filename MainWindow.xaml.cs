@@ -2560,6 +2560,7 @@ namespace HM
 
 
 
+
         /*    public void ustanovka_upakovano(TextEditor upakovka)
             {
                 //установка упаковано
