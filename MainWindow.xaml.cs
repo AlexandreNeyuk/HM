@@ -196,7 +196,7 @@ namespace HM
             SettingCanvas.MouseLeave += (a, e) => { Animations.Animation_rotate_OFF(settingImage_AnimatingEl); };
 
             ///обработка кликов на элементы меню
-            PartyCanvas.MouseDown += (a, e) => { OpenGrid(PartyGrid); WarEdit wr = new WarEdit(); wr.LoadHosts(ListWarhouses); wr.Close(); };
+            PartyCanvas.MouseDown += (a, e) => { OpenGrid(PartyGrid); };
             Home.MouseDown += (a, e) => { OpenGrid(HomeGrid); };
             PostomatsCanvas.MouseDown += (a, e) => { OpenGrid(PostomatsGrid); };
             SettingCanvas.MouseDown += (a, e) => { OpenGrid(SettingsGrid); };
@@ -925,28 +925,23 @@ namespace HM
         }
 
         /// <summary>
-        /// Посик в листе Склада
+        ///  Делаем доступным ввод только цифр в поле Партий
         /// </summary>
-        private void Search_Warh_TextChanged(object sender, TextChangedEventArgs e)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Party_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (Search_Warh.Text != "")
+            TextBox textBox = sender as TextBox;
+
+            if (textBox != null)
             {
-                foreach (var item in ListWarhouses.Items)
-                    if (item.ToString().ToUpper().Contains(Search_Warh.Text.ToUpper()))
-                    {
-                        ListWarhouses.SelectedItem = item;
-                        Name_War.Content = ListWarhouses.SelectedItem;
-                        ListWarhouses.ScrollIntoView(ListWarhouses.Items.GetItemAt(ListWarhouses.SelectedIndex));
+                // Удаляем нецифровые символы из текста
+                textBox.Text = new string(textBox.Text.Where(char.IsDigit).ToArray());
 
-
-                    }
+                // Устанавливаем курсор в конец текста
+                textBox.CaretIndex = textBox.Text.Length;
             }
         }
-
-        /// <summary>
-        /// Вывод выбранного склада 
-        /// </summary>
-        private void ListWarhouses_SelectionChanged(object sender, SelectionChangedEventArgs e) { Name_War.Content = ListWarhouses.SelectedItem; }
 
         /// <summary>
         /// Выбор "Расформировать"
@@ -2562,6 +2557,7 @@ namespace HM
                     break;
             }
         }
+
 
 
         /*    public void ustanovka_upakovano(TextEditor upakovka)

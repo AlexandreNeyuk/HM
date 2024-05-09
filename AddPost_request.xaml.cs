@@ -74,6 +74,7 @@ namespace HM
             // MessageBox.Show("Готово!");
             ClearTextBox();
             _mainWindow.LoadPosts();
+            Button_Click_1(sender, e);
         }
 
         /// <summary>

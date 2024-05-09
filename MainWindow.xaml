@@ -101,27 +101,25 @@
             </Canvas>
         </Grid>
         <Grid x:Name="MajorGrid" Height="478" VerticalAlignment="Bottom">
-            <Grid x:Name="PartyGrid" Background="White" d:IsHidden="True">
+            <Grid x:Name="PartyGrid" Background="White" d:IsLocked="True">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии склада" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
                 <CheckBox x:Name="CheckBox_CorrectStatus_Party" Content="Скорректировать статусы" Margin="0,298,17,0" VerticalAlignment="Top" ToolTip="Если вырано, скорректируются дополнительно статусы на возвратные как на складе, так и в Шиптор у отправлений" HorizontalAlignment="Right" Width="161"/>
                 <ComboBox x:Name="SelectAction" HorizontalAlignment="Right" Margin="0,153,24,0" VerticalAlignment="Top" Width="147" SelectedIndex="0" BorderThickness="0,0,0,0" FontFamily="72" Height="22" SelectionChanged="SelectAction_SelectionChanged">
                     <ComboBoxItem Content="Добавить в партию"/>
                     <ComboBoxItem Content="Удалить из партии"/>
                 </ComboBox>
-                <ListBox x:Name="ListWarhouses" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,55,0,24" HorizontalAlignment="Left" Width="224" SelectionMode="Extended" SelectionChanged="ListWarhouses_SelectionChanged" BorderThickness="0,0,0,0"/>
                 <Label HorizontalAlignment="Right" Margin="0,127,24,0" VerticalAlignment="Top" Content="Действие над посылкой" Width="147" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                <Label Margin="0,66,198,0" VerticalAlignment="Top" Content="Посылка (или -ки, номера без RP )" HorizontalAlignment="Right" Width="200"/>
-                <TextBox x:Name="Search_Warh" HorizontalAlignment="Left" Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="224" Height="22" TextChanged="Search_Warh_TextChanged"/>
-                <TextBox x:Name="Party" HorizontalAlignment="Right" Margin="0,98,24,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="147" Height="20" FontFamily="72"/>
+                <Label Margin="10,35,0,0" VerticalAlignment="Top" Content="Посылка (или -ки, номера без RP, через запятую )" HorizontalAlignment="Left" Width="288"/>
+                <TextBox x:Name="Party" HorizontalAlignment="Right" Margin="0,98,24,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="147" Height="20" FontFamily="72" TextChanged="Party_TextChanged"/>
                 <Label Margin="0,71,24,0" VerticalAlignment="Top" Content="Партия" HorizontalAlignment="Right" Width="143" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                <Label HorizontalAlignment="Left" Margin="275,35,0,0" VerticalAlignment="Top" Content="Склад" FontFamily="72" FontWeight="Bold"/>
-                <Label x:Name="Name_War" HorizontalAlignment="Left" Margin="327,35,0,0" VerticalAlignment="Top" Width="268" Height="25" FontWeight="Bold" FontFamily="72"/>
+                <Label HorizontalAlignment="Left" Margin="318,36,0,0" VerticalAlignment="Top" Content="Склад" FontFamily="72" FontWeight="Bold"/>
+                <Label x:Name="Name_War" HorizontalAlignment="Left" Margin="370,36,0,0" VerticalAlignment="Top" Width="268" Height="25" FontWeight="Bold" FontFamily="72"/>
                 <Button x:Name="PartyEx" HorizontalAlignment="Right" Margin="0,254,24,0" VerticalAlignment="Top" BorderThickness="0,0,0,0" FontFamily="72" Content="Сделать 👍" Height="22" Width="147" Click="PartyEx_Click"/>
                 <avalonEdit:TextEditor
 				                x:Name="RP_Party"
 				                FontFamily="Consolas"
 				                FontSize="14"
-				                SyntaxHighlighting="C#" LineNumbersForeground="#FF107142" Background="White" Foreground="Black" WordWrap="True" Margin="229,101,198,24" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FF21CA78" BorderThickness="0,1,0,0"/>
+				                SyntaxHighlighting="C#" LineNumbersForeground="#FF107142" Background="White" Foreground="Black" WordWrap="True" Margin="0,66,198,24" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FF21CA78" BorderThickness="0,1,0,0"/>
                 <ComboBox x:Name="SelectAction_Party" HorizontalAlignment="Right" Margin="0,217,24,0" VerticalAlignment="Top" Width="147" SelectedIndex="0" BorderThickness="0,0,0,0" FontFamily="72" Height="22" SelectionChanged="SelectAction_Party_SelectionChanged">
                     <ComboBoxItem Content="Ничего"/>
                     <ComboBoxItem Content="Собирается"/>
@@ -368,7 +366,7 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="StoreGrid" Background="White" d:IsHidden="True">
+            <Grid x:Name="StoreGrid" Background="White">
                 <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2" BorderBrush="White" Background="White">
                     <TabItem x:Name="RP_List1" Header="Импорт" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="451">
@@ -393,7 +391,7 @@
                                 <Label Canvas.Left="10" Canvas.Top="33" Width="122" FontWeight="Bold" Height="26" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Склад" HorizontalContentAlignment="Center"/>
                             </Canvas>
                             <Button x:Name="SearchWarh" HorizontalAlignment="Left" Margin="240,30,0,0" VerticalAlignment="Top" Width="75" BorderThickness="0,0,0,0" Height="20" Content="Поиск"/>
-                            <DataGrid x:Name="WarhausesTable" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,55,0,29" HorizontalAlignment="Left" Width="433" IsReadOnly="True" SelectionChanged="WarhausesTable_SelectionChanged"/>
+                            <DataGrid x:Name="WarhausesTable" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,55,0,29" HorizontalAlignment="Left" Width="433" IsReadOnly="True" SelectionChanged="WarhausesTable_SelectionChanged" Grid.ColumnSpan="1"/>
 
                         </Grid>
                     </TabItem>
@@ -403,11 +401,18 @@
                                 x:Name="TextBox1_Копировать"
                                 FontFamily="Consolas"
                                 FontSize="14"
-                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="10,31,0,33" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="406"/>
-                            <Button Content="Сделать" Margin="0,393,10,0" Height="20" VerticalAlignment="Top" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="209"/>
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="10,31,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="594"/>
                             <Label Content="Сюда список посылок для присвоения трек номеров (без RP и с запятыми)" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
-                            <CheckBox Content="Отчёт" Margin="0,348,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="52"/>
-                            <Button Content="Выбрать расположение отчёта" HorizontalAlignment="Right" Margin="0,368,10,0" VerticalAlignment="Top" Width="209"/>
+                            <Canvas Margin="609,0,0,23">
+                                <Button Content="Сделать" Height="20" BorderThickness="0,0,0,0" Width="104" HorizontalAlignment="Left" Canvas.Left="60" Canvas.Top="253" VerticalAlignment="Top"/>
+                                <CheckBox Content="Отчёт" Width="74" HorizontalAlignment="Left" Canvas.Left="10" Canvas.Top="47" VerticalAlignment="Center"/>
+                                <Button Content="Расположение" Width="119" HorizontalAlignment="Left" Canvas.Left="52" Canvas.Top="178" VerticalAlignment="Top" Height="20" BorderThickness="0,0,0,0"/>
+                                <TextBox Canvas.Left="7" TextWrapping="Wrap" Canvas.Top="93" Width="212" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20"/>
+                                <Label Canvas.Left="62" Canvas.Top="67" Content="Имя файла" HorizontalAlignment="Left" VerticalAlignment="Center" Width="99" HorizontalContentAlignment="Center"/>
+                                <TextBox Canvas.Left="7" TextWrapping="Wrap" Canvas.Top="142" Width="212" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20"/>
+                                <Label Canvas.Left="48" Canvas.Top="116" Content="Расположение" HorizontalAlignment="Left" VerticalAlignment="Center" Width="129" HorizontalContentAlignment="Center"/>
+                                <Label Canvas.Left="65" Content="Параметры" Width="99" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                            </Canvas>
                         </Grid>
                     </TabItem>
                     <TabItem Width="120" Height="30" Margin="-3,-2,3,2" >
