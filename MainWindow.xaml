@@ -101,7 +101,7 @@
             </Canvas>
         </Grid>
         <Grid x:Name="MajorGrid" Height="478" VerticalAlignment="Bottom">
-            <Grid x:Name="PartyGrid" Background="White">
+            <Grid x:Name="PartyGrid" Background="White" d:IsHidden="True">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии склада" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
                 <CheckBox x:Name="CheckBox_CorrectStatus_Party" Content="Скорректировать статусы" Margin="0,298,17,0" VerticalAlignment="Top" ToolTip="Если вырано, скорректируются дополнительно статусы на возвратные как на складе, так и в Шиптор у отправлений" HorizontalAlignment="Right" Width="161"/>
                 <ComboBox x:Name="SelectAction" HorizontalAlignment="Right" Margin="0,153,24,0" VerticalAlignment="Top" Width="147" SelectedIndex="0" BorderThickness="0,0,0,0" FontFamily="72" Height="22" SelectionChanged="SelectAction_SelectionChanged">
@@ -195,7 +195,7 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid" d:IsHidden="True">
+            <Grid x:Name="HomeGrid">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsSelected="True" >
                         <Grid Background="White" Height="451">
@@ -334,25 +334,34 @@
                     </TabItem>
                     <TabItem x:Name="Change_status" Margin="-4,-1,4,1" Width="120" Header="Смена статуса">
                         <Grid Background="#FFF9F9F9">
+                            <Label Content="Список посылок " Margin="10,2,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="164"/>
+                            <Button HorizontalAlignment="Right" Margin="0,4,5,0" VerticalAlignment="Top" Content="Х" Width="34" BorderThickness="0,0,0,0" FontFamily="72" HorizontalContentAlignment="Center" Click="Button_Click_1"/>
+                            <Button x:Name="GO_GK1" Content="Запуск" Margin="0,259,47,115" FontFamily="72" BorderThickness="0,0,0,0" Click="GO_GK_Click" HorizontalAlignment="Right" Width="174"/>
+                            <ComboBox HorizontalAlignment="Right" Margin="0,28,0,0" VerticalAlignment="Top" Width="268" Height="25" SelectedIndex="0">
+                                <ComboBoxItem Content="Не изменять"/>
+                                <ComboBoxItem Content="Новая"/>
+                                <ComboBoxItem Content="Упакована"/>
+                                <ComboBoxItem Content="Отправлена"/>
+                                <ComboBoxItem Content="Ожидает в пункте выдачи"/>
+                                <ComboBoxItem Content="Доставлена"/>
+                                <ComboBoxItem Content="Ожидает решения по возврату"/>
+                                <ComboBoxItem Content="На возврат"/>
+                                <ComboBoxItem Content="Возвращена"/>
+                                <ComboBoxItem Content="Удалена"/>
+                            </ComboBox>
+                            <Label Content="Статус в шиптор" HorizontalAlignment="Right" Margin="0,0,122,0" VerticalAlignment="Top" Height="31" Width="146"/>
+                            <Label Content="Статус в Zappstore" HorizontalAlignment="Right" Margin="0,53,106,0" VerticalAlignment="Top" Height="31" Width="162"/>
+                            <ComboBox HorizontalAlignment="Right" Margin="0,84,0,0" VerticalAlignment="Top" Width="268" Height="26" SelectedIndex="0">
+                                <ComboBoxItem Content="Не изменять"/>
+                            </ComboBox>
+                            <ComboBox HorizontalAlignment="Right" VerticalAlignment="Top" Width="268" Margin="0,140,0,0" Height="26" SelectedIndex="0">
+                                <ComboBoxItem Content="Не изменять"/>
+                            </ComboBox>
+                            <Label Content="Статус в PVZ шиптор" HorizontalAlignment="Right" Margin="0,110,86,0" VerticalAlignment="Top" Height="30" Width="182"/>
                             <avalonEdit:TextEditor x:Name="RP_list_Status"
                                 FontFamily="Consolas"
                                 FontSize="14"
-                                SyntaxHighlighting="C#" LineNumbersForeground="#FF0A58C1" Background="White" Foreground="Black" WordWrap="True" Margin="0,30,0,21" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FF0A58C1" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0" HorizontalAlignment="Left" Width="286"/>
-                            <ComboBox x:Name="SelectorStatus" Margin="0,186,16,0" VerticalAlignment="Top" SelectedIndex="0" FontFamily="72" BorderThickness="0,0,0,1" HorizontalAlignment="Right" Width="100">
-                                <ComboBoxItem Content="1"/>
-                                <ComboBoxItem Content="2"/>
-                                <ComboBoxItem Content="3"/>
-                                <ComboBoxItem Content="4"/>
-                                <ComboBoxItem Content="5"/>
-                                <ComboBoxItem Content="6"/>
-                            </ComboBox>
-                            <Label Content="Список посылок " Margin="22,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="164"/>
-                            <Label Margin="0,162,49,0" VerticalAlignment="Top" Content="Статус" FontFamily="72" HorizontalAlignment="Right" Width="48"/>
-                            <Button HorizontalAlignment="Right" Margin="0,4,5,0" VerticalAlignment="Top" Content="Х" Width="34" BorderThickness="0,0,0,0" FontFamily="72" HorizontalContentAlignment="Center" Click="Button_Click_1"/>
-                            <Button x:Name="GO_GK1" Content="Запуск" Margin="0,39,35,0" VerticalAlignment="Top" FontFamily="72" Height="27" BorderThickness="0,0,0,0" Click="GO_GK_Click" HorizontalAlignment="Right" Width="62"/>
-                            <CheckBox x:Name="fromSAP_radioButton1" Margin="0,91,22,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="88" FontFamily="72" Content="Shiptor" ToolTip="7-дневное ограничение для списка посылок (используется при прогрузке списка из САП)" IsChecked="True"/>
-                            <CheckBox x:Name="fromSAP_radioButton1_Copy" Margin="0,111,22,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="88" FontFamily="72" Content="PVZ" ToolTip="7-дневное ограничение для списка посылок (используется при прогрузке списка из САП)"/>
-                            <CheckBox x:Name="fromSAP_radioButton1_Copy1" Margin="0,131,22,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="88" FontFamily="72" Content="Zappstore" ToolTip="7-дневное ограничение для списка посылок (используется при прогрузке списка из САП)"/>
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF0A58C1" Background="White" Foreground="Black" WordWrap="True" Margin="10,28,273,22" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FF0A58C1" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0"/>
 
 
                         </Grid>
