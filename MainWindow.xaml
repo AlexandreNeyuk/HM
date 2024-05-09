@@ -108,20 +108,18 @@
                     <ComboBoxItem Content="Добавить в партию"/>
                     <ComboBoxItem Content="Удалить из партии"/>
                 </ComboBox>
-                <ListBox x:Name="ListWarhouses" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,55,0,24" HorizontalAlignment="Left" Width="224" SelectionMode="Extended" SelectionChanged="ListWarhouses_SelectionChanged" BorderThickness="0,0,0,0"/>
                 <Label HorizontalAlignment="Right" Margin="0,127,24,0" VerticalAlignment="Top" Content="Действие над посылкой" Width="147" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                <Label Margin="0,66,198,0" VerticalAlignment="Top" Content="Посылка (или -ки, номера без RP )" HorizontalAlignment="Right" Width="200"/>
-                <TextBox x:Name="Search_Warh" HorizontalAlignment="Left" Margin="0,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="224" Height="22" TextChanged="Search_Warh_TextChanged"/>
-                <TextBox x:Name="Party" HorizontalAlignment="Right" Margin="0,98,24,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="147" Height="20" FontFamily="72"/>
+                <Label Margin="10,35,0,0" VerticalAlignment="Top" Content="Посылка (или -ки, номера без RP, через запятую )" HorizontalAlignment="Left" Width="288"/>
+                <TextBox x:Name="Party" HorizontalAlignment="Right" Margin="0,98,24,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="147" Height="20" FontFamily="72" TextChanged="Party_TextChanged"/>
                 <Label Margin="0,71,24,0" VerticalAlignment="Top" Content="Партия" HorizontalAlignment="Right" Width="143" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                <Label HorizontalAlignment="Left" Margin="275,35,0,0" VerticalAlignment="Top" Content="Склад" FontFamily="72" FontWeight="Bold"/>
-                <Label x:Name="Name_War" HorizontalAlignment="Left" Margin="327,35,0,0" VerticalAlignment="Top" Width="268" Height="25" FontWeight="Bold" FontFamily="72"/>
+                <Label HorizontalAlignment="Left" Margin="318,36,0,0" VerticalAlignment="Top" Content="Склад" FontFamily="72" FontWeight="Bold"/>
+                <Label x:Name="Name_War" HorizontalAlignment="Left" Margin="370,36,0,0" VerticalAlignment="Top" Width="268" Height="25" FontWeight="Bold" FontFamily="72"/>
                 <Button x:Name="PartyEx" HorizontalAlignment="Right" Margin="0,254,24,0" VerticalAlignment="Top" BorderThickness="0,0,0,0" FontFamily="72" Content="Сделать 👍" Height="22" Width="147" Click="PartyEx_Click"/>
                 <avalonEdit:TextEditor
 				                x:Name="RP_Party"
 				                FontFamily="Consolas"
 				                FontSize="14"
-				                SyntaxHighlighting="C#" LineNumbersForeground="#FF107142" Background="White" Foreground="Black" WordWrap="True" Margin="229,101,198,24" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FF21CA78" BorderThickness="0,1,0,0"/>
+				                SyntaxHighlighting="C#" LineNumbersForeground="#FF107142" Background="White" Foreground="Black" WordWrap="True" Margin="0,66,198,24" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FF21CA78" BorderThickness="0,1,0,0"/>
                 <ComboBox x:Name="SelectAction_Party" HorizontalAlignment="Right" Margin="0,217,24,0" VerticalAlignment="Top" Width="147" SelectedIndex="0" BorderThickness="0,0,0,0" FontFamily="72" Height="22" SelectionChanged="SelectAction_Party_SelectionChanged">
                     <ComboBoxItem Content="Ничего"/>
                     <ComboBoxItem Content="Собирается"/>
