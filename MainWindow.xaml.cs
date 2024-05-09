@@ -213,8 +213,9 @@ namespace HM
             //Обработка кнопок в Склады-Импорт
             SearchWarh.Click += (a, e) => { SearchStoreinDB(SearchWH.Text); };
 
-            
 
+            //Для csm 
+            TextBox_Raspologenie_Otchet_CSM.Text = Put_CSM;
 
 
             //Кнопки раннера
@@ -1866,6 +1867,8 @@ namespace HM
         /// </summary>
         /// <param name="Put_CSM">Путь для отчёта CSM</param>   
         string Put_CSM = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        string Name_Otchet_CSM = "Отчет CSM";
+
         //1. делаем апдейт в бидэ "апдейт сделать красиво"
         //2. переподготавливаем список посылок
         //3. создаём отчёт
@@ -1882,6 +1885,126 @@ namespace HM
 
         int VsegoThreads_perepodgotovka;
         int ThreadComplited_perepodgotovka = 0; //переменные для метода переподготовки 1. Всего потоков. 2. всего выполненных потоков.
+
+        /// <summary>
+        ///Кнопка Старта CMS 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void StartButton_CMS_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_Raspologenie_Otchet_CSM.Text = Put_CSM;
+            if (TextBox_Name_Otchet_CSM.Text == "")
+            {
+                TextBox_Name_Otchet_CSM.Text = Name_Otchet_CSM;
+            }
+
+            //1. делаем апдейт в бидэ "апдейт сделать красиво"? если выбьрана галка для трек-номеров
+            if (CheckBox_Prisv_trackCSM.IsChecked == true)
+            {
+                update_shiptor_for_treck_number(TextBox_Nomera_for_CSM); // апдейт для подготовки посылок в шиптор для присвоения трек-номеров
+                csm_createOrder_api(TextBox_Nomera_for_CSM); //прокидываем метод по присвоению трек-номеров
+                perepodgotovka_posilok(TextBox_Nomera_for_CSM);
+
+            }
+
+            //если не выьбрано то вывод отчета 
+            if (CheckBox_Otchet_CSM.IsChecked == true)
+            {
+                if (CheckBox_Otchet_dlya_sebya_CSM.IsChecked == true)
+                {
+                    //если отчет чекнут для себя 
+                    otchet_CSM_(dataBases.ConnectDB("Шиптор", $@"select *
+from (
+select 'RP' || p2.id as ""Родительское"", 'RP' || p.id as ""Дочернее"", p.external_id as ""ШК"", p.current_status as ""Статус"", case when t.tracking is null then t2.tracking else t.tracking end as ""Трек-номер""
+, case
+    when pd.carrier_method_slug in ('return_courier', 'pvz', 'return_fulfilment', 'postamat_sbl', 'return_terminal') then 'Не партнёрская доставка'
+    when pd.delivery_point_id is null then 'Курьерская доставка'
+    when (p.current_status in ('removed') or p.removed_at is not null) then 'Удалена'
+    when (EXISTS (SELECT 1 FROM package p_inner where t.tracking is null and (p_inner.parent_id = p.parent_id or p_inner.id = p.id) and p_inner.current_status in ('to_return', 'returned', 'return_to_sender', 'returned_to_warehouse', 'returning_to_warehouse') LIMIT 1)) then 'На возврате'
+    when (EXISTS (SELECT 1 FROM package p_inner WHERE t.tracking is null and ((p_inner.parent_id = p.parent_id and p_inner.current_status in ('new')) or (p_inner.id = p.id and p_inner.current_status in ('new'))) LIMIT 1)) then 'Не обработана складом'
+    when (EXISTS (SELECT 1 FROM package p_inner WHERE t.tracking is null and (p_inner.parent_id = p.parent_id or p_inner.id = p.id) AND p_inner.current_warehouse_id != p_inner.next_warehouse_id LIMIT 1)) then 'Находится в пути на склад'
+    when p.current_status in ('delivered') then 'Уже доставлена'
+    when (EXISTS (SELECT 1 FROM package p_inner WHERE t.tracking is null and (p_inner.parent_id = p.parent_id or p_inner.id = p.id) AND p_inner.current_warehouse_id != p_inner.destination_warehouse_id LIMIT 1)) then 'Не на конечном складе'
+    when p2.extra_data #>> '{{is_completed}}' in ('false') then 'Посылка не скомплектована'
+    when (a.marked_as_trash_at is not null) then 'Некорректный адрес'
+    when (pp2.type in ('package-is-lost')) then 'Утеряна'
+    when (dp.is_active in (false)) then 'Неактивный пункт выдачи'
+    when (((pp.description is not null) and (co.rejection_reason is null)) and (t.tracking is null and t2.tracking is null)) then pp.description
+    when co.rejection_reason is not null then co.rejection_reason
+    when ((t.tracking is not null) or (t2.tracking is not null)) then ''
+end as ""Ошибка""
+,pd.carrier_method_slug as ""Партнёр""
+from package p
+left join warehouse w on w.id = p.current_warehouse_id
+left join package p2 on p.parent_id = p2.id
+join package_departure pd on p.id = pd.package_id
+left join tracking.tracking t on pd.tracking_id = t.id
+left join package_departure pd2 on p.parent_id = pd2.package_id
+left join tracking.tracking t2 on pd2.tracking_id = t2.id
+left join package_problem pp on (p2.id = pp.package_id and pp.description not in ('Посылка задерживается', 'Смена метода доставки', 'Клиент отказался от заказа', 'Техническая проблема', 'Нет свободных ячеек подходящего размера', 'Срок пребывания в очереди на бронирование истек'))
+left join package_problem pp2 on p.id = pp2.package_id
+left join shipping.delivery_point dp on pd.delivery_point_id = dp.id
+left join address a on pd.address_id = a.id
+left join csm_order co on p2.id = co.package_id
+where 1 = 1
+and p.id in ({TextBox_Nomera_for_CSM.Text})--Дочерние посылки RP
+--and upper(p.external_id) in ()--Дочерние посылки external в верхнем регистре
+and p.previous_id is null
+) as table_name
+where 1 = 1
+group by ""Родительское"", ""Дочернее"", ""ШК"", ""Статус"", ""Трек-номер"", ""Ошибка"", ""Партнёр""
+"));
+
+                }
+                else
+                {
+                    otchet_CSM_(dataBases.ConnectDB("Шиптор", $@"select *
+from (
+select  p.external_id as ""ШК"", case when t.tracking is null then t2.tracking else t.tracking end as ""Трек-номер"",
+case
+    when pd.carrier_method_slug in ('return_courier', 'pvz', 'return_fulfilment', 'postamat_sbl', 'return_terminal') then 'Не партнёрская доставка'
+    when pd.delivery_point_id is null then 'Курьерская доставка'
+    when (p.current_status in ('removed') or p.removed_at is not null) then 'Удалена'
+    when (EXISTS (SELECT 1 FROM package p_inner where t.tracking is null and (p_inner.parent_id = p.parent_id or p_inner.id = p.id) and p_inner.current_status in ('to_return', 'returned', 'return_to_sender', 'returned_to_warehouse', 'returning_to_warehouse') LIMIT 1)) then 'На возврате'
+    when (EXISTS (SELECT 1 FROM package p_inner WHERE t.tracking is null and ((p_inner.parent_id = p.parent_id and p_inner.current_status in ('new')) or (p_inner.id = p.id and p_inner.current_status in ('new'))) LIMIT 1)) then 'Не обработана складом'
+    when (EXISTS (SELECT 1 FROM package p_inner WHERE t.tracking is null and (p_inner.parent_id = p.parent_id or p_inner.id = p.id) AND p_inner.current_warehouse_id != p_inner.next_warehouse_id LIMIT 1)) then 'Находится в пути на склад'
+    when p.current_status in ('delivered') then 'Уже доставлена'
+    when (EXISTS (SELECT 1 FROM package p_inner WHERE t.tracking is null and (p_inner.parent_id = p.parent_id or p_inner.id = p.id) AND p_inner.current_warehouse_id != p_inner.destination_warehouse_id LIMIT 1)) then 'Не на конечном складе'
+    when p2.extra_data #>> '{{is_completed}}' in ('false') then 'Посылка не скомплектована'
+    when (a.marked_as_trash_at is not null) then 'Некорректный адрес'
+    when (pp2.type in ('package-is-lost')) then 'Утеряна'
+    when (dp.is_active in (false)) then 'Неактивный пункт выдачи'
+    when (((pp.description is not null) and (co.rejection_reason is null)) and (t.tracking is null and t2.tracking is null)) then pp.description
+    when co.rejection_reason is not null then co.rejection_reason
+    when ((t.tracking is not null) or (t2.tracking is not null)) then ''
+end as ""Ошибка""
+from package p
+left join warehouse w on w.id = p.current_warehouse_id
+left join package p2 on p.parent_id = p2.id
+join package_departure pd on p.id = pd.package_id
+left join tracking.tracking t on pd.tracking_id = t.id
+left join package_departure pd2 on p.parent_id = pd2.package_id
+left join tracking.tracking t2 on pd2.tracking_id = t2.id
+left join package_problem pp on (p2.id = pp.package_id and pp.description not in ('Посылка задерживается', 'Смена метода доставки', 'Клиент отказался от заказа', 'Техническая проблема', 'Нет свободных ячеек подходящего размера', 'Срок пребывания в очереди на бронирование истек'))
+left join package_problem pp2 on p.id = pp2.package_id
+left join shipping.delivery_point dp on pd.delivery_point_id = dp.id
+left join address a on pd.address_id = a.id
+left join csm_order co on p2.id = co.package_id
+where 1 = 1
+and p.id in ({TextBox_Nomera_for_CSM.Text})--Дочерние посылки RP
+--and upper(p.external_id) in ()--Дочерние посылки external в верхнем регистре
+and p.previous_id is null
+) as table_name
+where 1 = 1
+group by ""ШК"", ""Трек-номер"", ""Ошибка"""));
+                }
+
+
+            }
+
+        }
+
         /// <summary>
         ///    Запуск переподготовки посылок
         /// </summary>
@@ -1968,13 +2091,105 @@ namespace HM
                 RuunerPost_Postman(urlP, bodyP, i, chunks);
 
             }
+            ThreadComplited_perepodgotovka = 0;
         }
 
         /// <summary>
-        /// Создание отчёта CSM
+        ///    Запуск присвоения трек-номеров 
         /// </summary>
-        /// <param name="otchet_CSM">Посылки для отчёта CSM</param>
-        void otchet_CSM_(TextEditor otchet_CSM)
+        /// <param name="spisok_RP">spisok_RP это ID РПшек через запятые</param>
+        void csm_createOrder_api(TextEditor spisok_RP)
+        {
+            //Убираем все пустые строки
+            // ListRP_postman.Text.Split(",\n").ToList();
+            string[] lines = spisok_RP.Text.Split(new[] { "\r\n", "\r", "\n", "," }, StringSplitOptions.None);
+            lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+            spisok_RP.Text = string.Join(Environment.NewLine, lines);
+            int kol_vo_potokov = 6;
+            if (spisok_RP.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
+                kol_vo_potokov = 1;
+            List<string> listRP = new List<string>(To_List(spisok_RP)); //лист со всеми rp
+
+            #region RP_Stats
+            /////////////--------------------------------
+            ////////////-----------запись кол-ва в реестр для статы--------------
+            int statsRP = 0;
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM"))
+            {
+
+                foreach (var item in key?.GetValueNames())
+                {
+                    if (item.Contains("RP_post_stats_"))
+                    {
+                        statsRP = (int)key?.GetValue(item);
+
+                    }
+                }
+            }
+
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM"))
+            {
+                if (listRP.Count != 0)
+                {
+                    key?.SetValue("RP_post_stats_", listRP.Count + statsRP);
+
+                }
+            }
+            //////////------------------------------------------
+            #endregion
+
+
+            //•Делим списки RP для нашего числа потоков 
+            int chunkSize_perepodgotovka = listRP.Count / kol_vo_potokov;
+            VsegoThreads_perepodgotovka = kol_vo_potokov;
+            ThreadComplited_perepodgotovka = 0;
+            List<List<string>> chunks = new List<List<string>>();
+            for (int i = 0; i < listRP.Count; i += chunkSize_perepodgotovka)
+            {
+                if ((listRP.Count - (chunkSize_perepodgotovka * (chunks.Count + 1))) < listRP.Count / 10)
+                {
+
+                    //берем все до конца с текущего I 
+                    chunks.Add(listRP.GetRange(i, listRP.Count - i));
+                    break;
+                }
+                else
+                {
+                    chunks.Add(listRP.GetRange(i, Math.Min(chunkSize_perepodgotovka, listRP.Count - i)));
+                }
+
+            }
+
+            //• получаю данне об post-запросе (url и body)
+            string urlP = "https://api.shiptor.ru/system/v1?key=SemEd5DexEk7Ub2YrVuyNavNutEh4Uh8TerSuwEnMev";
+            string bodyP = $@"{{
+    ""id"": ""JsonRpcClient.js"",
+    ""jsonrpc"": ""2.0"",
+    ""method"": ""csm.createOrder"",
+    ""params"": [
+        {{
+            ""package_id"": {{{{R}}}}
+        }}
+    ]
+}}";
+
+            //• Запуск раннеров по колву потоков /Распределитель потоков
+            for (int i = 0; i < kol_vo_potokov; i++)
+            {
+
+                //выбираем ЛисВью в который будем писать, нужный url, body, номер потока, и колво посылок для этого потока и запускаем раннер                     
+
+                RuunerPost_Postman(urlP, bodyP, i, chunks);
+
+            }
+        }
+
+
+        /// <summary>
+        /// Создание отчёта CSM, отображая всю таблицу из селекта (otchet_CSM - сюда селект)
+        /// </summary>
+        /// <param name="otchet_CSM">Готовый селект из БД для отчета CSM</param>
+        void otchet_CSM_(DataTable otchet_CSM)
         {
             //•Создаем файлик Excel
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -1991,29 +2206,21 @@ namespace HM
                 worksheet = package.Workbook.Worksheets.Add("Выгрузка");
 
 
-                //Создаем шаблон
-                worksheet.Cells["A1"].Value = "Прогруженные";
-                worksheet.Cells["C1"].Value = "Не прогруженные";
-                worksheet.Cells["D1"].Value = "Статус";
-                worksheet.Cells["F1"].Value = "Не найденные в Шиптор";
+                // Заполняем первую строку названиями столбцов
+                for (int i = 0; i < otchet_CSM.Columns.Count; i++)
+                {
+                    worksheet.Cells[1, i + 1].Value = otchet_CSM.Columns[i].ColumnName;
+                }
 
-                if (LoadedHash.Count <= 2) LoadedHash.AddRange(new[] { "", "", "", "" });
-                if (NoLoadRP.Count <= 2) NoLoadRP.AddRange(new[] { "", "", "", "" });
-                if (NoLoadStatus.Count <= 2) NoLoadStatus.AddRange(new[] { "", "", "", "" });
-                if (NoFound.Count <= 2) NoFound.AddRange(new[] { "", "", "", "" });
-
-                // Запись значений в колонку "Прогруженных"
-                var A_Col = worksheet.Cells["A2:A" + LoadedHash.Count]; ///ERROR::необходимо сделать проверку по колву элементов, т.к когда они 0 то вылетает программа (А0 - не существует в ядре экселя)!!!!! 
-                A_Col.LoadFromCollection(LoadedHash);
-                // Запись значений в колонку "Не прогруженных"
-                var C_Col = worksheet.Cells["C2:C" + NoLoadRP.Count];//ERROR::если этот count 0 kb 1 или 2 - то что ниже или равно 2 то по ядру excel идет ошибка, т.к нумерацию необходимо корректировать 
-                C_Col.LoadFromCollection(NoLoadRP);
-                // Запись значений в колонку "Статус"
-                var D_Col = worksheet.Cells["D2:D" + NoLoadStatus.Count];
-                D_Col.LoadFromCollection(NoLoadStatus);
-                // Запись значений в колонку "Не найденные в Шиптор"
-                var F_Col = worksheet.Cells["F2:F" + NoFound.Count]; //ERROR:: если не найденное будет равно 1 то будет все ломаться из-за ядра excel
-                F_Col.LoadFromCollection(NoFound);
+                // Заполняем остальные строки данными из DataTable
+                for (int i = 0; i < otchet_CSM.Rows.Count; i++)
+                {
+                    DataRow row = otchet_CSM.Rows[i];
+                    for (int j = 0; j < row.ItemArray.Length; j++)
+                    {
+                        worksheet.Cells[i + 2, j + 1].Value = row[j];
+                    }
+                }
 
                 // Сохранение файла
                 try
@@ -2033,11 +2240,10 @@ namespace HM
             using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
             using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
                 new SoundPlayer(gzOut).Play();
-            GO_GK.IsEnabled = true;
-            StopRunnerGK_Button.IsEnabled = false;
+
 
             //• открываем проводник и выделяем наш файл в нем
-            string filePath = Path.Combine(pathHashes, ExcelNameFile.Text + ".xlsx");
+            string filePath = Path.Combine(Put_CSM, TextBox_Name_Otchet_CSM.Text + ".xlsx");
             Process process = new Process();
             process.StartInfo = new ProcessStartInfo()
             {// Передаем команду открытия и выделения файла
@@ -2055,18 +2261,19 @@ namespace HM
         /// <param name="e"></param>
         private void button_Raspologenie_Otchet_CSM_Click(object sender, RoutedEventArgs e)
         {
-            
+
             VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
 
             if (dialog.ShowDialog() == true)
                 Put_CSM = dialog.SelectedPath;
             SelectedFolderHashes.Content = Path.GetFileName(Put_CSM);
+            TextBox_Raspologenie_Otchet_CSM.Text = Put_CSM;
         }
 
         /// <summary>
         /// Метод переключения видимости текстбоксов и лабелок в зависимости от чекбокса CheckBox_Otchet_CSM В меню склады в подменю CSM
         /// </summary>
-        private void CheckBox_Otchet_CSM_Checked(object sender, RoutedEventArgs e)
+        private void CheckBox_Otchet_CSM_Checked_1(object sender, RoutedEventArgs e)
         {
             Label_Name_Otchet_CSM.IsEnabled = true;
             TextBox_Name_Otchet_CSM.IsEnabled = true;
@@ -2090,9 +2297,6 @@ namespace HM
             TextBox_Raspologenie_Otchet_CSM.Text = Put_CSM;
             CheckBox_Otchet_dlya_sebya_CSM.IsEnabled = false;
         }
-    
-        
-
 
         #endregion
 
@@ -2694,6 +2898,8 @@ namespace HM
 
 
 
+
+
         /*    public void ustanovka_upakovano(TextEditor upakovka)
             {
                 //установка упаковано
@@ -2711,7 +2917,6 @@ namespace HM
             }*/
 
         #endregion
-
 
     }
 }
