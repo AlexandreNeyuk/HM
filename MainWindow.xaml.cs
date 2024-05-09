@@ -213,6 +213,10 @@ namespace HM
             //Обработка кнопок в Склады-Импорт
             SearchWarh.Click += (a, e) => { SearchStoreinDB(SearchWH.Text); };
 
+            
+
+
+
             //Кнопки раннера
             AddCanvas_Postman.MouseDown += (a, e) => { Addrequest_inRegistry(); };
             RemoveCanvas_Postman.MouseDown += (a, e) => { DeletePost(); };
@@ -1851,6 +1855,13 @@ namespace HM
         #endregion
 
         #region CSM 
+
+        //Общие переменные
+        /// <summary>
+        /// Путь для отчёта CSM
+        /// </summary>
+        /// <param name="Put_CSM">Путь для отчёта CSM</param>   
+        string Put_CSM = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         //1. делаем апдейт в бидэ "апдейт сделать красиво"
         //2. переподготавливаем список посылок
         //3. создаём отчёт
@@ -1955,10 +1966,129 @@ namespace HM
             }
         }
 
-        void otchet_CSM(TextEditor otchet_CSM)
+        /// <summary>
+        /// Создание отчёта CSM
+        /// </summary>
+        /// <param name="otchet_CSM">Посылки для отчёта CSM</param>
+        void otchet_CSM_(TextEditor otchet_CSM)
         {
+            //•Создаем файлик Excel
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var file = new FileInfo(Put_CSM + @"\" + TextBox_Name_Otchet_CSM.Text + ".xlsx");
+            using (var package = new ExcelPackage(file))
+            {
+                // Добавление нового листа
+                var worksheet = package.Workbook.Worksheets["Выгрузка"];
 
+                if (worksheet != null)
+                {
+                    package.Workbook.Worksheets.Delete(worksheet);
+                }
+                worksheet = package.Workbook.Worksheets.Add("Выгрузка");
+
+
+                //Создаем шаблон
+                worksheet.Cells["A1"].Value = "Прогруженные";
+                worksheet.Cells["C1"].Value = "Не прогруженные";
+                worksheet.Cells["D1"].Value = "Статус";
+                worksheet.Cells["F1"].Value = "Не найденные в Шиптор";
+
+                if (LoadedHash.Count <= 2) LoadedHash.AddRange(new[] { "", "", "", "" });
+                if (NoLoadRP.Count <= 2) NoLoadRP.AddRange(new[] { "", "", "", "" });
+                if (NoLoadStatus.Count <= 2) NoLoadStatus.AddRange(new[] { "", "", "", "" });
+                if (NoFound.Count <= 2) NoFound.AddRange(new[] { "", "", "", "" });
+
+                // Запись значений в колонку "Прогруженных"
+                var A_Col = worksheet.Cells["A2:A" + LoadedHash.Count]; ///ERROR::необходимо сделать проверку по колву элементов, т.к когда они 0 то вылетает программа (А0 - не существует в ядре экселя)!!!!! 
+                A_Col.LoadFromCollection(LoadedHash);
+                // Запись значений в колонку "Не прогруженных"
+                var C_Col = worksheet.Cells["C2:C" + NoLoadRP.Count];//ERROR::если этот count 0 kb 1 или 2 - то что ниже или равно 2 то по ядру excel идет ошибка, т.к нумерацию необходимо корректировать 
+                C_Col.LoadFromCollection(NoLoadRP);
+                // Запись значений в колонку "Статус"
+                var D_Col = worksheet.Cells["D2:D" + NoLoadStatus.Count];
+                D_Col.LoadFromCollection(NoLoadStatus);
+                // Запись значений в колонку "Не найденные в Шиптор"
+                var F_Col = worksheet.Cells["F2:F" + NoFound.Count]; //ERROR:: если не найденное будет равно 1 то будет все ломаться из-за ядра excel
+                F_Col.LoadFromCollection(NoFound);
+
+                // Сохранение файла
+                try
+                {
+                    package.Save();
+                }
+                catch (Exception)
+                {
+
+                    MessageBox.Show("Файл открыт в другом процессе! Файл сохранен не будет, его придется собирать самим! ВАЖНО: это сообщение касается ТОЛЬКО файла!", "Предупреждение");
+
+                }
+
+            }
+
+            //• Звук уведомление о финале файла
+            using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+            using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                new SoundPlayer(gzOut).Play();
+            GO_GK.IsEnabled = true;
+            StopRunnerGK_Button.IsEnabled = false;
+
+            //• открываем проводник и выделяем наш файл в нем
+            string filePath = Path.Combine(pathHashes, ExcelNameFile.Text + ".xlsx");
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo()
+            {// Передаем команду открытия и выделения файла
+                FileName = "explorer.exe",
+                Arguments = $"/select, /order, \"date\", \"{filePath}\""
+            };
+            // Запускаем процесс
+            process.Start();
         }
+
+        /// <summary>
+        /// Кнопка расположения отчётов CSM
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_Raspologenie_Otchet_CSM_Click(object sender, RoutedEventArgs e)
+        {
+            
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+
+            if (dialog.ShowDialog() == true)
+                Put_CSM = dialog.SelectedPath;
+            SelectedFolderHashes.Content = Path.GetFileName(Put_CSM);
+        }
+
+        /// <summary>
+        /// Метод переключения видимости текстбоксов и лабелок в зависимости от чекбокса CheckBox_Otchet_CSM В меню склады в подменю CSM
+        /// </summary>
+        private void CheckBox_Otchet_CSM_Checked(object sender, RoutedEventArgs e)
+        {
+            Label_Name_Otchet_CSM.IsEnabled = true;
+            TextBox_Name_Otchet_CSM.IsEnabled = true;
+            Label_Raspologenie_Otchet_CSM.IsEnabled = true;
+            TextBox_Raspologenie_Otchet_CSM.IsEnabled = true;
+            button_Raspologenie_Otchet_CSM.IsEnabled = true;
+            TextBox_Raspologenie_Otchet_CSM.Text = Put_CSM;
+            CheckBox_Otchet_dlya_sebya_CSM.IsEnabled = true;
+        }
+
+        /// <summary>
+        /// Метод переключения видимости текстбоксов и лабелок в зависимости от чекбокса CheckBox_Otchet_CSM В меню склады в подменю CSM
+        /// </summary>
+        private void CheckBox_Otchet_CSM_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Label_Name_Otchet_CSM.IsEnabled = false;
+            TextBox_Name_Otchet_CSM.IsEnabled = false;
+            Label_Raspologenie_Otchet_CSM.IsEnabled = false;
+            TextBox_Raspologenie_Otchet_CSM.IsEnabled = false;
+            button_Raspologenie_Otchet_CSM.IsEnabled = false;
+            TextBox_Raspologenie_Otchet_CSM.Text = Put_CSM;
+            CheckBox_Otchet_dlya_sebya_CSM.IsEnabled = false;
+        }
+    
+        
+
 
         #endregion
 
@@ -2557,6 +2687,8 @@ namespace HM
                     break;
             }
         }
+
+
 
 
 
