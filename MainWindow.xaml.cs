@@ -1905,7 +1905,10 @@ namespace HM
                 update_shiptor_for_treck_number(TextBox_Nomera_for_CSM); // апдейт для подготовки посылок в шиптор для присвоения трек-номеров
                 csm_createOrder_api(TextBox_Nomera_for_CSM); //прокидываем метод по присвоению трек-номеров
                 perepodgotovka_posilok(TextBox_Nomera_for_CSM);
-
+            }
+            if (CheckBox_Snyat_Stop_CSM.IsChecked == true)
+            {
+                csm_zz_ne_sozdan(TextBox_Nomera_for_CSM);
             }
 
             //если не выьбрано то вывод отчета 
@@ -2002,7 +2005,10 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"""));
 
 
             }
-
+            //• Звук уведомление о финале файла
+            using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+            using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                new SoundPlayer(gzOut).Play();
         }
 
         /// <summary>
@@ -2011,11 +2017,13 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"""));
         /// <param name="spisok_RP">spisok_RP это ID РПшек через запятые</param>
         void perepodgotovka_posilok(TextEditor spisok_RP)
         {
+            //локальная переменная для не удаления запятых
+            string forzapya = spisok_RP.Text;
             //Убираем все пустые строки
             // ListRP_postman.Text.Split(",\n").ToList();
-            string[] lines = spisok_RP.Text.Split(new[] { "\r\n", "\r", "\n", "," }, StringSplitOptions.None);
+            string[] lines = forzapya.Split(new[] { "\r\n", "\r", "\n", "," }, StringSplitOptions.None);
             lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
-            spisok_RP.Text = string.Join(Environment.NewLine, lines);
+            forzapya = string.Join(Environment.NewLine, lines);
             int kol_vo_potokov = 6;
             if (spisok_RP.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
                 kol_vo_potokov = 1;
@@ -2100,11 +2108,12 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"""));
         /// <param name="spisok_RP">spisok_RP это ID РПшек через запятые</param>
         void csm_createOrder_api(TextEditor spisok_RP)
         {
+            string forzapya1 = spisok_RP.Text;
             //Убираем все пустые строки
             // ListRP_postman.Text.Split(",\n").ToList();
-            string[] lines = spisok_RP.Text.Split(new[] { "\r\n", "\r", "\n", "," }, StringSplitOptions.None);
+            string[] lines = forzapya1.Split(new[] { "\r\n", "\r", "\n", "," }, StringSplitOptions.None);
             lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
-            spisok_RP.Text = string.Join(Environment.NewLine, lines);
+            forzapya1 = string.Join(Environment.NewLine, lines);
             int kol_vo_potokov = 6;
             if (spisok_RP.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
                 kol_vo_potokov = 1;
@@ -2170,6 +2179,96 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"""));
         {{
             ""package_id"": {{{{R}}}}
         }}
+    ]
+}}";
+
+            //• Запуск раннеров по колву потоков /Распределитель потоков
+            for (int i = 0; i < kol_vo_potokov; i++)
+            {
+
+                //выбираем ЛисВью в который будем писать, нужный url, body, номер потока, и колво посылок для этого потока и запускаем раннер                     
+
+                RuunerPost_Postman(urlP, bodyP, i, chunks);
+
+            }
+        }
+
+        /// <summary>
+        /// Снимает стоп "Заказ не создан у партнёра"
+        /// </summary>
+        /// <param name="spisok_RP"></param>
+        void csm_zz_ne_sozdan(TextEditor spisok_RP)
+        {
+            string forzapya1 = spisok_RP.Text;
+            //Убираем все пустые строки
+            // ListRP_postman.Text.Split(",\n").ToList();
+            string[] lines = forzapya1.Split(new[] { "\r\n", "\r", "\n", "," }, StringSplitOptions.None);
+            lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+            forzapya1 = string.Join(Environment.NewLine, lines);
+            int kol_vo_potokov = 6;
+            if (spisok_RP.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
+                kol_vo_potokov = 1;
+            List<string> listRP = new List<string>(To_List(spisok_RP)); //лист со всеми rp
+
+            #region RP_Stats
+            /////////////--------------------------------
+            ////////////-----------запись кол-ва в реестр для статы--------------
+            int statsRP = 0;
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM"))
+            {
+
+                foreach (var item in key?.GetValueNames())
+                {
+                    if (item.Contains("RP_post_stats_"))
+                    {
+                        statsRP = (int)key?.GetValue(item);
+
+                    }
+                }
+            }
+
+            using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM"))
+            {
+                if (listRP.Count != 0)
+                {
+                    key?.SetValue("RP_post_stats_", listRP.Count + statsRP);
+
+                }
+            }
+            //////////------------------------------------------
+            #endregion
+
+
+            //•Делим списки RP для нашего числа потоков 
+            int chunkSize_perepodgotovka = listRP.Count / kol_vo_potokov;
+            VsegoThreads_perepodgotovka = kol_vo_potokov;
+            ThreadComplited_perepodgotovka = 0;
+            List<List<string>> chunks = new List<List<string>>();
+            for (int i = 0; i < listRP.Count; i += chunkSize_perepodgotovka)
+            {
+                if ((listRP.Count - (chunkSize_perepodgotovka * (chunks.Count + 1))) < listRP.Count / 10)
+                {
+
+                    //берем все до конца с текущего I 
+                    chunks.Add(listRP.GetRange(i, listRP.Count - i));
+                    break;
+                }
+                else
+                {
+                    chunks.Add(listRP.GetRange(i, Math.Min(chunkSize_perepodgotovka, listRP.Count - i)));
+                }
+
+            }
+
+            //• получаю данне об post-запросе (url и body)
+            string urlP = $@"https://{TextBox_imya_sklada_CSM.Text}.zappstore.pro/api/jsonrpc?key=8f79c9ef35f955feb7c758735bb6bac1767a07a1";
+            string bodyP = $@"{{
+    ""id"": ""JsonRpcClient.js"",
+    ""jsonrpc"": ""2.0"",
+    ""method"": ""package.removeStop"",
+    ""params"": [
+        {{{{R}}}},
+        ""creating_partner_order""
     ]
 }}";
 
@@ -2253,6 +2352,8 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"""));
             // Запускаем процесс
             process.Start();
         }
+
+
 
         /// <summary>
         /// Кнопка расположения отчётов CSM
@@ -2880,43 +2981,56 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"""));
         #endregion
 
         #region izmenenie statusov
-
-
-        public void Select_status_Posilki(TextEditor RP_list_for_change_status, System.Windows.Controls.ComboBox status)
+        /// <summary>
+        /// Кнопка смены статусов по комбобоксам
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Smeni_Status_Click(object sender, RoutedEventArgs e)
         {
-            switch (status.SelectedIndex)
+            switch (ComboBox_Sh_Status.SelectedValue)
             {
-                //статус упаковано
-                case 0:
-                    //  dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = destination_warehouse_id, next_warehouse_id = destination_warehouse_id, current_status = 'packed', sent_at = NULL, returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({upakovka.Text})");
-
+                case "Новая": dataBases.ConnectDB("Шиптор", $@"update public.package set measured_at = null, packed_since = null, prepared_to_send_since = null, in_store_since = null, current_status = 'new' where id in ({RP_list_Status.Text})");
+                    break; 
+                case "Упакована": dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({ RP_list_Status.Text})");
+                    break;
+                case "Отправлена":
+                    dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'sent', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null where id in ({RP_list_Status.Text})");
+                    break;
+                case "Ожидает в пункте выдачи":
+                    dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'waiting_on_delivery_point', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = now(), delivered_at = null where id in ({RP_list_Status.Text})");
+                    break;
+                case "Доставлена":
+                    dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'delivered', delivered_at = now(), lost_at = null, reported_at = null, returned_at = null, returning_to_warehouse_at = null, sent_at = now(), removed_at = null where id in ({RP_list_Status.Text})");
+                    break;
+                case "Ожидает решения по возврату":
+                    dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned_to_warehouse', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now() where id in ({RP_list_Status.Text})");
+                    break;
+                case "На возврат":
+                    dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'to_return', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now() where id in ({RP_list_Status.Text})");
+                    break;
+                case "Возвращена":
+                    MessageBox.Show("Этот статус WIP");//dataBases.ConnectDB("Шиптор", $@"where id in ({RP_list_Status.Text})");
+                    break;
+                case "Удалена":
+                    dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'removed', removed_at = now() where id in ({RP_list_Status.Text})");
+                    break;
+                /*case "":
+                    dataBases.ConnectDB("Шиптор", $@"where id in ({RP_list_Status.Text})");
+                    break;*/
+                default:
+                    break;
+            }    
+            switch (ComboBox_ZS_Status.SelectedValue) 
+            {
+                case "":
+                    dataBases.ConnectDB("Шиптор", $@"where id in ({RP_list_Status.Text})");
                     break;
                 default:
                     break;
             }
+
         }
-
-
-
-
-
-        /*    public void ustanovka_upakovano(TextEditor upakovka)
-            {
-                //установка упаковано
-                dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = destination_warehouse_id, next_warehouse_id = destination_warehouse_id, current_status = 'packed', sent_at = NULL, returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({upakovka.Text})");
-            }
-            public void ustanovka_otpravleno(TextEditor otpravleno)
-            {
-                //установка отправлено
-                dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'sent', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null where id in ({otpravleno.Text})");
-            }
-            public void ustanovka_ojidaet_resheniya(TextEditor ojidaet_resheniya)
-            {
-                //установка ожидает решения по возврату
-                dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned_to_warehouse', returned_at = now(), lost_at = null, removed_at = null, reported_at = null where id in ({ojidaet_resheniya.Text})");
-            }*/
-
-        #endregion
-
+            #endregion
     }
 }

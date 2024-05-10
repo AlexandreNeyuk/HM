@@ -193,7 +193,7 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid" d:IsHidden="True">
+            <Grid x:Name="HomeGrid">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsSelected="True" >
                         <Grid Background="White" Height="451">
@@ -333,9 +333,9 @@
                     <TabItem x:Name="Change_status" Margin="-4,-1,4,1" Width="120" Header="Смена статуса">
                         <Grid Background="#FFF9F9F9">
                             <Label Content="Список посылок " Margin="10,2,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="164"/>
-                            <Button HorizontalAlignment="Right" Margin="0,4,5,0" VerticalAlignment="Top" Content="Х" Width="34" BorderThickness="0,0,0,0" FontFamily="72" HorizontalContentAlignment="Center" Click="Button_Click_1"/>
-                            <Button x:Name="GO_GK1" Content="Запуск" Margin="0,259,47,115" FontFamily="72" BorderThickness="0,0,0,0" Click="GO_GK_Click" HorizontalAlignment="Right" Width="174"/>
-                            <ComboBox HorizontalAlignment="Right" Margin="0,28,0,0" VerticalAlignment="Top" Width="268" Height="25" SelectedIndex="0">
+                            <Button x:Name="Button_Clear_Smena_Statusa" HorizontalAlignment="Right" Margin="0,4,5,0" VerticalAlignment="Top" Content="Х" Width="34" BorderThickness="0,0,0,0" FontFamily="72" HorizontalContentAlignment="Center"/>
+                            <Button x:Name="Button_Smeni_Status" Content="Запуск" Margin="0,259,47,115" FontFamily="72" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="174" Height="20" Click="Button_Smeni_Status_Click"/>
+                            <ComboBox x:Name="ComboBox_Sh_Status" HorizontalAlignment="Right" Margin="0,28,0,0" VerticalAlignment="Top" Width="268" Height="25" SelectedIndex="0">
                                 <ComboBoxItem Content="Не изменять"/>
                                 <ComboBoxItem Content="Новая"/>
                                 <ComboBoxItem Content="Упакована"/>
@@ -349,10 +349,15 @@
                             </ComboBox>
                             <Label Content="Статус в шиптор" HorizontalAlignment="Right" Margin="0,0,122,0" VerticalAlignment="Top" Height="31" Width="146"/>
                             <Label Content="Статус в Zappstore" HorizontalAlignment="Right" Margin="0,53,106,0" VerticalAlignment="Top" Height="31" Width="162"/>
-                            <ComboBox HorizontalAlignment="Right" Margin="0,84,0,0" VerticalAlignment="Top" Width="268" Height="26" SelectedIndex="0">
+                            <ComboBox x:Name="ComboBox_ZS_Status" HorizontalAlignment="Right" Margin="0,84,0,0" VerticalAlignment="Top" Width="268" Height="26" SelectedIndex="0">
                                 <ComboBoxItem Content="Не изменять"/>
+                                <ComboBoxItem Content="На складе"/>
+                                <ComboBoxItem Content="Ожидает решения по возврату"/>
+                                <ComboBoxItem Content="Расформирована"/>
+                                <ComboBoxItem Content="Ожидает сортировки"/>
+                                <ComboBoxItem Content="Возвращена"/>
                             </ComboBox>
-                            <ComboBox HorizontalAlignment="Right" VerticalAlignment="Top" Width="268" Margin="0,140,0,0" Height="26" SelectedIndex="0">
+                            <ComboBox x:Name="ComboBox_PVZSH_Status" HorizontalAlignment="Right" VerticalAlignment="Top" Width="268" Margin="0,140,0,0" Height="26" SelectedIndex="0">
                                 <ComboBoxItem Content="Не изменять"/>
                             </ComboBox>
                             <Label Content="Статус в PVZ шиптор" HorizontalAlignment="Right" Margin="0,110,86,0" VerticalAlignment="Top" Height="30" Width="182"/>
@@ -366,7 +371,7 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="StoreGrid" Background="White">
+            <Grid x:Name="StoreGrid" Background="White" d:IsHidden="True">
                 <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2" BorderBrush="White" Background="White">
                     <TabItem x:Name="RP_List1" Header="Импорт" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="451">
@@ -404,7 +409,7 @@
                                 SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="10,31,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="594"/>
                             <Label Content="Сюда список посылок для присвоения трек номеров (без RP и с запятыми)" Margin="10,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="425"/>
                             <Canvas Margin="0,0,0,23" HorizontalAlignment="Right" Width="224" Background="White">
-                                <Button x:Name="StartButton_CMS" Content="Сделать" Height="20" BorderThickness="0,0,0,0" Width="104" HorizontalAlignment="Left" Canvas.Left="60" Canvas.Top="253" VerticalAlignment="Top" Click="StartButton_CMS_Click"/>
+                                <Button x:Name="StartButton_CMS" Content="Сделать" Height="20" BorderThickness="0,0,0,0" Width="104" HorizontalAlignment="Left" Canvas.Left="60" Canvas.Top="283" VerticalAlignment="Top" Click="StartButton_CMS_Click"/>
                                 <CheckBox x:Name="CheckBox_Otchet_CSM" Content="Отчёт" Width="74" HorizontalAlignment="Left" Canvas.Left="10" Canvas.Top="47" VerticalAlignment="Center" Checked="CheckBox_Otchet_CSM_Checked_1" Unchecked="CheckBox_Otchet_CSM_Unchecked"/>
                                 <Button x:Name="button_Raspologenie_Otchet_CSM" Content="Расположение" Width="119" HorizontalAlignment="Left" Canvas.Left="52" Canvas.Top="178" VerticalAlignment="Top" Height="20" BorderThickness="0,0,0,0" Click="button_Raspologenie_Otchet_CSM_Click" IsEnabled="False"/>
                                 <TextBox x:Name="TextBox_Name_Otchet_CSM" Canvas.Left="7" TextWrapping="Wrap" Canvas.Top="93" Width="212" HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" IsEnabled="False"/>
@@ -414,6 +419,8 @@
                                 <Label Canvas.Left="65" Content="Параметры" Width="99" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                                 <CheckBox x:Name="CheckBox_Otchet_dlya_sebya_CSM" Content="Отчёт для себя" Width="103" Canvas.Left="111" Canvas.Top="47" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
                                 <CheckBox x:Name="CheckBox_Prisv_trackCSM" Content="Присвоить трек-номер" Width="164" Canvas.Left="32" Canvas.Top="220" HorizontalAlignment="Center" VerticalAlignment="Top" Height="18" ToolTip="(!Ставь галочку, если знаешь что делать(!)"/>
+                                <CheckBox x:Name="CheckBox_Snyat_Stop_CSM" Content="Снять стоп на:" Width="106" Canvas.Left="8" Canvas.Top="248" Height="18" ToolTip="(!Ставь галочку, если знаешь что делать(!)" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TextBox_imya_sklada_CSM" Canvas.Left="111" TextWrapping="Wrap" Canvas.Top="246" Width="92" HorizontalAlignment="Center" VerticalAlignment="Top" Height="20"/>
                             </Canvas>
                         </Grid>
                     </TabItem>
