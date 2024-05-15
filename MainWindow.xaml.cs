@@ -1867,7 +1867,7 @@ namespace HM
         /// </summary>
         /// <param name="Put_CSM">Путь для отчёта CSM</param>   
         string Put_CSM = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        string Name_Otchet_CSM = "Отчет CSM";
+        string Name_Otchet_CSM = "Выгрузка";
 
         //1. делаем апдейт в бидэ "апдейт сделать красиво"
         //2. переподготавливаем список посылок
@@ -1957,7 +1957,7 @@ and p.previous_id is null
 ) as table_name
 where 1 = 1
 group by ""Родительское"", ""Дочернее"", ""ШК"", ""Статус"", ""Трек-номер"", ""Ошибка"", ""Партнёр""
-"));
+order by ""Ошибка"" desc"));
 
                 }
                 else
@@ -2000,15 +2000,16 @@ and p.id in ({TextBox_Nomera_for_CSM.Text})--Дочерние посылки RP
 and p.previous_id is null
 ) as table_name
 where 1 = 1
-group by ""ШК"", ""Трек-номер"", ""Ошибка"""));
+group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошибка"" desc"));
                 }
 
 
             }
-            //• Звук уведомление о финале файла
+            MessageBox.Show("Готово!");
+            /*//• Звук уведомление о финале файла
             using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
             using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                new SoundPlayer(gzOut).Play();
+                new SoundPlayer(gzOut).Play();*/
         }
 
         /// <summary>
