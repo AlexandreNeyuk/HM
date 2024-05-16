@@ -3011,7 +3011,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                     dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'to_return', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now() where id in ({RP_list_Status.Text})");
                     break;
                 case "Возвращена":
-                    MessageBox.Show("Этот статус WIP");//dataBases.ConnectDB("Шиптор", $@"where id in ({RP_list_Status.Text})");
+                    dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), reported_at = now() where id in ({RP_list_Status.Text})");
                     break;
                 case "Удалена":
                     dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'removed', removed_at = now() where id in ({RP_list_Status.Text})");
@@ -3024,13 +3024,28 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             }    
             switch (ComboBox_ZS_Status.SelectedValue) 
             {
-                case "":
-                    dataBases.ConnectDB("Шиптор", $@"where id in ({RP_list_Status.Text})");
+                case "На складе":
+                    dataBases.ConnectDB("Шиптор", $@"update package a set status = 'in_store' where package_fid in (RP_list_Status);");
                     break;
+                case "Ожидает решения по возврату":
+                    dataBases.ConnectDB("Шиптор", $@"update package a set status = 'wait_return_to_sender' where package_fid in RP_list_Status);");
+                    break;
+                case "Расформирована":
+                    dataBases.ConnectDB("Шиптор", $@"update package a set status = 'disbanded' where package_fid in (RP_list_Status);");
+                    break;
+                case "Ожидает сортировки":
+                    dataBases.ConnectDB("Шиптор", $@"update package a set status = 'wait_sorting' where package_fid in (RP_list_Status);");
+                    break;
+                case "Возвращена":
+                    dataBases.ConnectDB("Шиптор", $@"update package a set status = 'returned' where package_fid in (RP_list_Status);");
+                    break;
+
                 default:
                     break;
             }
 
+
+            MessageBox.Show("Готово!");
         }
             #endregion
     }
