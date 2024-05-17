@@ -193,7 +193,7 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid">
+            <Grid x:Name="HomeGrid" d:IsHidden="True">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsSelected="True" >
                         <Grid Background="White" Height="451">
@@ -371,8 +371,8 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="StoreGrid" Background="White" d:IsHidden="True">
-                <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2" BorderBrush="White" Background="White">
+            <Grid x:Name="StoreGrid" Background="White">
+                <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2" BorderBrush="White" Background="White" SelectionChanged="CSM_SelectionChanged">
                     <TabItem x:Name="RP_List1" Header="Импорт" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="451">
                             <Grid.RowDefinitions>
@@ -498,6 +498,20 @@
                 <TabControl x:Name="TabPostman_Responses" Margin="196,29,161,23" Padding="0,0,0,0" BorderThickness="0,0,0,0" SelectionChanged="TabPostman_SelectionChanged" Visibility="Hidden"/>
             </Grid>
 
+        </Grid>
+        <Border x:Name="Teni_CSM" BorderBrush="Black" BorderThickness="1" Background="#7F000000" Visibility="Collapsed">
+            <Border.Effect>
+                <DropShadowEffect Direction="300" BlurRadius="10" RenderingBias="Performance" ShadowDepth="2"/>
+            </Border.Effect>
+        </Border>
+        <Grid x:Name="CSM_show_okno_teney" Margin="238,144,238,169" Background="#FFF7F7F7" Visibility="Collapsed">
+            <Button x:Name="Knopka_ubrat_teni" Content="0K!" BorderThickness="0,0,0,0" Click="Knopka_ubrat_teni_Click" Margin="86,124,86,0" Height="56" VerticalAlignment="Top"/>
+            <Image Source="/icons8-error-100.png" Stretch="Fill" Margin="10,46,0,0" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50">
+                <Image.OpacityMask>
+                    <ImageBrush ImageSource="/icons8-error-100.png"/>
+                </Image.OpacityMask>
+            </Image>
+            <Label Content="Используй только если знаешь что делать!" Margin="65,58,10,106" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         </Grid>
 
         <!--TabControl -->

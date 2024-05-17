@@ -1869,6 +1869,41 @@ namespace HM
         string Put_CSM = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         string Name_Otchet_CSM = "Выгрузка";
 
+        /// <summary>
+        /// керпка вывода предупреждения при входе во вкладку CSM
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CSM_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            System.Windows.Controls.TabControl tabControl = sender as System.Windows.Controls.TabControl;
+            System.Windows.Controls.TabItem selectedTab = tabControl.SelectedItem as System.Windows.Controls.TabItem;
+
+            if (selectedTab != null)
+            {
+                switch (selectedTab.Name)
+                {
+                    case "CSM":
+                        // Код для обработки выбора первой вкладки
+                        Teni_CSM.Visibility = Visibility.Visible;
+                        CSM_show_okno_teney.Visibility = Visibility.Visible;
+                        break;
+                }
+            }
+
+            
+        }
+        /// <summary>
+        /// Кнопка скрытия предупреждения
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Knopka_ubrat_teni_Click(object sender, RoutedEventArgs e)
+        {
+            CSM_show_okno_teney.Visibility = Visibility.Collapsed;
+            Teni_CSM.Visibility = Visibility.Collapsed;
+        }
+
         //1. делаем апдейт в бидэ "апдейт сделать красиво"
         //2. переподготавливаем список посылок
         //3. создаём отчёт
@@ -2436,7 +2471,6 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         // Код для обработки выбора второй вкладки
                         EditCanvas_Postman.Visibility = Visibility.Visible; EditCanvas_Postman.IsEnabled = true;
                         break;
-
                 }
             }
 
@@ -3047,6 +3081,8 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
             MessageBox.Show("Готово!");
         }
-            #endregion
+        #endregion
+
+        
     }
 }
