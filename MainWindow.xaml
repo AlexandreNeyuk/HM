@@ -388,7 +388,7 @@
                                 SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="438,26,0,29" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="256"/>
                             <TextBox x:Name="SearchWH" Margin="10,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="20" KeyDown="SearchWH_KeyDown" HorizontalAlignment="Left" Width="225"/>
                             <Label Content="slug | name | address" HorizontalAlignment="Left" Margin="58,4,0,0" VerticalAlignment="Top" Width="129"/>
-                            <Label Content="номера без RP через запятую" HorizontalAlignment="Left" Margin="481,0,0,0" VerticalAlignment="Top" Width="208"/>
+                            <Label Content="номера без RP через запятую" Margin="462,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="208"/>
                             <Canvas Margin="0,0,0,29" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139">
                                 <Button x:Name="Import_button" Content="Импорт" Width="112" HorizontalAlignment="Left" Canvas.Left="16" Canvas.Top="142" VerticalAlignment="Top" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20" Click="Import_button_Click"/>
                                 <Label Content="Параметры" Canvas.Left="33" FontWeight="Bold"/>

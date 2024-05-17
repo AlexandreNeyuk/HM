@@ -1813,11 +1813,12 @@ namespace HM
         /// <param name="txBx">TextBox - ID посылок для импорта, через запятую</param>
         public void UpdatesShiptor_InportStore(TextEditor txBx)
         {
-            if (selected_id_warh != null)
+            if (selected_id_warh != 0)
             {
                 /// если выбран скалд то пишу в его шиптор посылкам
                 dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = {selected_id_warh},next_warehouse_id = {selected_id_warh} where id in ({txBx.Text})");
                 dataBases.ConnectDB("Шиптор", $@"update package set ems_execution_mode = false where id in ({txBx.Text}) and ems_execution_mode = true");
+                selected_id_warh = 0;
 
             }
             else
@@ -1842,9 +1843,13 @@ namespace HM
                 UpdatesShiptor_InportStore(TextBox1_importText);
                 perepodgotovka_posilok(TextBox1_importText);
                 //• Звук уведомление о финале 
-                using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
-                using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                    new SoundPlayer(gzOut).Play();
+                if (Selected_NameWarh.Content != null)
+                {
+                    using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                    using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                        new SoundPlayer(gzOut).Play();
+                    Selected_NameWarh.Content = null;
+                }
             }
             else
             {
@@ -1891,7 +1896,7 @@ namespace HM
                 }
             }
 
-            
+
         }
         /// <summary>
         /// Кнопка скрытия предупреждения
@@ -3025,9 +3030,11 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         {
             switch (ComboBox_Sh_Status.SelectedValue)
             {
-                case "Новая": dataBases.ConnectDB("Шиптор", $@"update public.package set measured_at = null, packed_since = null, prepared_to_send_since = null, in_store_since = null, current_status = 'new' where id in ({RP_list_Status.Text})");
-                    break; 
-                case "Упакована": dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({ RP_list_Status.Text})");
+                case "Новая":
+                    dataBases.ConnectDB("Шиптор", $@"update public.package set measured_at = null, packed_since = null, prepared_to_send_since = null, in_store_since = null, current_status = 'new' where id in ({RP_list_Status.Text})");
+                    break;
+                case "Упакована":
+                    dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({RP_list_Status.Text})");
                     break;
                 case "Отправлена":
                     dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'sent', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null where id in ({RP_list_Status.Text})");
@@ -3055,8 +3062,8 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                     break;*/
                 default:
                     break;
-            }    
-            switch (ComboBox_ZS_Status.SelectedValue) 
+            }
+            switch (ComboBox_ZS_Status.SelectedValue)
             {
                 case "На складе":
                     dataBases.ConnectDB("Шиптор", $@"update package a set status = 'in_store' where package_fid in (RP_list_Status);");
@@ -3083,6 +3090,6 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         }
         #endregion
 
-        
+
     }
 }
