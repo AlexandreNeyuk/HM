@@ -358,6 +358,15 @@ namespace HM
                 {
                     item.Visibility = Visibility.Visible;
                     item.IsEnabled = true;
+                    //дополнение к переключению клавиши Home: открытие первой вкладки автоматом
+                    if (item.Name == "HomeGrid")
+                    {
+                        if (HomeGrid.IsEnabled && HomeGrid.Visibility == Visibility.Visible)
+                        {
+                            TB.SelectedIndex = 0;
+                            ContextRP.IsChecked = true;
+                        }
+                    }
                 }
                 else { item.Visibility = Visibility.Hidden; item.IsEnabled = false; }
 
@@ -367,6 +376,7 @@ namespace HM
 
         }
 
+
         #endregion
 
         #region Боковая панель
@@ -375,6 +385,10 @@ namespace HM
         ///Кнопка боковой панели 
         /// </summary>
         private async void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) { SwitchPanel(); }
+
+        /// <summary>
+        /// Анимация боковой панели
+        /// </summary>
         async public void SwitchPanel()
         {
             const int marginLeftMin = 0;
@@ -1866,6 +1880,18 @@ namespace HM
 
         }
 
+        /// <summary>
+        /// Кнопка Очистки полей  Импорта
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonClear_ImportStrore_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox1_importText.Text = null;
+            Selected_NameWarh.Content = null;
+            SearchWH.Text = null;
+            WarhausesTable.ItemsSource = null;
+        }
 
         #endregion
 
@@ -2714,7 +2740,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             TabPostman_Responses.Items.Clear();
             //если выбран метод и если поля метода не пустые!!
             string ssl = List_JSONS.SelectedItem?.ToString();
-            if (ssl != null && url_post_text.Text != null && bodyTabItem != null && ListRP_postman.Text != null)
+            if (ssl != null && url_post_text.Text != null && Body_post_text.Text != null && ListRP_postman.Text != null)
             {
 
                 //•Распределяем по потокам на отдельные листы
@@ -2731,11 +2757,10 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                 // ListRP_postman.Text.Split(",\n").ToList();
                 string[] lines = ListRP_postman.Text.Split(new[] { "\r\n", "\r", "\n", "," }, StringSplitOptions.None);
                 lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
-                ListRP_postman.Text = string.Join(Environment.NewLine, lines);
 
                 if (ListRP_postman.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
                     SelectorThreads_postman.SelectedIndex = 0;
-                List<string> listRP = new List<string>(To_List(ListRP_postman)); //лист со всеми rp
+                List<string> listRP = new List<string>(lines); //лист со всеми rp
 
                 #region RP_Stats
                 /////////////--------------------------------
@@ -3095,6 +3120,9 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
             MessageBox.Show("Готово!");
         }
+
+
+
         #endregion
 
 

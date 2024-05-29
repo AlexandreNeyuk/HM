@@ -391,9 +391,10 @@
                             <Label Content="номера без RP через запятую" Margin="462,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="208"/>
                             <Canvas Margin="0,0,0,29" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139">
                                 <Button x:Name="Import_button" Content="Импорт" Width="112" HorizontalAlignment="Left" Canvas.Left="16" Canvas.Top="142" VerticalAlignment="Top" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20" Click="Import_button_Click"/>
-                                <Label Content="Параметры" Canvas.Left="33" FontWeight="Bold"/>
-                                <Label x:Name="Selected_NameWarh" Canvas.Left="10" Canvas.Top="64" HorizontalAlignment="Left" VerticalAlignment="Top" Width="122" FontWeight="Bold" Height="26" HorizontalContentAlignment="Center"/>
-                                <Label Canvas.Left="10" Canvas.Top="33" Width="122" FontWeight="Bold" Height="26" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Склад" HorizontalContentAlignment="Center"/>
+                                <Label Content="Параметры" Canvas.Left="33" FontWeight="Bold" HorizontalAlignment="Center" Canvas.Top="30" VerticalAlignment="Top"/>
+                                <Label x:Name="Selected_NameWarh" Canvas.Left="10" Canvas.Top="94" HorizontalAlignment="Center" VerticalAlignment="Top" Width="122" FontWeight="Bold" Height="26" HorizontalContentAlignment="Center"/>
+                                <Label Canvas.Left="10" Canvas.Top="63" Width="122" Height="26" HorizontalAlignment="Center" VerticalAlignment="Top" Content="Выбран склад" HorizontalContentAlignment="Center"/>
+                                <Button x:Name="ButtonClear_ImportStrore" Width="31" Canvas.Left="108" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Content="X" Click="ButtonClear_ImportStrore_Click" ToolTip="Очистить поля"/>
                             </Canvas>
                             <Button x:Name="SearchWarh" HorizontalAlignment="Left" Margin="240,30,0,0" VerticalAlignment="Top" Width="75" BorderThickness="0,0,0,0" Height="20" Content="Поиск"/>
                             <DataGrid x:Name="WarhausesTable" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,55,0,29" HorizontalAlignment="Left" Width="433" IsReadOnly="True" SelectionChanged="WarhausesTable_SelectionChanged" Grid.ColumnSpan="1"/>
@@ -426,7 +427,7 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="RunnerGrid" Background="#FF6B6B6B" d:IsHidden="True">
+            <Grid x:Name="RunnerGrid" Background="#FF6B6B6B">
                 <ListBox x:Name="List_JSONS" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Left" Width="196" Margin="0,52,0,23" Background="White" Foreground="Black" FontWeight="Bold" FontSize="14" BorderThickness="0,0,0,0"/>
                 <Canvas HorizontalAlignment="Right" Width="161" Background="#FFF0F0F0" Margin="0,0,0,23">
                     <Button x:Name="RunnerStop" Content="Стоп!" Width="60" HorizontalAlignment="Center" Height="25" Canvas.Left="91" Canvas.Top="36" BorderThickness="0,0,0,0" VerticalAlignment="Center" IsEnabled="False" Click="RunnerStop_Click"/>
