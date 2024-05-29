@@ -2279,7 +2279,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             string[] lines = forzapya1.Split(new[] { "\r\n", "\r", "\n", "," }, StringSplitOptions.None);
             lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
             forzapya1 = string.Join(Environment.NewLine, lines);
-            int kol_vo_potokov = 6;
+            int kol_vo_potokov = 1;
             if (spisok_RP.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
                 kol_vo_potokov = 1;
             List<string> listRP = new List<string>(lines); //лист со всеми rp
