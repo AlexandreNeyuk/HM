@@ -2256,7 +2256,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             int kol_vo_potokov = 6;
             if (spisok_RP.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
                 kol_vo_potokov = 1;
-            List<string> listRP = new List<string>(To_List(spisok_RP)); //лист со всеми rp
+            List<string> listRP = new List<string>(lines); //лист со всеми rp
 
             #region RP_Stats
             /////////////--------------------------------
