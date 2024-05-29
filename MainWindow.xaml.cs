@@ -56,6 +56,9 @@ namespace HM
 {
     public partial class MainWindow : Window
     {
+
+
+
         #region Global Переменные
 
         List<TextBox> KeyTextBoxies; // ///все поля для которых нужно свойство введения HotKeys, через  ",
@@ -1837,6 +1840,7 @@ namespace HM
         /// <param name="e"></param>
         private void Import_button_Click(object sender, RoutedEventArgs e)
         {
+
             if (TextBox1_importText.Text != "")
             {
                 //Обновляю в шипторе корректные склады
@@ -1849,6 +1853,7 @@ namespace HM
                     using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
                         new SoundPlayer(gzOut).Play();
                     Selected_NameWarh.Content = null;
+                    WarhausesTable.SelectedItem = null;
                 }
             }
             else
@@ -2052,13 +2057,15 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                 new SoundPlayer(gzOut).Play();*/
         }
 
+
+
         /// <summary>
         ///    Запуск переподготовки посылок
         /// </summary>
         /// <param name="spisok_RP">spisok_RP это ID РПшек через запятые</param>
         void perepodgotovka_posilok(TextEditor spisok_RP)
         {
-            //локальная переменная для не удаления запятых
+            //локальная переменная для удаления запятых
             string forzapya = spisok_RP.Text;
             //Убираем все пустые строки
             // ListRP_postman.Text.Split(",\n").ToList();
@@ -2068,7 +2075,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             int kol_vo_potokov = 6;
             if (spisok_RP.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
                 kol_vo_potokov = 1;
-            List<string> listRP = new List<string>(To_List(spisok_RP)); //лист со всеми rp
+            List<string> listRP = new List<string>(lines); //лист со всеми rp
 
             #region RP_Stats
             /////////////--------------------------------
