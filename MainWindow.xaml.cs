@@ -3135,6 +3135,11 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         /// <summary>
         /// Подключение к Кафка и чтение данных из топика 
         /// </summary>
+        /// <param name="host">Хост сервера кафки</param>
+        /// <param name="port"> Порт сервера кафки</param>
+        /// <param name="GroupId">Группа доступа пользователей (возможно брокер)</param>
+        /// <param name="topic">Имя нужного топика для чтения</param>
+        /// <param name="TE">Редактор вывода ответа (в будущем можно заменить на что-либо другое)</param>
         public void _kafka_ConnectAndRead(string host, string port, string GroupId, string topic, TextEditor TE)
         {
             var config = new ConsumerConfig
