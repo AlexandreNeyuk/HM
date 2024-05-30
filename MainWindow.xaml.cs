@@ -122,6 +122,10 @@ namespace HM
             }
             #endregion
 
+            #region 
+
+            #endregion
+
             #region Дешифровка данных пользователя полученных из реестра с помошью ключа безопасности 
             if ((Encrypt_UserName != null) && (Encrypt_Password != null))
             {//если есть данные о пользователе из реестра, то рабтаем дольше с ключом, если ключа нет то выведет сообщение 
@@ -184,6 +188,7 @@ namespace HM
 
             //Привязываю ссылку на вопрос по токенам постомата какие вставлять в поле
             QstLB_POST.MouseDown += (a, e) => { Process.Start(new ProcessStartInfo("https://wiki.sblogistica.ru/display/LINE2SUPP/NEW+Back-end+ENGY+-+supportapi") { UseShellExecute = true }); };
+
 
 
             #endregion
@@ -3161,5 +3166,10 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         #endregion
 
 
+        #region Pallets && Bags
+
+
+
+        #endregion
     }
 }
