@@ -426,7 +426,7 @@
                         </Grid>
                     </TabItem>
                     <TabItem x:Name="Pallet_and_meshok" Header="Паллеты/Мешки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
-                        <Grid Background="White" Height="451">
+                        <Grid Background="White" Height="445" Width="835">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
@@ -437,11 +437,11 @@
                                 x:Name="text_editor_palmet"
                                 FontFamily="Consolas"
                                 FontSize="14"
-                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="320,26,0,29" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="374"/>
-                            <TextBox x:Name="Search_palmet" Margin="10,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="20" KeyDown="SearchWH_KeyDown" HorizontalAlignment="Left" Width="305"/>
-                            <Label Content="Имя склада" HorizontalAlignment="Left" Margin="85,4,0,0" VerticalAlignment="Top" Width="75"/>
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="320,26,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="374"/>
+                            <TextBox x:Name="Search_palmet" Margin="2,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="20" KeyDown="SearchWH_KeyDown" HorizontalAlignment="Left" Width="305"/>
+                            <Label Content="Имя склада" HorizontalAlignment="Left" Margin="2,1,0,0" VerticalAlignment="Top" Width="75"/>
                             <Label Content="номера без RP через запятую" Margin="416,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="190"/>
-                            <Canvas Margin="0,0,0,29" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139">
+                            <Canvas Margin="0,0,0,23" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139">
                                 <Label Content="Параметры" Canvas.Left="33" FontWeight="Bold" HorizontalAlignment="Center" Canvas.Top="30" VerticalAlignment="Top"/>
                                 <Label x:Name="Selected_NameWarh_palmet" Canvas.Left="10" Canvas.Top="94" HorizontalAlignment="Center" VerticalAlignment="Top" Width="122" FontWeight="Bold" Height="26" HorizontalContentAlignment="Center"/>
                                 <Label Canvas.Left="10" Canvas.Top="63" Width="122" Height="26" HorizontalAlignment="Center" VerticalAlignment="Top" Content="Выбран склад" HorizontalContentAlignment="Center"/>
@@ -454,7 +454,7 @@
                                 <Label Content="паллеты/мешка" Canvas.Left="22" Canvas.Top="153" HorizontalAlignment="Left" VerticalAlignment="Center" Width="102"/>
                                 <Button x:Name="Button_palmet" Content="Сделать!" Canvas.Left="34" Canvas.Top="221" HorizontalAlignment="Left" VerticalAlignment="Top" Width="78" Height="20"/>
                             </Canvas>
-                            <ListBox x:Name="list_palmet" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,45,518,29" BorderThickness="0,0,0,0"/>
+                            <ListBox x:Name="list_palmet" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,45,528,23" BorderThickness="0,0,0,0"/>
 
                         </Grid>
                     </TabItem>
