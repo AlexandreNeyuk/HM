@@ -1,4 +1,8 @@
-﻿using ICSharpCode.AvalonEdit;
+﻿using Confluent.Kafka;
+using Confluent.Kafka;
+using Confluent.Kafka;
+using Confluent.Kafka;
+using ICSharpCode.AvalonEdit;
 using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using Microsoft.VisualBasic;
@@ -3122,6 +3126,32 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         }
 
 
+
+        #endregion
+
+        #region Kafka_and_Import_Sap_ZApp
+        // запрос к кафке по номеру sap_id, поиск сообщений из топика 
+
+        /// <summary>
+        /// Подключение к Кафка и чтение данных из топика 
+        /// </summary>
+        public void _kafka_ConnectAndRead(string host, string port, string GroupId, string topic, TextEditor TE)
+        {
+            var config = new ConsumerConfig
+            {
+                BootstrapServers = $"{host}:{port}",
+                GroupId = GroupId,
+                AutoOffsetReset = AutoOffsetReset.Earliest
+            };
+
+            using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
+            consumer.Subscribe(topic);
+            while (true)
+            {
+                var consumeResult = consumer.Consume();
+                TE.Text += $"\n\rReceived message from topic {consumeResult.Topic}: {consumeResult.Message.Value}";
+            }
+        }
 
         #endregion
 

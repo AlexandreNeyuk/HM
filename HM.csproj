@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
+    <PackageReference Include="Confluent.Kafka" Version="2.4.0" />
     <PackageReference Include="EPPlus" Version="7.1.2" />
     <PackageReference Include="Npgsql" Version="8.0.2" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
