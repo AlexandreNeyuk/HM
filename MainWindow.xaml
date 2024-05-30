@@ -372,7 +372,7 @@
                 </TabControl>
             </Grid>
             <Grid x:Name="StoreGrid" Background="White">
-                <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2" BorderBrush="White" Background="White" SelectionChanged="CSM_SelectionChanged">
+                <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2" BorderBrush="White" Background="White" SelectionChanged="Store_SelectionChanged">
                     <TabItem x:Name="RP_List1" Header="Импорт" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="451">
                             <Grid.RowDefinitions>
@@ -425,45 +425,54 @@
                             </Canvas>
                         </Grid>
                     </TabItem>
-                    <TabItem x:Name="Pallet_and_meshok" Header="Паллеты/Мешки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-3,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
-                        <Grid Background="White" Height="445" Width="835">
+                    <TabItem x:Name="Pallet_and_meshok" Header="Паллеты/Мешки" BorderThickness="0,0,55,0" Height="30" Margin="-3,-2,0,0" VerticalAlignment="Top" IsSelected="True" HorizontalAlignment="Left" Width="103" >
+                        <Grid Background="White" Height="445" Margin="0,0,-2,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="543*"/>
-                                <ColumnDefinition Width="292*"/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <avalonEdit:TextEditor
                                 x:Name="text_editor_palmet"
                                 FontFamily="Consolas"
                                 FontSize="14"
-                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="307,26,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="387" Grid.ColumnSpan="2"/>
-                            <TextBox x:Name="Search_palmet" Margin="0,4,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="20" KeyDown="SearchWH_KeyDown" HorizontalAlignment="Left" Width="307"/>
-                            <Label Content="номера без RP через запятую" Margin="406,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="190" Grid.ColumnSpan="2" Height="28"/>
-                            <Canvas Margin="0,0,0,23" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139" Grid.Column="1">
-                                <Label Content="Параметры" Canvas.Left="31" FontWeight="Bold" HorizontalAlignment="Left" Canvas.Top="15" VerticalAlignment="Top"/>
-                                <Label x:Name="Selected_NameWarh_palmet" Canvas.Left="10" Canvas.Top="67" HorizontalAlignment="Center" VerticalAlignment="Top" Width="122" FontWeight="Bold" Height="26" HorizontalContentAlignment="Center"/>
-                                <Label Canvas.Left="9" Canvas.Top="41" Width="122" Height="26" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Выбран склад" HorizontalContentAlignment="Center"/>
-                                <Button x:Name="ButtonClear_ImportStrore1" Width="31" Canvas.Left="108" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Content="X" Click="ButtonClear_ImportStrore_Click" ToolTip="Очистить поля"/>
-                                <ComboBox x:Name="Combobox_palmet" Canvas.Left="11" Canvas.Top="98" Width="120" SelectedIndex="0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="307,26,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="387"/>
+                            <TextBox x:Name="Search_palmet" Margin="6,4,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="20" KeyDown="SearchWH_KeyDown" HorizontalAlignment="Left" Width="301" TextChanged="Search_palmet_TextChanged"/>
+                            <Label Content="номера без RP через запятую" Margin="406,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="190" Height="28"/>
+                            <ListBox x:Name="list_palmet" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="6,29,0,23" BorderThickness="0,0,0,0" HorizontalAlignment="Left" Width="301"/>
+                            <Canvas Margin="0,0,2,23" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139">
+                                <Label Content="Параметры" Canvas.Left="31" FontWeight="Bold" Canvas.Top="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Label x:Name="Selected_NameWarh_palmet" Canvas.Left="10" Canvas.Top="67" Width="122" FontWeight="Bold" Height="26" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1,1,1,1" BorderBrush="#FFC3C3C3"/>
+                                <Label Canvas.Left="9" Canvas.Top="41" Width="122" Height="26" Content="Выбран склад" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button x:Name="ButtonClear_ImportStrore1" Width="31" Canvas.Left="108" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20" Content="X" Click="ButtonClear_ImportStrore_Click" ToolTip="Очистить поля" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="Combobox_palmet" Canvas.Left="11" Canvas.Top="98" Width="120" SelectedIndex="0" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <ComboBoxItem Content="Паллета"/>
                                     <ComboBoxItem Content="Мешок"/>
                                 </ComboBox>
-                                <TextBox x:Name="textbox_palmet" Canvas.Left="11" TextWrapping="Wrap" Canvas.Top="153" Width="120" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top"/>
-                                <Label Content="паллеты/мешка" Canvas.Left="21" Canvas.Top="127" HorizontalAlignment="Left" VerticalAlignment="Top" Width="102"/>
-                                <Button x:Name="Button_palmet" Content="Сделать!" Canvas.Left="32" Canvas.Top="338" HorizontalAlignment="Left" VerticalAlignment="Top" Width="78" Height="20" BorderThickness="0,0,0,0"/>
-                                <ComboBox x:Name="Combobox_palmet" Canvas.Left="11" Canvas.Top="211" Width="120" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                                    <ComboBoxItem Content="Паллета"/>
-                                    <ComboBoxItem Content="Мешок"/>
+                                <TextBox x:Name="textbox_palmet" Canvas.Left="11" TextWrapping="Wrap" Canvas.Top="151" Width="120" Height="20" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                <Label Content="Паллета/Мешок" Canvas.Left="21" Canvas.Top="125" Width="102" HorizontalAlignment="Center" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+                                <Button x:Name="Button_palmet" Content="Сделать!" Canvas.Left="31" Canvas.Top="303" Width="78" Height="20" BorderThickness="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <ComboBox x:Name="Combobox_Actions_palmet" Canvas.Left="12" Canvas.Top="258" Width="120" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <ComboBoxItem Content="Ничего"/>
+                                    <ComboBoxItem Content="Собирается"/>
+                                    <ComboBoxItem Content="Собран"/>
+                                    <ComboBoxItem Content="Упакован"/>
+                                    <ComboBoxItem Content="Отправлен"/>
+                                    <ComboBoxItem Content="Доставлен"/>
+                                    <ComboBoxItem Content="Расформирован"/>
                                 </ComboBox>
-                                <Label Content="Действия над П/М" Canvas.Left="11" Canvas.Top="185" Width="118" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <Label Content="Действия над П/М" Canvas.Left="12" Canvas.Top="232" Width="118" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+                                <ComboBox x:Name="Combobox_Actions_palmet_RP" Canvas.Left="12" Canvas.Top="202" Width="120" SelectedIndex="0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                    <ComboBoxItem Content="Добавить"/>
+                                    <ComboBoxItem Content="Удалить"/>
+                                </ComboBox>
+                                <Label Content="Действия над RP" Canvas.Left="12" Canvas.Top="176" Width="118" HorizontalAlignment="Center" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
                             </Canvas>
-                            <ListBox x:Name="list_palmet" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,29,236,23" BorderThickness="0,0,0,0"/>
 
                         </Grid>
                     </TabItem>
-                    <TabItem x:Name="Kafka_Tool" Header="Kafka" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
+                    <TabItem x:Name="Kafka_Tool" Header="Kafka" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-3,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="451">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -472,22 +481,14 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <avalonEdit:TextEditor
-                                x:Name="TextBox1_importText1"
+                                x:Name="TextEditor_Response_kafka"
                                 FontFamily="Consolas"
                                 FontSize="14"
-                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="438,26,0,29" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="256"/>
-                            <TextBox x:Name="SearchWH1" Margin="10,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="20" KeyDown="SearchWH_KeyDown" HorizontalAlignment="Left" Width="225"/>
-                            <Label Content="slug | name | address" HorizontalAlignment="Left" Margin="58,4,0,0" VerticalAlignment="Top" Width="129"/>
-                            <Label Content="номера без RP через запятую" Margin="462,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="208"/>
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="10,56,0,29" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="684"/>
                             <Canvas Margin="0,0,0,29" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139">
-                                <Button x:Name="Import_button1" Content="Импорт" Width="112" HorizontalAlignment="Left" Canvas.Left="16" Canvas.Top="142" VerticalAlignment="Top" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20" Click="Import_button_Click"/>
-                                <Label Content="Параметры" Canvas.Left="33" FontWeight="Bold" HorizontalAlignment="Center" Canvas.Top="30" VerticalAlignment="Top"/>
-                                <Label x:Name="Selected_NameWarh1" Canvas.Left="10" Canvas.Top="94" HorizontalAlignment="Center" VerticalAlignment="Top" Width="122" FontWeight="Bold" Height="26" HorizontalContentAlignment="Center"/>
-                                <Label Canvas.Left="10" Canvas.Top="63" Width="122" Height="26" HorizontalAlignment="Center" VerticalAlignment="Top" Content="Выбран склад" HorizontalContentAlignment="Center"/>
-                                <Button x:Name="ButtonClear_ImportStrore2" Width="31" Canvas.Left="108" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Content="X" Click="ButtonClear_ImportStrore_Click" ToolTip="Очистить поля"/>
+                                <Button x:Name="Button_Kafka" Content="Сделать!" Canvas.Left="10" Canvas.Top="298" Height="30" Width="119" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Button_Kafka_Click"/>
                             </Canvas>
-                            <Button x:Name="SearchWarh1" HorizontalAlignment="Left" Margin="240,30,0,0" VerticalAlignment="Top" Width="75" BorderThickness="0,0,0,0" Height="20" Content="Поиск"/>
-                            <DataGrid x:Name="WarhausesTable1" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,55,0,29" HorizontalAlignment="Left" Width="433" IsReadOnly="True" SelectionChanged="WarhausesTable_SelectionChanged" Grid.ColumnSpan="1"/>
+                            <TextBox x:Name="TextBox_SapID" HorizontalAlignment="Left" Margin="190,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="324"/>
 
                         </Grid>
                     </TabItem>

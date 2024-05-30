@@ -1789,6 +1789,37 @@ namespace HM
 
         #region Store
 
+        /// <summary>
+        /// Действия при переключепнии вкладок на Складе: керпка вывода предупреждения при входе во вкладку CSM + подгрузка заппов на вкладке с Паллетами и Мешками 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Store_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            System.Windows.Controls.TabControl tabControl = sender as System.Windows.Controls.TabControl;
+            System.Windows.Controls.TabItem selectedTab = tabControl.SelectedItem as System.Windows.Controls.TabItem;
+
+            if (selectedTab != null)
+            {
+                switch (selectedTab.Name)
+                {
+                    case "CSM":
+                        // Код для обработки выбора первой вкладки
+                        Teni_CSM.Visibility = Visibility.Visible;
+                        CSM_show_okno_teney.Visibility = Visibility.Visible;
+                        break;
+                    case "Pallet_and_meshok":
+                        //Вкладка паллет и мешка
+                        loaderL_P_M();
+                        break;
+                }
+            }
+
+
+        }
+
+
+
         #region Import
         DataTable data; //таблица со складами из поиска
         int selected_id_warh; //выбранный ID выбранного склада 
@@ -1914,30 +1945,7 @@ namespace HM
         string Put_CSM = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         string Name_Otchet_CSM = "Выгрузка";
 
-        /// <summary>
-        /// керпка вывода предупреждения при входе во вкладку CSM
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CSM_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            System.Windows.Controls.TabControl tabControl = sender as System.Windows.Controls.TabControl;
-            System.Windows.Controls.TabItem selectedTab = tabControl.SelectedItem as System.Windows.Controls.TabItem;
 
-            if (selectedTab != null)
-            {
-                switch (selectedTab.Name)
-                {
-                    case "CSM":
-                        // Код для обработки выбора первой вкладки
-                        Teni_CSM.Visibility = Visibility.Visible;
-                        CSM_show_okno_teney.Visibility = Visibility.Visible;
-                        break;
-                }
-            }
-
-
-        }
         /// <summary>
         /// Кнопка скрытия предупреждения
         /// </summary>
@@ -2484,6 +2492,38 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
         #endregion
 
+
+        #region Pallets && Bags
+
+        /// <summary>
+        /// Загрузчик списка складов в лист list_palmet
+        /// </summary>
+        public void loaderL_P_M()
+        {
+            WarEdit warEdit = new WarEdit();
+            warEdit.LoadHosts(list_palmet);
+            warEdit.Close();
+        }
+
+        /// <summary>
+        /// Поле Поиска
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Search_palmet_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (Search_palmet.Text.Length >= 3)
+                if (Search_palmet.Text != "")
+                    foreach (var item in list_palmet.Items)
+                        if (item.ToString().ToUpper().Contains(Search_palmet.Text.ToUpper()))
+                        {
+                            list_palmet.SelectedItem = item;
+                            list_palmet.ScrollIntoView(list_palmet.Items.GetItemAt(list_palmet.SelectedIndex));
+                        }
+
+        }
+
+        #endregion
 
 
         #endregion
@@ -3156,20 +3196,26 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
             using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
             consumer.Subscribe(topic);
-            while (true)
+            while (!TE.Text.Contains("message"))
             {
                 var consumeResult = consumer.Consume();
                 TE.Text += $"\n\rReceived message from topic {consumeResult.Topic}: {consumeResult.Message.Value}";
             }
         }
 
+        /// <summary>
+        ///Кнопка для теста кафки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Kafka_Click(object sender, RoutedEventArgs e)
+        {
+            _kafka_ConnectAndRead("pd10-kafka-n5.int.sblogistica.ru", "19092", "8", "ems.integration.wms.zappstore", TextEditor_Response_kafka);
+        }
+
+
         #endregion
 
 
-        #region Pallets && Bags
-
-
-
-        #endregion
     }
 }
