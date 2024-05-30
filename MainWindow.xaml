@@ -425,7 +425,7 @@
                             </Canvas>
                         </Grid>
                     </TabItem>
-                    <TabItem x:Name="Pallet_and_meshok" Header="Паллеты/Мешки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
+                    <TabItem x:Name="Pallet_and_meshok" Header="Паллеты/Мешки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-3,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="445" Width="835">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -437,7 +437,7 @@
                                 x:Name="text_editor_palmet"
                                 FontFamily="Consolas"
                                 FontSize="14"
-                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="320,26,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="374"/>
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="320,26,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="376"/>
                             <TextBox x:Name="Search_palmet" Margin="2,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="20" KeyDown="SearchWH_KeyDown" HorizontalAlignment="Left" Width="305"/>
                             <Label Content="Имя склада" HorizontalAlignment="Left" Margin="2,1,0,0" VerticalAlignment="Top" Width="75"/>
                             <Label Content="номера без RP через запятую" Margin="416,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="190"/>
