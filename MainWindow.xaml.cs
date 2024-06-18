@@ -8,6 +8,7 @@ using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using OfficeOpenXml;
+using OfficeOpenXml.Drawing.Slicer.Style;
 using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections;
@@ -3172,6 +3173,8 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         /// <param name="e"></param>
         private void Button_Smeni_Status_Click(object sender, RoutedEventArgs e)
         {
+
+
             if (ComboBox_Sh_Status.SelectedIndex != 0)
             { //если у нас вообще чтото выбранов поле статусов Шиптора 
                 switch (ComboBox_Sh_Status.SelectedIndex)
@@ -3210,7 +3213,12 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         break;
                 }
                 ComboBox_Sh_Status.SelectedIndex = 0;
+                //• Звук уведомление о финале 
+                using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                    new SoundPlayer(gzOut).Play();
             }
+
 
             if (ComboBox_ZS_Status.SelectedIndex != 0)
             { //Если чтото выбрано в поле заппа то дальше уже ищем инфо о бд
@@ -3242,16 +3250,37 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                     }
 
                     DB_Name_IS = null;
+                    ComboBox_ZS_Status.SelectedIndex = 0;
+
+                    //• Звук уведомление о финале 
+                    using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                    using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                        new SoundPlayer(gzOut).Play();
 
                 }
-                ComboBox_ZS_Status.SelectedIndex = 0;
+                else
+                {
+                    //прогрывать звук Windows Ошибка error
+                    string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+
+                    // Создание экземпляра SoundPlayer и проигрывание звука
+                    using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                    {
+                        errorSoundPlayer.Play();
+                    };
+                    MessageBox.Show("Не выбрад склад!");
+
+                }
+
+
+
             }
 
-            //• Звук уведомление о финале 
-            using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
-            using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                new SoundPlayer(gzOut).Play();
-            MessageBox.Show("Готово!");
+
+
+
+
+
 
         }
 
