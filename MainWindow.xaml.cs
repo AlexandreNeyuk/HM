@@ -3107,6 +3107,59 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+
+        private void home_Grid_changed(object sender, SelectionChangedEventArgs e)
+        {
+            System.Windows.Controls.TabControl TB = sender as System.Windows.Controls.TabControl;
+            System.Windows.Controls.TabItem selectedTab = TB.SelectedItem as System.Windows.Controls.TabItem;
+
+            if (selectedTab != null)
+            {
+                switch (selectedTab.Name)
+                {
+                    case "Change_status":
+                        // Код для обработки выбора первой вкладки
+                        WarEdit warEdit = new WarEdit();
+                        warEdit.LoadHosts(vibor_sklada);
+                        warEdit.Close();
+                        break;
+                }
+            }
+
+
+        }
+
+        /// <summary>
+        /// Загрузчик списка складов в лист vibor_sklada
+        /// </summary>
+        public void zagruzka_skladov_IS()
+        {
+            WarEdit warEdit = new WarEdit();
+            warEdit.LoadHosts(vibor_sklada);
+            warEdit.Close();
+        }
+
+        /// <summary>
+        /// Поле Поиска
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void poisk_skladov_IS_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (text_box_poisk_sklada_IS.Text.Length >= 3)
+                if (text_box_poisk_sklada_IS.Text != "")
+                    foreach (var item in vibor_sklada.Items)
+                        if (item.ToString().ToUpper().Contains(text_box_poisk_sklada_IS.Text.ToUpper()))
+                        {
+                            vibor_sklada.SelectedItem = item;
+                            vibor_sklada.ScrollIntoView(vibor_sklada.Items.GetItemAt(vibor_sklada.SelectedIndex));
+                        }
+
+        }
+
+
+
+
         private void Button_Smeni_Status_Click(object sender, RoutedEventArgs e)
         {
             switch (ComboBox_Sh_Status.SelectedValue)
