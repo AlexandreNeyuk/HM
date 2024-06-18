@@ -3022,7 +3022,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                 {
                     //кнопка остановки прожималась и остановились все потоки 
                     MessageBox.Show("Раннер остановлен");
-                    isStopped_Runner = true;
+                    isStopped_Runner = false;
                     RunnerStart.IsEnabled = true;
                     RunnerStop.IsEnabled = false;
                     RunnerStop.Foreground = new SolidColorBrush(Colors.Black);
