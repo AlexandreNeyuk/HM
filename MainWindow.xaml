@@ -204,20 +204,20 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Canvas x:Name="Left_Controls" HorizontalAlignment="Right" Width="156">
-                                <ListBox x:Name="ListBox" Margin="15                                      ,160,0,0" BorderThickness="0,0,0,0" Height="74" VerticalAlignment="Top" HorizontalAlignment="Left" Width="108" Background="{x:Null}">
+                                <ListBox x:Name="ListBox" BorderThickness="0,0,0,0" Height="74" VerticalAlignment="Top" HorizontalAlignment="Left" Width="108" Background="{x:Null}" Canvas.Left="19" Canvas.Top="141">
                                     <CheckBox x:Name="AF_1" Content="Вся семья☝" Checked="AF_1_Checked"/>
                                     <CheckBox x:Name="AF_2" Content="Родитель" Checked="AF_2_Checked" IsChecked="False"/>
                                     <CheckBox x:Name="UpperSearch" Content="Найти RP"/>
                                 </ListBox>
-                                <Button x:Name="ListProcess" Content="Обработка" VerticalAlignment="Center" Height="25" HorizontalAlignment="Left" Width="87" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0" ToolTip="Копирую сам!" Canvas.Left="8" Canvas.Top="113"/>
+                                <Button x:Name="ListProcess" Content="Обработка" VerticalAlignment="Center" Height="24" HorizontalAlignment="Left" Width="87" Click="ListProcess_Click" FontFamily="Bahnschrift" Padding="1,1,1,1" BorderThickness="0,0,0,0" ToolTip="Копирую сам!" Canvas.Left="17" Canvas.Top="210"/>
                                 <CheckBox x:Name="comma" Content="Запятые" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" IsChecked="True" Canvas.Left="25" Canvas.Top="85"/>
                                 <RadioButton x:Name="ContextRP" Content="RP" VerticalAlignment="Center" HorizontalAlignment="Left" Width="96" ToolTip="Обработка текста в рамках RP списка." IsChecked="True" FontFamily="Bahnschrift" Checked="ContextRP_Checked" Canvas.Left="25" Canvas.Top="35"/>
                                 <RadioButton x:Name="ConrextUpper" Content="ШК + SBC" VerticalAlignment="Center" HorizontalAlignment="Left" Width="99" IsChecked="False" FontFamily="Bahnschrift" ToolTip="Обработка списка с добавлением UPPER -контекста. " Checked="ConrextUpper_Checked" Canvas.Left="25" Canvas.Top="55"/>
                                 <Label Content="Параметры" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Bahnschrift" Canvas.Left="25" Canvas.Top="4"/>
                                 <TextBlock x:Name="BFcopy" Height="77" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Left" Width="136" Canvas.Left="10" Canvas.Top="325"/>
-                                <Button x:Name="Clear_all_textB" Content="X" Canvas.Left="102" Canvas.Top="114" BorderThickness="0,0,0,0" Width="31" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Click="Clear_all_textB_Click"/>
-                                <Button x:Name="AddRP" Content="+RP" Canvas.Left="15" Canvas.Top="239" BorderThickness="0,0,0,0" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center" Width="46" Click="AddRP_Click"/>
-                                <Button x:Name="AddRPforPVZ" Content="'RP'" Canvas.Left="87" Canvas.Top="239" BorderThickness="0,0,0,0" Height="25" Width="46" HorizontalAlignment="Left" VerticalAlignment="Center" Click="AddRPforPVZ_Click"/>
+                                <Button x:Name="Clear_all_textB" Content="X" Canvas.Left="108" Canvas.Top="210" BorderThickness="0,0,0,0" Width="32" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Clear_all_textB_Click"/>
+                                <Button x:Name="AddRP" Content="+RP" Canvas.Left="25" Canvas.Top="111" BorderThickness="0,0,0,0" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center" Width="46" Click="AddRP_Click"/>
+                                <Button x:Name="AddRPforPVZ" Content="'RP'" Canvas.Left="81" Canvas.Top="111" BorderThickness="0,0,0,0" Height="25" Width="46" HorizontalAlignment="Center" VerticalAlignment="Center" Click="AddRPforPVZ_Click"/>
                             </Canvas>
                             <avalonEdit:TextEditor
 				                x:Name="TextBox"
@@ -332,10 +332,14 @@
                     </TabItem>
                     <TabItem x:Name="Change_status" Margin="-4,-1,4,1" Width="120" Header="Смена статуса">
                         <Grid Background="#FFF9F9F9">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="824*"/>
+                                <ColumnDefinition Width="9*"/>
+                            </Grid.ColumnDefinitions>
                             <Label Content="Список посылок " Margin="10,2,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="164"/>
-                            <Button x:Name="Button_Clear_Smena_Statusa" HorizontalAlignment="Right" Margin="0,4,5,0" VerticalAlignment="Top" Content="Х" Width="34" BorderThickness="0,0,0,0" FontFamily="72" HorizontalContentAlignment="Center"/>
-                            <Button x:Name="Button_Smeni_Status" Content="Запуск" Margin="0,259,47,115" FontFamily="72" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="174" Height="20" Click="Button_Smeni_Status_Click"/>
-                            <ComboBox x:Name="ComboBox_Sh_Status" HorizontalAlignment="Right" Margin="0,28,0,0" VerticalAlignment="Top" Width="268" Height="25" SelectedIndex="0">
+                            <Button x:Name="Button_Clear_Smena_Statusa" HorizontalAlignment="Right" Margin="0,4,5,0" VerticalAlignment="Top" Content="Х" Width="34" BorderThickness="0,0,0,0" FontFamily="72" HorizontalContentAlignment="Center" Click="Button_Clear_Smena_Statusa_Click" Grid.ColumnSpan="2"/>
+                            <Button x:Name="Button_Smeni_Status" Content="Запуск" Margin="0,284,38,140" FontFamily="72" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="174" Height="20" Click="Button_Smeni_Status_Click"/>
+                            <ComboBox x:Name="ComboBox_Sh_Status" HorizontalAlignment="Right" Margin="0,28,0,0" VerticalAlignment="Top" Width="268" Height="25" SelectedIndex="0" Grid.ColumnSpan="2">
                                 <ComboBoxItem Content="Не изменять"/>
                                 <ComboBoxItem Content="Новая"/>
                                 <ComboBoxItem Content="Упакована"/>
@@ -346,24 +350,28 @@
                                 <ComboBoxItem Content="На возврат"/>
                                 <ComboBoxItem Content="Возвращена"/>
                                 <ComboBoxItem Content="Удалена"/>
+                                <ComboBoxItem Content="Отправлена на возврат"/>
                             </ComboBox>
-                            <Label Content="Статус в шиптор" HorizontalAlignment="Right" Margin="0,0,122,0" VerticalAlignment="Top" Height="31" Width="146"/>
-                            <Label Content="Статус в Zappstore" HorizontalAlignment="Right" Margin="0,53,106,0" VerticalAlignment="Top" Height="31" Width="162"/>
-                            <ComboBox x:Name="ComboBox_ZS_Status" HorizontalAlignment="Right" Margin="0,84,0,0" VerticalAlignment="Top" Width="268" Height="26" SelectedIndex="0">
+                            <Label Content="Статус в шиптор" HorizontalAlignment="Right" Margin="0,0,113,0" VerticalAlignment="Top" Height="31" Width="146"/>
+                            <Label Content="Статус в Zappstore" HorizontalAlignment="Right" Margin="0,53,97,0" VerticalAlignment="Top" Height="31" Width="162"/>
+                            <ComboBox x:Name="ComboBox_ZS_Status" HorizontalAlignment="Right" Margin="0,84,0,0" VerticalAlignment="Top" Width="268" Height="26" SelectedIndex="0" Grid.ColumnSpan="2">
                                 <ComboBoxItem Content="Не изменять"/>
                                 <ComboBoxItem Content="На складе"/>
+                                <ComboBoxItem Content="Отправлена"/>
                                 <ComboBoxItem Content="Ожидает решения по возврату"/>
                                 <ComboBoxItem Content="Расформирована"/>
                                 <ComboBoxItem Content="Ожидает сортировки"/>
-                                <ComboBoxItem Content="Возвращена"/>
+                                <ComboBoxItem Content="Возвращена на склад"/>
+                                <ComboBoxItem Content="Возвращена отправтелю"/>
+                                <ComboBoxItem Content="В паллете"/>
                             </ComboBox>
                             <avalonEdit:TextEditor x:Name="RP_list_Status"
                                 FontFamily="Consolas"
                                 FontSize="14"
-                                SyntaxHighlighting="C#" LineNumbersForeground="#FF0A58C1" Background="White" Foreground="Black" WordWrap="True" Margin="10,28,579,22" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FF0A58C1" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0"/>
-                            <ListBox x:Name="vibor_sklada" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,53,273,23" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="301"/>
-                            <TextBox x:Name="text_box_poisk_sklada_IS" HorizontalAlignment="Right" Margin="0,28,273,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="301" Height="20" TextChanged="poisk_skladov_IS_TextChanged"/>
-                            <Label Content="Выбор склада" HorizontalAlignment="Right" Margin="0,4,493,0" VerticalAlignment="Top"/>
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF0A58C1" Background="White" Foreground="Black" WordWrap="True" Margin="10,28,570,22" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FF0A58C1" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0"/>
+                            <ListBox x:Name="vibor_sklada" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,53,264,23" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="301"/>
+                            <TextBox x:Name="text_box_poisk_sklada_IS" HorizontalAlignment="Right" Margin="0,28,264,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="301" Height="20" TextChanged="poisk_skladov_IS_TextChanged"/>
+                            <Label Content="Выбор склада" HorizontalAlignment="Right" Margin="0,4,484,0" VerticalAlignment="Top"/>
 
 
                         </Grid>

@@ -1967,8 +1967,7 @@ namespace HM
         void update_shiptor_for_treck_number(TextEditor nomera)
         {
             //апдейт сделать красиво
-            dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = destination_warehouse_id, next_warehouse_id = destination_warehouse_id, current_status = 'packed', sent_at = NULL, returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({nomera.Text})");
-
+            dataBases.ConnectDB("Шиптор", $@"update package set current_warehouse_id = destination_warehouse_id, next_warehouse_id = destination_warehouse_id where id in ({nomera.Text})");
         }
 
         int VsegoThreads_perepodgotovka;
@@ -3206,6 +3205,9 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                     case 9:
                         dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'removed', removed_at = now() where id in ({RP_list_Status.Text})");
                         break;
+                    case 10:
+                        dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'return_to_sender', returned_at = now(), lost_at = null, removed_at = null, reported_at = null where id in ({RP_list_Status.Text})");
+                        break;
                     /*case "":
                         dataBases.ConnectDB("Шиптор", $@"where id in ({RP_list_Status.Text})");
                         break;*/
@@ -3232,6 +3234,9 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         case "На складе":
                             dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'in_store' where package_fid in ({RP_list_Status.Text});");
                             break;
+                        case "Отправлена":
+                            dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'sent' where package_fid in ({RP_list_Status.Text});");
+                            break;
                         case "Ожидает решения по возврату":
                             dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'wait_return_to_sender' where package_fid in ({RP_list_Status.Text});");
                             break;
@@ -3241,10 +3246,15 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         case "Ожидает сортировки":
                             dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'wait_sorting' where package_fid in ({RP_list_Status.Text});");
                             break;
-                        case "Возвращена":
+                        case "Возвращена на склад":
                             dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'returned' where package_fid in ({RP_list_Status.Text});");
                             break;
-
+                        case "Возвращена отправтелю":
+                            dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'returned_to_sender' where package_fid in ({RP_list_Status.Text});");
+                            break;
+                        case "В паллете":
+                            dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'in_pallet' where package_fid in ({RP_list_Status.Text});");
+                            break;
                         default:
                             break;
                     }
@@ -3311,6 +3321,11 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
         }
 
+        private void Button_Clear_Smena_Statusa_Click(object sender, RoutedEventArgs e)
+        {
+            RP_list_Status.Text = null;
+        }
+
         #endregion
 
         #region Kafka_and_Import_Sap_ZApp
@@ -3354,8 +3369,9 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
 
 
+
         #endregion
 
-
+        
     }
 }
