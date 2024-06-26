@@ -2523,6 +2523,14 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
         }
 
+        /// <summary>
+        ///выбор склада - вывод вывббранного в лейбл 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void list_palmet_SelectionChanged(object sender, SelectionChangedEventArgs e) { Selected_NameWarh_palmet.Content = list_palmet.SelectedItem.ToString(); }
+
+
         #endregion
 
 
@@ -3351,6 +3359,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         {
             _kafka_ConnectAndRead("pd10-kafka-n5.int.sblogistica.ru", "19092", "8", "ems.integration.wms.zappstore", TextEditor_Response_kafka);
         }
+
 
 
 
