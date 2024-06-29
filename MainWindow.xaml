@@ -193,7 +193,7 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid">
+            <Grid x:Name="HomeGrid" d:IsHidden="True">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2" SelectionChanged="TB_SelectionChanged">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsSelected="True" >
                         <Grid Height="451" Margin="0,0,-2,0">
@@ -378,7 +378,7 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="StoreGrid" Background="White" d:IsHidden="True">
+            <Grid x:Name="StoreGrid" Background="White">
                 <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2" BorderBrush="White" Background="White" SelectionChanged="Store_SelectionChanged">
                     <TabItem x:Name="RP_List1" Header="Импорт" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="451">
@@ -402,6 +402,7 @@
                                 <Label x:Name="Selected_NameWarh" Canvas.Left="10" Canvas.Top="94" HorizontalAlignment="Center" VerticalAlignment="Top" Width="122" FontWeight="Bold" Height="26" HorizontalContentAlignment="Center"/>
                                 <Label Canvas.Left="10" Canvas.Top="63" Width="122" Height="26" HorizontalAlignment="Center" VerticalAlignment="Top" Content="Выбран склад" HorizontalContentAlignment="Center"/>
                                 <Button x:Name="ButtonClear_ImportStrore" Width="31" Canvas.Left="108" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Content="X" Click="ButtonClear_ImportStrore_Click" ToolTip="Очистить поля"/>
+                                <Button x:Name="Stone_import_otvet" Content="Копировать ответ" Canvas.Left="16" Canvas.Top="167" HorizontalAlignment="Left" VerticalAlignment="Center" Width="112" Height="20" Click="Stone_import_otvet_Click"/>
                             </Canvas>
                             <Button x:Name="SearchWarh" HorizontalAlignment="Left" Margin="240,30,0,0" VerticalAlignment="Top" Width="75" BorderThickness="0,0,0,0" Height="20" Content="Поиск"/>
                             <DataGrid x:Name="WarhausesTable" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,55,0,29" HorizontalAlignment="Left" Width="433" IsReadOnly="True" SelectionChanged="WarhausesTable_SelectionChanged" Grid.ColumnSpan="1"/>
