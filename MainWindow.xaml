@@ -448,7 +448,7 @@
                                 SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="307,26,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="387"/>
                             <TextBox x:Name="Search_palmet" Margin="6,4,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="20" KeyDown="SearchWH_KeyDown" HorizontalAlignment="Left" Width="301" TextChanged="Search_palmet_TextChanged"/>
                             <Label Content="номера без RP через запятую" Margin="406,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="190" Height="28"/>
-                            <ListBox x:Name="list_palmet" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="6,29,0,23" BorderThickness="0,0,0,0" HorizontalAlignment="Left" Width="301"/>
+                            <ListBox x:Name="list_palmet" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="6,29,0,23" BorderThickness="0,0,0,0" HorizontalAlignment="Left" Width="301" SelectionChanged="list_palmet_SelectionChanged"/>
                             <Canvas Margin="0,0,2,23" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139">
                                 <Label Content="Параметры" Canvas.Left="31" FontWeight="Bold" Canvas.Top="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <Label x:Name="Selected_NameWarh_palmet" Canvas.Left="10" Canvas.Top="67" Width="122" FontWeight="Bold" Height="26" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1,1,1,1" BorderBrush="#FFC3C3C3"/>
