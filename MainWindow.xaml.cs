@@ -1823,7 +1823,7 @@ namespace HM
         #region Import
         DataTable data; //таблица со складами из поиска
         int selected_id_warh; //выбранный ID выбранного склада 
-
+        string tekushiy_sklad;
         
 
 
@@ -1851,7 +1851,7 @@ namespace HM
                 object cellValue = selectedRow["name"];
                 selected_id_warh = (int)selectedRow["id"]; //полученпие ID выбранного склада 
                 Selected_NameWarh.Content = cellValue.ToString(); //вывод имени склада в Лабел
-
+                tekushiy_sklad = cellValue.ToString();
             }
         }
 
@@ -1862,12 +1862,8 @@ namespace HM
         /// <param name="e"></param>
         private void Stone_import_otvet_Click(object sender, RoutedEventArgs e)
         {
-            if (WarhausesTable.SelectedItem != null)
-            {
-                DataRowView selectedRow = WarhausesTable.SelectedItem as DataRowView;
-                object znachenie_cell = selectedRow["name"];
-                try { Clipboard.SetText("Здравствуйте! Посылки импортированы на склад '" + znachenie_cell + "'"); } catch { }
-            }
+            try { Clipboard.SetText("Здравствуйте! Посылки импортированы на склад '" + tekushiy_sklad + "'"); } catch { }
+            tekushiy_sklad = "";
         }
 
         /// <summary>
