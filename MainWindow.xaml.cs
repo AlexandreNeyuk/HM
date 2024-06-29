@@ -1824,15 +1824,7 @@ namespace HM
         DataTable data; //таблица со складами из поиска
         int selected_id_warh; //выбранный ID выбранного склада 
 
-        /// <summary>
-        /// Кнопка копирующая автоответ в буфер обмена.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Stone_import_otvet_Click(object sender, RoutedEventArgs e)
-        {
-            try {Clipboard.SetText("Здравствуйте! Посылки импортированы на склад."); } catch { }            
-        }
+        
 
 
 
@@ -1862,6 +1854,22 @@ namespace HM
 
             }
         }
+
+        /// <summary>
+        /// Кнопка копирующая автоответ в буфер обмена.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Stone_import_otvet_Click(object sender, RoutedEventArgs e)
+        {
+            if (WarhausesTable.SelectedItem != null)
+            {
+                DataRowView selectedRow = WarhausesTable.SelectedItem as DataRowView;
+                object znachenie_cell = selectedRow["name"];
+                try { Clipboard.SetText("Здравствуйте! Посылки импортированы на склад '" + znachenie_cell + "'"); } catch { }
+            }
+        }
+
         /// <summary>
         /// обработка нажатия на Enter в поле поиска склада (чтобы не жать кнопку каждый раз)
         /// </summary>
