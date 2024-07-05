@@ -402,6 +402,7 @@
                                 <Label x:Name="Selected_NameWarh" Canvas.Left="10" Canvas.Top="94" HorizontalAlignment="Center" VerticalAlignment="Top" Width="122" FontWeight="Bold" Height="26" HorizontalContentAlignment="Center"/>
                                 <Label Canvas.Left="10" Canvas.Top="63" Width="122" Height="26" HorizontalAlignment="Center" VerticalAlignment="Top" Content="Выбран склад" HorizontalContentAlignment="Center"/>
                                 <Button x:Name="ButtonClear_ImportStrore" Width="31" Canvas.Left="108" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Content="X" Click="ButtonClear_ImportStrore_Click" ToolTip="Очистить поля"/>
+                                <Button x:Name="Stone_import_otvet" Content="Копировать ответ" Canvas.Left="16" Canvas.Top="167" HorizontalAlignment="Left" VerticalAlignment="Center" Width="112" Height="20" Click="Stone_import_otvet_Click"/>
                             </Canvas>
                             <Button x:Name="SearchWarh" HorizontalAlignment="Left" Margin="240,30,0,0" VerticalAlignment="Top" Width="75" BorderThickness="0,0,0,0" Height="20" Content="Поиск"/>
                             <DataGrid x:Name="WarhausesTable" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,55,0,29" HorizontalAlignment="Left" Width="433" IsReadOnly="True" SelectionChanged="WarhausesTable_SelectionChanged" Grid.ColumnSpan="1"/>

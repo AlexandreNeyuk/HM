@@ -1823,6 +1823,10 @@ namespace HM
         #region Import
         DataTable data; //таблица со складами из поиска
         int selected_id_warh; //выбранный ID выбранного склада 
+        string tekushiy_sklad;
+        
+
+
 
         /// <summary>
         ///Поиск склада и отображение его в таблице складов с адресом и slug
@@ -1847,9 +1851,21 @@ namespace HM
                 object cellValue = selectedRow["name"];
                 selected_id_warh = (int)selectedRow["id"]; //полученпие ID выбранного склада 
                 Selected_NameWarh.Content = cellValue.ToString(); //вывод имени склада в Лабел
-
+                tekushiy_sklad = cellValue.ToString();
             }
         }
+
+        /// <summary>
+        /// Кнопка копирующая автоответ в буфер обмена.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Stone_import_otvet_Click(object sender, RoutedEventArgs e)
+        {
+            try { Clipboard.SetText("Здравствуйте! Посылки импортированы на склад '" + tekushiy_sklad + "'"); } catch { }
+            tekushiy_sklad = "";
+        }
+
         /// <summary>
         /// обработка нажатия на Enter в поле поиска склада (чтобы не жать кнопку каждый раз)
         /// </summary>
@@ -3380,6 +3396,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         {
             _kafka_ConnectAndRead("pd10-kafka-n5.int.sblogistica.ru", "19092", "8", "ems.integration.wms.zappstore", TextEditor_Response_kafka);
         }
+
 
 
 
