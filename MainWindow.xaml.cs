@@ -2792,135 +2792,141 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         /// <param name="e"></param>
         private void RunnerStart_Click(object sender, RoutedEventArgs e)
         {
-            //очищать старые раны (потоки в таблице и записи)
-            TabPostman_Responses.Items.Clear();
-            //если выбран метод и если поля метода не пустые!!
-            string ssl = List_JSONS.SelectedItem?.ToString();
-            if (ssl != null && url_post_text.Text != null && Body_post_text.Text != null && ListRP_postman.Text != null)
-            {
-
-                //•Распределяем по потокам на отдельные листы
-                //• запускаем раннеры в фоне по каждому элементу каждого листа вместо спецсимвола "{{R}}" = колву потоков и проверяем каждый раз не была ли нажата кнопка "стопа" а также не завершил ли каждый поток проход
-
-                RunnerStart.IsEnabled = false; //Отключение кнопки "пуск"
-                RunnerStop.IsEnabled = true; //Включение кнопки "Стоп"
-                RunnerStop.Background = (Brush)new BrushConverter().ConvertFrom("#FFC51308");
-                RunnerStop.Foreground = new SolidColorBrush(Colors.White);
-
-                //• Формируем корректный список из RP
-
-                //Убираем все пустые строки
-                // ListRP_postman.Text.Split(",\n").ToList();
-                string[] lines = ListRP_postman.Text.Split(new[] { "\r\n", "\r", "\n", "," }, StringSplitOptions.None);
-                lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
-
-                if (ListRP_postman.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
-                    SelectorThreads_postman.SelectedIndex = 0;
-                List<string> listRP = new List<string>(lines); //лист со всеми rp
-
-                #region RP_Stats
-                /////////////--------------------------------
-                ////////////-----------запись кол-ва в реестр для статы--------------
-                int statsRP = 0;
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM"))
+            if (ListRP_postman.Text != "")
+            {//если у нас там точно чтото есть в поле с посылками 
+                //очищать старые раны (потоки в таблице и записи)
+                TabPostman_Responses.Items.Clear();
+                //если выбран метод и если поля метода не пустые!!
+                string ssl = List_JSONS.SelectedItem?.ToString();
+                if (ssl != null && url_post_text.Text != null && Body_post_text.Text != null && ListRP_postman.Text != null)
                 {
 
-                    foreach (var item in key?.GetValueNames())
+                    //•Распределяем по потокам на отдельные листы
+                    //• запускаем раннеры в фоне по каждому элементу каждого листа вместо спецсимвола "{{R}}" = колву потоков и проверяем каждый раз не была ли нажата кнопка "стопа" а также не завершил ли каждый поток проход
+
+                    RunnerStart.IsEnabled = false; //Отключение кнопки "пуск"
+                    RunnerStop.IsEnabled = true; //Включение кнопки "Стоп"
+                    RunnerStop.Background = (Brush)new BrushConverter().ConvertFrom("#FFC51308");
+                    RunnerStop.Foreground = new SolidColorBrush(Colors.White);
+
+                    //• Формируем корректный список из RP
+
+                    //Убираем все пустые строки
+                    // ListRP_postman.Text.Split(",\n").ToList();
+                    string[] lines = ListRP_postman.Text.Split(new[] { "\r\n", "\r", "\n", "," }, StringSplitOptions.None);
+                    lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+
+                    if (ListRP_postman.LineCount <= 10) //если в поле менее 10 строк (отправленмий), то автоматически ставится 1 поток
+                        SelectorThreads_postman.SelectedIndex = 0;
+                    List<string> listRP = new List<string>(lines); //лист со всеми rp
+
+                    #region RP_Stats
+                    /////////////--------------------------------
+                    ////////////-----------запись кол-ва в реестр для статы--------------
+                    int statsRP = 0;
+                    using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM"))
                     {
-                        if (item.Contains("RP_post_stats_"))
+
+                        foreach (var item in key?.GetValueNames())
                         {
-                            statsRP = (int)key?.GetValue(item);
+                            if (item.Contains("RP_post_stats_"))
+                            {
+                                statsRP = (int)key?.GetValue(item);
+
+                            }
+                        }
+                    }
+
+                    using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM"))
+                    {
+                        if (listRP.Count != 0)
+                        {
+                            key?.SetValue("RP_post_stats_", listRP.Count + statsRP);
 
                         }
                     }
-                }
+                    //////////------------------------------------------
+                    #endregion
 
-                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\HM"))
-                {
-                    if (listRP.Count != 0)
+
+                    //•Делим списки RP для нашего числа потоков 
+                    int chunkSize_post = listRP.Count / (SelectorThreads_postman.SelectedIndex + 1);
+                    VsegoThreads = (SelectorThreads_postman.SelectedIndex + 1);
+                    ThreadComplited = 0;
+                    List<List<string>> chunks = new List<List<string>>();
+                    for (int i = 0; i < listRP.Count; i += chunkSize_post)
                     {
-                        key?.SetValue("RP_post_stats_", listRP.Count + statsRP);
+                        if ((listRP.Count - (chunkSize_post * (chunks.Count + 1))) < listRP.Count / 10)
+                        {
+
+                            //берем все до конца с текущего I 
+                            chunks.Add(listRP.GetRange(i, listRP.Count - i));
+                            break;
+                        }
+                        else
+                        {
+                            chunks.Add(listRP.GetRange(i, Math.Min(chunkSize_post, listRP.Count - i)));
+                        }
 
                     }
-                }
-                //////////------------------------------------------
-                #endregion
 
-
-                //•Делим списки RP для нашего числа потоков 
-                int chunkSize_post = listRP.Count / (SelectorThreads_postman.SelectedIndex + 1);
-                VsegoThreads = (SelectorThreads_postman.SelectedIndex + 1);
-                ThreadComplited = 0;
-                List<List<string>> chunks = new List<List<string>>();
-                for (int i = 0; i < listRP.Count; i += chunkSize_post)
-                {
-                    if ((listRP.Count - (chunkSize_post * (chunks.Count + 1))) < listRP.Count / 10)
+                    //• получаю данне об post-запросе (url и body)
+                    string selectPost = List_JSONS.SelectedItem?.ToString(); // выбраный запрос (там уже имя запроса)
+                    string urlP = "";
+                    string bodyP = "";
+                    if (selectPost != null)
                     {
 
-                        //берем все до конца с текущего I 
-                        chunks.Add(listRP.GetRange(i, listRP.Count - i));
-                        break;
+                        //если чтото выбрано, деалем активной кнопку Удалить
+                        RemoveCanvas_Postman.Opacity = 100;
+                        RemoveCanvas_Postman.IsEnabled = true;
+
+
+                        Post_pull_Up_Registry(selectPost, ref urlP, ref bodyP);
+
                     }
-                    else
+
+
+
+                    //• Запуск раннеров по колву потоков /Распределитель потоков
+                    for (int i = 0; i < (SelectorThreads_postman.SelectedIndex + 1); i++)
                     {
-                        chunks.Add(listRP.GetRange(i, Math.Min(chunkSize_post, listRP.Count - i)));
+
+                        //• Переключение TabControl`ов на таб с динамичными вкладками по потокам 
+                        TabPostman.Visibility = Visibility.Hidden;
+                        TabPostman_Responses.Visibility = Visibility.Visible;
+                        //создаем listView`s по количеству потоков в tabControl
+
+                        // создаем новую вкладку
+                        System.Windows.Controls.TabItem tabItem = new System.Windows.Controls.TabItem();
+                        tabItem.Header = $"Поток {i + 1}"; // задаем заголовок вкладки
+
+                        // создаем новый Grid для вкладки
+                        Grid grid = new Grid();
+                        tabItem.Content = grid; // добавляем Grid в содержимое вкладки
+
+                        // создаем новый ListBox для Grid
+                        ListBox listBox = new ListBox();
+                        listBox.Name = $"listBox{i + 1}"; // задаем имя ListBox на основе индекса вкладки
+                        grid.Children.Add(listBox); // добавляем ListBox в Grid
+
+                        // добавляем вкладку в TabControl
+                        TabPostman_Responses.Items.Add(tabItem);
+
+
+                        //выбираем ЛисВью в который будем писать, нужный url, body, номер потока, и колво посылок для этого потока и запускаем раннер                     
+
+                        RuunerPost_Postman(listBox, urlP, bodyP, i, chunks);
                     }
-
                 }
-
-                //• получаю данне об post-запросе (url и body)
-                string selectPost = List_JSONS.SelectedItem?.ToString(); // выбраный запрос (там уже имя запроса)
-                string urlP = "";
-                string bodyP = "";
-                if (selectPost != null)
+                else
                 {
-
-                    //если чтото выбрано, деалем активной кнопку Удалить
-                    RemoveCanvas_Postman.Opacity = 100;
-                    RemoveCanvas_Postman.IsEnabled = true;
-
-
-                    Post_pull_Up_Registry(selectPost, ref urlP, ref bodyP);
-
+                    MessageBox.Show("Проверьте : либо не выбран метод, либо поля некорректно заполнены (пустые)!");
                 }
 
-
-
-                //• Запуск раннеров по колву потоков /Распределитель потоков
-                for (int i = 0; i < (SelectorThreads_postman.SelectedIndex + 1); i++)
-                {
-
-                    //• Переключение TabControl`ов на таб с динамичными вкладками по потокам 
-                    TabPostman.Visibility = Visibility.Hidden;
-                    TabPostman_Responses.Visibility = Visibility.Visible;
-                    //создаем listView`s по количеству потоков в tabControl
-
-                    // создаем новую вкладку
-                    System.Windows.Controls.TabItem tabItem = new System.Windows.Controls.TabItem();
-                    tabItem.Header = $"Поток {i + 1}"; // задаем заголовок вкладки
-
-                    // создаем новый Grid для вкладки
-                    Grid grid = new Grid();
-                    tabItem.Content = grid; // добавляем Grid в содержимое вкладки
-
-                    // создаем новый ListBox для Grid
-                    ListBox listBox = new ListBox();
-                    listBox.Name = $"listBox{i + 1}"; // задаем имя ListBox на основе индекса вкладки
-                    grid.Children.Add(listBox); // добавляем ListBox в Grid
-
-                    // добавляем вкладку в TabControl
-                    TabPostman_Responses.Items.Add(tabItem);
-
-
-                    //выбираем ЛисВью в который будем писать, нужный url, body, номер потока, и колво посылок для этого потока и запускаем раннер                     
-
-                    RuunerPost_Postman(listBox, urlP, bodyP, i, chunks);
-                }
             }
-            else
-            {
-                MessageBox.Show("Проверьте : либо не выбран метод, либо поля некорректно заполнены (пустые)!");
-            }
+
+            else MessageBox.Show("Заполните поле с посылками!");
         }
 
         /// <summary>
@@ -3380,6 +3386,6 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
         #endregion
 
-        
+
     }
 }

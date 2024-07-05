@@ -378,7 +378,7 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="StoreGrid" Background="White">
+            <Grid x:Name="StoreGrid" Background="White" d:IsHidden="True">
                 <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2" BorderBrush="White" Background="White" SelectionChanged="Store_SelectionChanged">
                     <TabItem x:Name="RP_List1" Header="Импорт" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="451">
@@ -501,7 +501,7 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="RunnerGrid" Background="#FF6B6B6B" d:IsHidden="True">
+            <Grid x:Name="RunnerGrid" Background="#FF6B6B6B">
                 <ListBox x:Name="List_JSONS" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Left" Width="196" Margin="0,52,0,23" Background="White" Foreground="Black" FontWeight="Bold" FontSize="14" BorderThickness="0,0,0,0"/>
                 <Canvas HorizontalAlignment="Right" Width="161" Background="#FFF0F0F0" Margin="0,0,0,23">
                     <Button x:Name="RunnerStop" Content="Стоп!" Width="60" HorizontalAlignment="Center" Height="25" Canvas.Left="91" Canvas.Top="36" BorderThickness="0,0,0,0" VerticalAlignment="Center" IsEnabled="False" Click="RunnerStop_Click"/>
