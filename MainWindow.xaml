@@ -101,7 +101,7 @@
             </Canvas>
         </Grid>
         <Grid x:Name="MajorGrid" Height="478" VerticalAlignment="Bottom">
-            <Grid x:Name="PartyGrid" Background="White" d:IsLocked="True" d:IsHidden="True">
+            <Grid x:Name="PartyGrid" Background="White">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии склада" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
                 <CheckBox x:Name="CheckBox_CorrectStatus_Party" Content="Скорректировать статусы" Margin="0,298,17,0" VerticalAlignment="Top" ToolTip="Если вырано, скорректируются дополнительно статусы на возвратные как на складе, так и в Шиптор у отправлений" HorizontalAlignment="Right" Width="161"/>
                 <ComboBox x:Name="SelectAction" HorizontalAlignment="Right" Margin="0,153,24,0" VerticalAlignment="Top" Width="147" SelectedIndex="1" BorderThickness="0,0,0,0" FontFamily="72" Height="22" SelectionChanged="SelectAction_SelectionChanged">
@@ -129,7 +129,7 @@
                     <ComboBoxItem Content="Расформирована"/>
                 </ComboBox>
                 <Label HorizontalAlignment="Right" Margin="0,191,24,0" VerticalAlignment="Top" Content="Действие над партией" Width="147" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                <Button x:Name="Clear_Text_Party" Content="X" BorderThickness="0,0,0,0" Margin="804,34,0,420" Click="Clear_Text_Party_Click"/>
+                <Button x:Name="Clear_Text_Party" Content="X" BorderThickness="0,0,0,0" Margin="0,34,0,420" Click="Clear_Text_Party_Click" HorizontalAlignment="Right" Width="32"/>
 
 
             </Grid>
@@ -194,7 +194,7 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid">
+            <Grid x:Name="HomeGrid" d:IsHidden="True">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2" SelectionChanged="TB_SelectionChanged">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsSelected="True" >
                         <Grid Height="451" Margin="0,0,-2,0">
@@ -337,7 +337,7 @@
                                 <ColumnDefinition Width="824*"/>
                                 <ColumnDefinition Width="9*"/>
                             </Grid.ColumnDefinitions>
-                            <Label Content="номера посылок без RP через запятую" Margin="10,2,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="239"/>
+                            <Label Content="номера без RP через запятую" Margin="10,2,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="239"/>
                             <Button x:Name="Button_Clear_Smena_Statusa" HorizontalAlignment="Right" Margin="0,4,5,0" VerticalAlignment="Top" Content="Х" Width="34" BorderThickness="0,0,0,0" FontFamily="72" HorizontalContentAlignment="Center" Click="Button_Clear_Smena_Statusa_Click" Grid.ColumnSpan="2"/>
                             <Button x:Name="Button_Smeni_Status" Content="Запуск" Margin="0,284,38,140" FontFamily="72" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="174" Height="20" Click="Button_Smeni_Status_Click"/>
                             <ComboBox x:Name="ComboBox_Sh_Status" HorizontalAlignment="Right" Margin="0,28,0,0" VerticalAlignment="Top" Width="268" Height="25" SelectedIndex="0" Grid.ColumnSpan="2">
@@ -372,7 +372,7 @@
                                 SyntaxHighlighting="C#" LineNumbersForeground="#FF0A58C1" Background="White" Foreground="Black" WordWrap="True" Margin="10,28,570,22" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FF0A58C1" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0"/>
                             <ListBox x:Name="vibor_sklada" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,53,264,23" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="301"/>
                             <TextBox x:Name="text_box_poisk_sklada_IS" HorizontalAlignment="Right" Margin="0,28,264,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="301" Height="20" TextChanged="poisk_skladov_IS_TextChanged"/>
-                            <Label Content="Выбор склада" HorizontalAlignment="Right" Margin="0,3,468,0" VerticalAlignment="Top"/>
+                            <Label Content="Выбор склада" HorizontalAlignment="Right" Margin="0,5,479,0" VerticalAlignment="Top"/>
 
 
                         </Grid>
@@ -478,7 +478,7 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="RunnerGrid" Background="#FF6B6B6B" d:IsHidden="True" d:IsLocked="True">
+            <Grid x:Name="RunnerGrid" Background="#FF6B6B6B" d:IsLocked="True" d:IsHidden="True">
                 <ListBox x:Name="List_JSONS" d:ItemsSource="{d:SampleData ItemCount=5}" HorizontalAlignment="Left" Width="196" Margin="0,52,0,23" Background="White" Foreground="Black" FontWeight="Bold" FontSize="14" BorderThickness="0,0,0,0"/>
                 <Canvas HorizontalAlignment="Right" Width="161" Background="#FFF0F0F0" Margin="0,0,0,23">
                     <Button x:Name="RunnerStop" Content="Стоп!" Width="60" HorizontalAlignment="Center" Height="25" Canvas.Left="91" Canvas.Top="36" BorderThickness="0,0,0,0" VerticalAlignment="Center" IsEnabled="False" Click="RunnerStop_Click"/>
