@@ -194,7 +194,7 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid" d:IsLocked="True" d:IsHidden="True">
+            <Grid x:Name="HomeGrid">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2" SelectionChanged="TB_SelectionChanged">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsSelected="True" >
                         <Grid Height="451" Margin="0,0,-2,0">
@@ -372,14 +372,14 @@
                                 SyntaxHighlighting="C#" LineNumbersForeground="#FF0A58C1" Background="White" Foreground="Black" WordWrap="True" Margin="10,28,570,22" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FF0A58C1" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0"/>
                             <ListBox x:Name="vibor_sklada" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,53,264,23" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="301"/>
                             <TextBox x:Name="text_box_poisk_sklada_IS" HorizontalAlignment="Right" Margin="0,28,264,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="301" Height="20" TextChanged="poisk_skladov_IS_TextChanged"/>
-                            <Label Content="Выбор склада" HorizontalAlignment="Right" Margin="0,4,484,0" VerticalAlignment="Top"/>
+                            <Label Content="Выбор склада" HorizontalAlignment="Right" Margin="0,3,468,0" VerticalAlignment="Top"/>
 
 
                         </Grid>
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="StoreGrid" Background="White">
+            <Grid x:Name="StoreGrid" Background="White" d:IsHidden="True" d:IsLocked="True">
                 <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2" BorderBrush="White" Background="White" SelectionChanged="Store_SelectionChanged">
                     <TabItem x:Name="RP_List1" Header="Импорт" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="451">
