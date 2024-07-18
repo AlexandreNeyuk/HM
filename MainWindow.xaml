@@ -101,7 +101,7 @@
             </Canvas>
         </Grid>
         <Grid x:Name="MajorGrid" Height="478" VerticalAlignment="Bottom">
-            <Grid x:Name="PartyGrid" Background="White">
+            <Grid x:Name="PartyGrid" Background="White" d:IsHidden="True">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии склада" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
                 <CheckBox x:Name="CheckBox_CorrectStatus_Party" Content="Скорректировать статусы" Margin="0,298,17,0" VerticalAlignment="Top" ToolTip="Если вырано, скорректируются дополнительно статусы на возвратные как на складе, так и в Шиптор у отправлений" HorizontalAlignment="Right" Width="161"/>
                 <ComboBox x:Name="SelectAction" HorizontalAlignment="Right" Margin="0,153,24,0" VerticalAlignment="Top" Width="147" SelectedIndex="1" BorderThickness="0,0,0,0" FontFamily="72" Height="22" SelectionChanged="SelectAction_SelectionChanged">
@@ -194,7 +194,7 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid" d:IsLocked="True" d:IsHidden="True">
+            <Grid x:Name="HomeGrid">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2" SelectionChanged="TB_SelectionChanged">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsSelected="True" >
                         <Grid Height="451" Margin="0,0,-2,0">

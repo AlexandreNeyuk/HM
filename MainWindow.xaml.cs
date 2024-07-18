@@ -3407,136 +3407,142 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         /// <param name="e"></param>
         private void Button_Smeni_Status_Click(object sender, RoutedEventArgs e)
         {
-            
-
-            if (ComboBox_Sh_Status.SelectedIndex != 0)
-            { //если у нас вообще чтото выбранов поле статусов Шиптора 
-                switch (ComboBox_Sh_Status.SelectedIndex)
-                {
-                    case 1:
-                        dataBases.ConnectDB("Шиптор", $@"update public.package set measured_at = null, packed_since = null, prepared_to_send_since = null, in_store_since = null, current_status = 'new' where id in ({RP_list_Status.Text})");
-                        break;
-                    case 2:
-                        dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({RP_list_Status.Text})");
-                        break;
-                    case 3:
-                        dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'sent', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null where id in ({RP_list_Status.Text})");
-                        break;
-                    case 4:
-                        dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'waiting_on_delivery_point', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = now(), delivered_at = null where id in ({RP_list_Status.Text})");
-                        break;
-                    case 5:
-                        dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'delivered', delivered_at = now(), lost_at = null, reported_at = null, returned_at = null, returning_to_warehouse_at = null, sent_at = now(), removed_at = null where id in ({RP_list_Status.Text})");
-                        break;
-                    case 6:
-                        dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned_to_warehouse', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now() where id in ({RP_list_Status.Text})");
-                        break;
-                    case 7:
-                        dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'to_return', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now() where id in ({RP_list_Status.Text})");
-                        break;
-                    case 8:
-                        dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned', returned_at = now(), lost_at = null, removed_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), reported_at = now() where id in ({RP_list_Status.Text})");
-                        break;
-                    case 9:
-                        dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'removed', removed_at = now() where id in ({RP_list_Status.Text})");
-                        break;
-                    case 10:
-                        dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'return_to_sender', returned_at = now(), lost_at = null, removed_at = null, reported_at = null where id in ({RP_list_Status.Text})");
-                        break;
-                    /*case "":
-                        dataBases.ConnectDB("Шиптор", $@"where id in ({RP_list_Status.Text})");
-                        break;*/
-                    default:
-                        break;
-                }
-                ComboBox_Sh_Status.SelectedIndex = 0;
-                //• Звук уведомление о финале 
-                using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
-                using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                    new SoundPlayer(gzOut).Play();
-            }
-
-
-            if (ComboBox_ZS_Status.SelectedIndex != 0)
-            { //Если чтото выбрано в поле заппа то дальше уже ищем инфо о бд
-                LoadData_FromReg_izmenenie_status();
-                if (DB_Name_IS != null)
-                {//если найдена инфа по хосту и бд в реестре то идем дальше
-
-                    switch (ComboBox_ZS_Status.SelectionBoxItem)
+            if (RP_list_Status.Text != "")
+            {
+                if (ComboBox_Sh_Status.SelectedIndex != 0)
+                { //если у нас вообще чтото выбранов поле статусов Шиптора 
+                    switch (ComboBox_Sh_Status.SelectedIndex)
                     {
-
-                        case "На складе":
-                            dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'in_store' where package_fid in ({RP_list_Status.Text});");
+                        case 1:
+                            dataBases.ConnectDB("Шиптор", $@"update public.package set measured_at = null, packed_since = null, prepared_to_send_since = null, in_store_since = null, current_status = 'new' where id in ({RP_list_Status.Text})");
                             break;
-                        case "Отправлена":
-                            dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'sent' where package_fid in ({RP_list_Status.Text});");
+                        case 2:
+                            dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({RP_list_Status.Text})");
                             break;
-                        case "Ожидает решения по возврату":
-                            dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'wait_return_to_sender' where package_fid in ({RP_list_Status.Text});");
+                        case 3:
+                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'sent', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null where id in ({RP_list_Status.Text})");
                             break;
-                        case "Расформирована":
-                            dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'disbanded' where package_fid in ({RP_list_Status.Text});");
+                        case 4:
+                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'waiting_on_delivery_point', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = now(), delivered_at = null where id in ({RP_list_Status.Text})");
                             break;
-                        case "Ожидает сортировки":
-                            dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'wait_sorting' where package_fid in ({RP_list_Status.Text});");
+                        case 5:
+                            dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'delivered', delivered_at = now(), lost_at = null, reported_at = null, returned_at = null, returning_to_warehouse_at = null, sent_at = now(), removed_at = null where id in ({RP_list_Status.Text})");
                             break;
-                        case "Возвращена на склад":
-                            dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'returned' where package_fid in ({RP_list_Status.Text});");
+                        case 6:
+                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned_to_warehouse', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now() where id in ({RP_list_Status.Text})");
                             break;
-                        case "Возвращена отправтелю":
-                            dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'returned_to_sender' where package_fid in ({RP_list_Status.Text});");
+                        case 7:
+                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'to_return', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now() where id in ({RP_list_Status.Text})");
                             break;
-                        case "В паллете":
-                            dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'in_pallet' where package_fid in ({RP_list_Status.Text});");
+                        case 8:
+                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned', returned_at = now(), lost_at = null, removed_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), reported_at = now() where id in ({RP_list_Status.Text})");
                             break;
+                        case 9:
+                            dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'removed', removed_at = now() where id in ({RP_list_Status.Text})");
+                            break;
+                        case 10:
+                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'return_to_sender', returned_at = now(), lost_at = null, removed_at = null, reported_at = null where id in ({RP_list_Status.Text})");
+                            break;
+                        /*case "":
+                            dataBases.ConnectDB("Шиптор", $@"where id in ({RP_list_Status.Text})");
+                            break;*/
                         default:
                             break;
                     }
-                    DB_Name_IS = null;
-                    ComboBox_ZS_Status.SelectedIndex = 0;
-
+                    ComboBox_Sh_Status.SelectedIndex = 0;
                     //• Звук уведомление о финале 
                     using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
                     using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                    new SoundPlayer(gzOut).Play();
-
+                        new SoundPlayer(gzOut).Play();
                 }
-                else
-                {
-                    //прогрывать звук Windows Ошибка error
-                    string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
 
-                    // Создание экземпляра SoundPlayer и проигрывание звука
-                    using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+
+                if (ComboBox_ZS_Status.SelectedIndex != 0)
+                { //Если чтото выбрано в поле заппа то дальше уже ищем инфо о бд
+                    LoadData_FromReg_izmenenie_status();
+                    if (DB_Name_IS != null)
+                    {//если найдена инфа по хосту и бд в реестре то идем дальше
+
+                        switch (ComboBox_ZS_Status.SelectionBoxItem)
+                        {
+
+                            case "На складе":
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'in_store' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            case "Отправлена":
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'sent' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            case "Ожидает решения по возврату":
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'wait_return_to_sender' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            case "Расформирована":
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'disbanded' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            case "Ожидает сортировки":
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'wait_sorting' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            case "Возвращена на склад":
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'returned' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            case "Возвращена отправтелю":
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'returned_to_sender' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            case "В паллете":
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'in_pallet' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            default:
+                                break;
+                        }
+                        DB_Name_IS = null;
+                        ComboBox_ZS_Status.SelectedIndex = 0;
+
+                        //• Звук уведомление о финале 
+                        using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                        using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                            new SoundPlayer(gzOut).Play();
+
+                    }
+                    else
                     {
-                        errorSoundPlayer.Play();
-                    };
-                    MessageBox.Show("Не выбрад склад!");
+                        //прогрывать звук Windows Ошибка error
+                        string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+
+                        // Создание экземпляра SoundPlayer и проигрывание звука
+                        using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                        {
+                            errorSoundPlayer.Play();
+                        };
+                        MessageBox.Show("Не выбрад склад!");
+
+                    }
+                    //Галка снятия стопа "Разрыв ММ"
+                    if ((snyat_stop_smena_statusov.IsChecked == true) && (vibor_sklada.SelectedIndex != -1) && (RP_list_Status.Text != null))
+                    {
+                        dataBases.ConnectDB(DB_Name_IS, $@"delete from package_stop where package_id in (select id from package where package_fid in  ({RP_list_Status.Text})) and code = 'break_multiplace';");
+                        dataBases.ConnectDB(DB_Name_IS, $@"update parent_package pp set is_full = true where pp.fid in ({RP_list_Status.Text});");
+                        snyat_stop_smena_statusov.IsChecked = false;
+                        //• Звук уведомление о финале 
+                        using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                        using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                            new SoundPlayer(gzOut).Play();
+                    }
+
+
 
                 }
-                //Галка снятия стопа "Разрыв ММ"
-                if ((snyat_stop_smena_statusov.IsChecked == true) && (vibor_sklada.SelectedIndex != -1) && (RP_list_Status.Text != null))
-                {
-                    dataBases.ConnectDB(DB_Name_IS, $@"delete from package_stop where package_id in (select id from package where package_fid in  ({RP_list_Status.Text})) and code = 'break_multiplace';");
-                    dataBases.ConnectDB(DB_Name_IS, $@"update parent_package pp set is_full = true where pp.fid in ({RP_list_Status.Text});");
-                    snyat_stop_smena_statusov.IsChecked = false;
-                    //• Звук уведомление о финале 
-                    using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
-                    using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                    new SoundPlayer(gzOut).Play();
-                }
-
-
-
             }
+            else
+            {
+                //прогрывать звук Windows Ошибка error
+                string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
 
-
-
-
-
-
-
+                // Создание экземпляра SoundPlayer и проигрывание звука
+                using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                {
+                    errorSoundPlayer.Play();
+                }
+                MessageBox.Show("Не введены номера посылок!");
+            }
         }
 
         /// <summary>
