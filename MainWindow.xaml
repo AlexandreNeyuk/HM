@@ -194,7 +194,7 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid">
+            <Grid x:Name="HomeGrid" d:IsLocked="True">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2" SelectionChanged="TB_SelectionChanged">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsSelected="True" >
                         <Grid Height="451" Margin="0,0,-2,0">
@@ -255,7 +255,8 @@
 
 
                             <Label HorizontalAlignment="Left" Margin="588,2,0,0" VerticalAlignment="Top" FontFamily="72" Width="213" Content="Поле заметок" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                            <Button x:Name="FidCopy_Copy" Margin="276,103,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="36" Content="X" Click="FidCopy_Copy_Click"/>
+                            <Button x:Name="FidCopy_Copy" Margin="274,163,0,0" VerticalAlignment="Top" FontFamily="72" BorderThickness="0,0,0,0" Height="23" HorizontalAlignment="Left" Width="36" Content="X" Click="FidCopy_Copy_Click"/>
+                            <Button x:Name="Ubrat_zapyatie_RP_spiski" Content="Убрать запятые" BorderThickness="0,0,0,0" Click="Ubrat_zapyatie_RP_spiski_Click" Margin="248,110,0,0" HorizontalAlignment="Left" Width="88" Height="24" VerticalAlignment="Top"/>
 
                         </Grid>
                     </TabItem>
@@ -370,9 +371,12 @@
                                 FontFamily="Consolas"
                                 FontSize="14"
                                 SyntaxHighlighting="C#" LineNumbersForeground="#FF0A58C1" Background="White" Foreground="Black" WordWrap="True" Margin="10,28,570,22" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" BorderBrush="#FF0A58C1" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0,1,0,0"/>
-                            <ListBox x:Name="vibor_sklada" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,53,264,23" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="301"/>
+                            <ListBox x:Name="vibor_sklada" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,53,264,23" BorderThickness="0,0,0,0" HorizontalAlignment="Right" Width="301" SelectionChanged="vibor_sklada_SelectionChanged"/>
                             <TextBox x:Name="text_box_poisk_sklada_IS" HorizontalAlignment="Right" Margin="0,28,264,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="301" Height="20" TextChanged="poisk_skladov_IS_TextChanged"/>
                             <Label Content="Выбор склада" HorizontalAlignment="Right" Margin="0,5,479,0" VerticalAlignment="Top"/>
+                            <Label x:Name="label_vibran_sklad_statik" Content="Выбран склад:" HorizontalAlignment="Right" Margin="0,115,164,0" VerticalAlignment="Top" Width="95" Height="28"/>
+                            <Label x:Name="label_vibran_sklad_dinamik" Content="" HorizontalAlignment="Right" Margin="0,116,1,0" VerticalAlignment="Top" Width="172" FontWeight="Bold"/>
+                            <CheckBox x:Name="snyat_stop_smena_statusov" Content="Снять стоп &quot;Разрыв ММ&quot;" HorizontalAlignment="Right" Margin="0,143,102,0" VerticalAlignment="Top"/>
 
 
                         </Grid>

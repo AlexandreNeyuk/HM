@@ -607,6 +607,8 @@ namespace HM
             BFcopy.Text = null;
         }
 
+        
+
         /// <summary>
         ///очистка пвсего поля 
         /// </summary>
@@ -727,6 +729,15 @@ namespace HM
 
             FidCopyVoid();
 
+        }
+
+        /// <summary>
+        /// Убрать запятые
+        /// </summary>
+        private void Ubrat_zapyatie_RP_spiski_Click(object sender, RoutedEventArgs e)
+        {
+            ListOne.Text = ListOne.Text.Replace(",","");
+            ListTwo.Text = ListTwo.Text.Replace(",", "");
         }
 
         //метод поиска разницы
@@ -2011,31 +2022,33 @@ namespace HM
         /// <param name="e"></param>
         private void StartButton_CMS_Click(object sender, RoutedEventArgs e)
         {
-            TextBox_Raspologenie_Otchet_CSM.Text = Put_CSM;
-            if (TextBox_Name_Otchet_CSM.Text == "")
+            if (TextBox_Nomera_for_CSM.Text != "")
             {
-                TextBox_Name_Otchet_CSM.Text = Name_Otchet_CSM;
-            }
-
-            //1. делаем апдейт в бидэ "апдейт сделать красиво"? если выбьрана галка для трек-номеров
-            if (CheckBox_Prisv_trackCSM.IsChecked == true)
-            {
-                update_shiptor_for_treck_number(TextBox_Nomera_for_CSM); // апдейт для подготовки посылок в шиптор для присвоения трек-номеров
-                csm_createOrder_api(TextBox_Nomera_for_CSM); //прокидываем метод по присвоению трек-номеров
-                perepodgotovka_posilok(TextBox_Nomera_for_CSM);
-            }
-            if (CheckBox_Snyat_Stop_CSM.IsChecked == true)
-            {
-                csm_zz_ne_sozdan(TextBox_Nomera_for_CSM);
-            }
-
-            //если не выьбрано то вывод отчета 
-            if (CheckBox_Otchet_CSM.IsChecked == true)
-            {
-                if (CheckBox_Otchet_dlya_sebya_CSM.IsChecked == true)
+                TextBox_Raspologenie_Otchet_CSM.Text = Put_CSM;
+                if (TextBox_Name_Otchet_CSM.Text == "")
                 {
-                    //если отчет чекнут для себя 
-                    otchet_CSM_(dataBases.ConnectDB("Шиптор", $@"select *
+                    TextBox_Name_Otchet_CSM.Text = Name_Otchet_CSM;
+                }
+
+                //1. делаем апдейт в бидэ "апдейт сделать красиво"? если выбьрана галка для трек-номеров
+                if (CheckBox_Prisv_trackCSM.IsChecked == true)
+                {
+                    update_shiptor_for_treck_number(TextBox_Nomera_for_CSM); // апдейт для подготовки посылок в шиптор для присвоения трек-номеров
+                    csm_createOrder_api(TextBox_Nomera_for_CSM); //прокидываем метод по присвоению трек-номеров
+                    perepodgotovka_posilok(TextBox_Nomera_for_CSM);
+                }
+                if (CheckBox_Snyat_Stop_CSM.IsChecked == true)
+                {
+                    csm_zz_ne_sozdan(TextBox_Nomera_for_CSM);
+                }
+
+                //если не выьбрано то вывод отчета 
+                if (CheckBox_Otchet_CSM.IsChecked == true)
+                {
+                    if (CheckBox_Otchet_dlya_sebya_CSM.IsChecked == true)
+                    {
+                        //если отчет чекнут для себя 
+                        otchet_CSM_(dataBases.ConnectDB("Шиптор", $@"select *
 from (
 select 'RP' || p2.id as ""Родительское"", 'RP' || p.id as ""Дочернее"", p.external_id as ""ШК"", p.current_status as ""Статус"", case when t.tracking is null then t2.tracking else t.tracking end as ""Трек-номер""
 , case
@@ -2077,10 +2090,10 @@ where 1 = 1
 group by ""Родительское"", ""Дочернее"", ""ШК"", ""Статус"", ""Трек-номер"", ""Ошибка"", ""Партнёр""
 order by ""Ошибка"" desc"));
 
-                }
-                else
-                {
-                    otchet_CSM_(dataBases.ConnectDB("Шиптор", $@"select *
+                    }
+                    else
+                    {
+                        otchet_CSM_(dataBases.ConnectDB("Шиптор", $@"select *
 from (
 select  p.external_id as ""ШК"", case when t.tracking is null then t2.tracking else t.tracking end as ""Трек-номер"",
 case
@@ -2119,15 +2132,28 @@ and p.previous_id is null
 ) as table_name
 where 1 = 1
 group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошибка"" desc"));
+                    }
+
+
                 }
-
-
+                //MessageBox.Show("Готово!");
+                //Звук уведомление о финале файла
+                using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                new SoundPlayer(gzOut).Play();
             }
-            MessageBox.Show("Готово!");
-            /*//• Звук уведомление о финале файла
-            using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
-            using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                new SoundPlayer(gzOut).Play();*/
+            else
+            {
+                //прогрывать звук Windows Ошибка error
+                string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+
+                // Создание экземпляра SoundPlayer и проигрывание звука
+                using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                {
+                    errorSoundPlayer.Play();
+                }
+                MessageBox.Show("Не введены номера посылок!");
+            }    
         }
 
 
@@ -3360,7 +3386,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         /// <param name="e"></param>
         private void Button_Smeni_Status_Click(object sender, RoutedEventArgs e)
         {
-
+            
 
             if (ComboBox_Sh_Status.SelectedIndex != 0)
             { //если у нас вообще чтото выбранов поле статусов Шиптора 
@@ -3446,14 +3472,13 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         default:
                             break;
                     }
-
                     DB_Name_IS = null;
                     ComboBox_ZS_Status.SelectedIndex = 0;
 
                     //• Звук уведомление о финале 
                     using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
                     using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                        new SoundPlayer(gzOut).Play();
+                    new SoundPlayer(gzOut).Play();
 
                 }
                 else
@@ -3468,6 +3493,17 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                     };
                     MessageBox.Show("Не выбрад склад!");
 
+                }
+                //Галка снятия стопа "Разрыв ММ"
+                if ((snyat_stop_smena_statusov.IsChecked == true) && (vibor_sklada.SelectedIndex != -1) && (RP_list_Status.Text != null))
+                {
+                    dataBases.ConnectDB(DB_Name_IS, $@"delete from package_stop where package_id in (select id from package where package_fid in  ({RP_list_Status.Text})) and code = 'break_multiplace';");
+                    dataBases.ConnectDB(DB_Name_IS, $@"update parent_package pp set is_full = true where pp.fid in ({RP_list_Status.Text});");
+                    snyat_stop_smena_statusov.IsChecked = false;
+                    //• Звук уведомление о финале 
+                    using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                    using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                    new SoundPlayer(gzOut).Play();
                 }
 
 
@@ -3506,15 +3542,25 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
                 }
             }
+            
 
         }
+
 
         private void Button_Clear_Smena_Statusa_Click(object sender, RoutedEventArgs e)
         {
             RP_list_Status.Text = null;
+            vibor_sklada.SelectedIndex = -1;
+            text_box_poisk_sklada_IS.Text = null;
+        }
+
+        private void vibor_sklada_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            label_vibran_sklad_dinamik.Content = vibor_sklada.SelectedValue;
         }
 
         
+
 
         #endregion
 
