@@ -509,12 +509,16 @@ namespace HM
                 lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
                 TextBox.Text = string.Join(Environment.NewLine, lines);
                 List<string> SBC_strings = new List<string>();  //лист с SBC
-                if (TextBox.Text.Contains("SBC"))
+                if ((TextBox.Text.Contains("SBC"))  || (TextBox.Text.Contains("SMM")))
                 {
                     List<string> SBCs = To_List(TextBox); // лист разделенный на строки из всего TextBox
                     foreach (var item in SBCs)
                     {
                         if (item.Contains("SBC"))
+                        {
+                            SBC_strings.Add("'" + item + "'"); //добавляю в основной лист с SBC
+                        }
+                        if (item.Contains("SMM"))
                         {
                             SBC_strings.Add("'" + item + "'"); //добавляю в основной лист с SBC
                         }
@@ -939,7 +943,7 @@ namespace HM
 
                         // поиск и удаление из партии и корректировка статусов в шиптор 
                         var RPfromParty = dataBases.ConnectDB("Шиптор", $@"select id, return_id from package p where return_id in ({party})");
-                        dataBases.ConnectDB("Шиптор", $@"UPDATE public.package SET return_id = NULL, current_status = 'packed', sent_at = NULL  returned_at = NULL, returning_to_warehouse_at = NULL, packed_since = now()   WHERE return_id in ({party})");
+                        dataBases.ConnectDB("Шиптор", $@"UPDATE public.package SET return_id = NULL, current_status = 'packed', sent_at = NULL, returned_at = NULL, returning_to_warehouse_at = NULL, packed_since = now()   WHERE return_id in ({party})");
                         dataBases.ConnectDB("Шиптор", $@"UPDATE package_departure SET package_action = NULL  WHERE package_id in ({string.Join(",", RPfromParty.AsEnumerable().Select(x => x["id"].ToString()).ToList())})");
                         MessageBox.Show("Статус партии скорректирован!");
                         break;
@@ -2647,6 +2651,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                         break;
                                     case "Расформирована":
                                         dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where id in ({text_editor_palmet.Text});");
+                                        dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
                                         break;
                                 }
                                 DB_ZS_Palmet_Name_IS = null;
@@ -3383,7 +3388,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'to_return', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now() where id in ({RP_list_Status.Text})");
                         break;
                     case 8:
-                        dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), reported_at = now() where id in ({RP_list_Status.Text})");
+                        dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned', returned_at = now(), lost_at = null, removed_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), reported_at = now() where id in ({RP_list_Status.Text})");
                         break;
                     case 9:
                         dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'removed', removed_at = now() where id in ({RP_list_Status.Text})");
