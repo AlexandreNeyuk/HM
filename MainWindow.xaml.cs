@@ -781,6 +781,7 @@ namespace HM
         private void PartyEx_Click(object sender, RoutedEventArgs e)
         {
             // todo  [Партии]: При добавлении предупреждать о дубликатах если такие посылки уже добавлены и обрабатывать так, чтобы тех которых нет - прокидывать в партию, а дубли - убирать из запроса
+            
 
             if (Party.Text != "")
             {
@@ -860,7 +861,7 @@ namespace HM
                                 {
                                     //Удаление из паллеты
 
-                                    if (RP_Party.Text != null)
+                                    if (RP_Party.Text != "")
                                     {
                                         string RPid = RP_Party.Text.Replace("\r\n", "");
 
@@ -875,23 +876,43 @@ namespace HM
                                         dataBases.ConnectDB(StockName[0], $@"UPDATE package SET status = 'in_store' where package_fid in ({RPid})");
 
                                         MessageBox.Show($@"Из партии удалено!");
-                                        
+
 
 
 
 
                                     }
-                                    else MessageBox.Show("Поле для отправлений пусто! Добавьте отправления");
+
+                                    else
+                                    {
+                                        MessageBox.Show("Поле для отправлений пусто! Добавьте отправления");
+                                        //прогрывать звук Windows Ошибка error
+                                        string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+
+                                        // Создание экземпляра SoundPlayer и проигрывание звука
+                                        using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                                        {
+                                            errorSoundPlayer.Play();
+                                        }
+                                    }
+                                        
+
 
                                 }
                                 else MessageBox.Show($@"Партия не найдена на складе {StockName[0]}!");
                             }
+                                
+                            
                         }
                         ActionsForParty(StockName, paty);
 
 
                     }
-                    else { ActionsForParty(StockName, paty); }//поле посылок устое - работаю только с партией
+                    else 
+                        { 
+                            ActionsForParty(StockName, paty);
+                            MessageBox.Show("Поле посылок не заполнено!");
+                        }//поле посылок устое - работаю только с партией
 
 
 
