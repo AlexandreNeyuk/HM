@@ -2729,26 +2729,26 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                 itemPall.IsEnabled = true;
                             }
                         }
-                        ComboBoxItem itemBagNew = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(1);
+                        ComboBoxItem itemBagNew = (ComboBoxItem)Combobox_Actions_palmet.Items[1];// ContainerGenerator.ContainerFromIndex(1);
                         itemBagNew.IsEnabled = false;
-                        ComboBoxItem itemBagTransit = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(2);
+                        ComboBoxItem itemBagTransit = (ComboBoxItem)Combobox_Actions_palmet.Items[2]; // ContainerGenerator.ContainerFromIndex(2);
                         itemBagTransit.IsEnabled = false;
-                        ComboBoxItem itemBag12 = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(7); // блок отправлен и доставлен
+                        ComboBoxItem itemBag12 = (ComboBoxItem)Combobox_Actions_palmet.Items[7]; // ContainerGenerator.ContainerFromIndex(7); // блок отправлен и доставлен
                         itemBag12.IsEnabled = false;
-                        ComboBoxItem itemBag22 = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(8);
+                        ComboBoxItem itemBag22 = (ComboBoxItem)Combobox_Actions_palmet.Items[8]; // ContainerGenerator.ContainerFromIndex(8);
                         itemBag22.IsEnabled = false;
 
 
                         break;
                     case 1: // мешок
 
-                        ComboBoxItem itemBag1 = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(1);
+                        ComboBoxItem itemBag1 = (ComboBoxItem)Combobox_Actions_palmet.Items[1]; //ContainerGenerator.ContainerFromIndex(1);
                         itemBag1.IsEnabled = true;
-                        ComboBoxItem itemBag11 = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(2);
+                        ComboBoxItem itemBag11 = (ComboBoxItem)Combobox_Actions_palmet.Items[2]; //ContainerGenerator.ContainerFromIndex(2);
                         itemBag11.IsEnabled = true;
-                        ComboBoxItem itemBag111 = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(7);
+                        ComboBoxItem itemBag111 = (ComboBoxItem)Combobox_Actions_palmet.Items[7];   //ContainerGenerator.ContainerFromIndex(7);
                         itemBag111.IsEnabled = false;
-                        ComboBoxItem itemBag2 = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(8);
+                        ComboBoxItem itemBag2 = (ComboBoxItem)Combobox_Actions_palmet.Items[8];   //ContainerGenerator.ContainerFromIndex(8);
                         itemBag2.IsEnabled = false;
 
 
