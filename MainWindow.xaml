@@ -103,7 +103,7 @@
         <Grid x:Name="MajorGrid" Height="478" VerticalAlignment="Bottom">
             <Grid x:Name="PartyGrid" Background="White" d:IsHidden="True">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии склада" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
-                <CheckBox x:Name="CheckBox_CorrectStatus_Party" Content="Скорректировать статусы" Margin="0,298,17,0" VerticalAlignment="Top" ToolTip="Если вырано, скорректируются дополнительно статусы на возвратные как на складе, так и в Шиптор у отправлений" HorizontalAlignment="Right" Width="161"/>
+                <CheckBox x:Name="CheckBox_CorrectStatus_Party" Content="Скорректировать статусы" Margin="0,326,16,0" VerticalAlignment="Top" ToolTip="Если вырано, скорректируются дополнительно статусы на возвратные как на складе, так и в Шиптор у отправлений" HorizontalAlignment="Right" Width="161"/>
                 <ComboBox x:Name="SelectAction" HorizontalAlignment="Right" Margin="0,153,24,0" VerticalAlignment="Top" Width="147" SelectedIndex="1" BorderThickness="0,0,0,0" FontFamily="72" Height="22" SelectionChanged="SelectAction_SelectionChanged">
                     <ComboBoxItem Content="Добавить в партию" IsEnabled="False"/>
                     <ComboBoxItem Content="Удалить из партии"/>
@@ -130,6 +130,7 @@
                 </ComboBox>
                 <Label HorizontalAlignment="Right" Margin="0,191,24,0" VerticalAlignment="Top" Content="Действие над партией" Width="147" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                 <Button x:Name="Clear_Text_Party" Content="X" BorderThickness="0,0,0,0" Margin="0,34,0,420" Click="Clear_Text_Party_Click" HorizontalAlignment="Right" Width="32"/>
+                <Button x:Name="Kopirovat_otvet_party" Content="Копировать ответ" HorizontalAlignment="Left" Margin="665,289,0,0" VerticalAlignment="Top" Width="147" Click="Kopirovat_otvet_party_Click"/>
 
 
             </Grid>
@@ -194,7 +195,7 @@
                     </Canvas>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="HomeGrid">
+            <Grid x:Name="HomeGrid" d:IsHidden="True">
                 <TabControl x:Name="TB" BorderThickness="1,1,1,0" Padding="-1,-1,2,2" SelectionChanged="TB_SelectionChanged">
                     <TabItem x:Name="RP_List" Header="RP списки" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-3,0,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsSelected="True" >
                         <Grid Height="451" Margin="0,0,-2,0">
@@ -377,13 +378,14 @@
                             <Label x:Name="label_vibran_sklad_statik" Content="Выбран склад:" HorizontalAlignment="Right" Margin="0,115,164,0" VerticalAlignment="Top" Width="95" Height="28"/>
                             <Label x:Name="label_vibran_sklad_dinamik" Content="" HorizontalAlignment="Right" Margin="0,116,1,0" VerticalAlignment="Top" Width="172" FontWeight="Bold"/>
                             <CheckBox x:Name="snyat_stop_smena_statusov" Content="Снять стоп &quot;Разрыв ММ&quot;" HorizontalAlignment="Right" Margin="0,143,102,0" VerticalAlignment="Top"/>
+                            <Button x:Name="Kopirovat_otver_statusi" Content="Копировать ответ" HorizontalAlignment="Right" Margin="0,309,38,0" VerticalAlignment="Top" Width="174" Click="Kopirovat_otver_statusi_Click"/>
 
 
                         </Grid>
                     </TabItem>
                 </TabControl>
             </Grid>
-            <Grid x:Name="StoreGrid" Background="White" d:IsHidden="True">
+            <Grid x:Name="StoreGrid" Background="White">
                 <TabControl BorderThickness="1,1,1,0" Padding="-1,-1,2,2" BorderBrush="White" Background="White" SelectionChanged="Store_SelectionChanged">
                     <TabItem x:Name="RP_List1" Header="Импорт" BorderThickness="0,0,55,0" Width="120" Height="30" Margin="-2,-2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsSelected="True" >
                         <Grid Background="White" Height="451">
@@ -436,27 +438,27 @@
                                 <CheckBox x:Name="CheckBox_Snyat_Stop_CSM" Content="Снять стоп на:" Width="106" Canvas.Left="8" Canvas.Top="248" Height="18" ToolTip="(!Ставь галочку, если знаешь что делать(!)" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <TextBox x:Name="TextBox_imya_sklada_CSM" Canvas.Left="111" TextWrapping="Wrap" Canvas.Top="246" Width="92" HorizontalAlignment="Center" VerticalAlignment="Top" Height="20"/>
                                 <Button x:Name="ButtonClear_CSM" Width="31" Canvas.Left="193" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20" Content="X" ToolTip="Очистить поля" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ButtonClear_CSM_Click"/>
+                                <Button x:Name="kopirovat_otvet_csm" Content="Копировать ответ" Canvas.Left="61" Canvas.Top="308" HorizontalAlignment="Left" VerticalAlignment="Center" Width="103" Click="kopirovat_otvet_csm_Click"/>
                             </Canvas>
                         </Grid>
                     </TabItem>
                     <TabItem x:Name="Pallet_and_meshok" Header="Паллеты/Мешки" BorderThickness="0,0,55,0" Height="30" Margin="-3,-2,0,0" VerticalAlignment="Top" IsSelected="True" HorizontalAlignment="Left" Width="103" >
-                        <Grid Background="White" Height="445" Margin="0,0,-2,0">
+                        <Grid Background="White" Height="445" HorizontalAlignment="Left" Width="835">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="71*"/>
-                                <ColumnDefinition Width="764*"/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <avalonEdit:TextEditor
                                 x:Name="text_editor_palmet"
                                 FontFamily="Consolas"
                                 FontSize="14"
-                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="236,26,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="387" Grid.Column="1"/>
-                            <TextBox x:Name="Search_palmet" Margin="6,4,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="20" KeyDown="SearchWH_KeyDown" HorizontalAlignment="Left" Width="301" TextChanged="Search_palmet_TextChanged" Grid.ColumnSpan="2"/>
-                            <Label Content="Номера паллет/мешков" Margin="347,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="190" Height="28" Grid.Column="1"/>
-                            <ListBox x:Name="list_palmet" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="6,29,0,23" BorderThickness="0,0,0,0" HorizontalAlignment="Left" Width="301" SelectionChanged="list_palmet_SelectionChanged" Grid.ColumnSpan="2"/>
-                            <Canvas Margin="0,0,2,23" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139" Grid.Column="1">
+                                SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="307,26,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="387"/>
+                            <TextBox x:Name="Search_palmet" Margin="6,4,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="20" KeyDown="SearchWH_KeyDown" HorizontalAlignment="Left" Width="301" TextChanged="Search_palmet_TextChanged"/>
+                            <Label Content="Номера паллет/мешков" Margin="418,4,0,0" VerticalAlignment="Top" Height="28" HorizontalAlignment="Left" Width="190"/>
+                            <ListBox x:Name="list_palmet" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="7,29,528,23" BorderThickness="0,0,0,0" SelectionChanged="list_palmet_SelectionChanged"/>
+                            <Canvas Margin="0,0,2,23" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139">
                                 <Label Content="Параметры" Canvas.Left="31" FontWeight="Bold" Canvas.Top="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <Label x:Name="Selected_NameWarh_palmet" Canvas.Left="10" Canvas.Top="67" Width="122" FontWeight="Bold" Height="26" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1,1,1,1" BorderBrush="#FFC3C3C3"/>
                                 <Label Canvas.Left="9" Canvas.Top="41" Width="122" Height="26" Content="Выбран склад" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -476,6 +478,7 @@
                                     <ComboBoxItem Content="Расформирована"/>
                                 </ComboBox>
                                 <Label Content="Действия над П/М" Canvas.Left="11" Canvas.Top="125" Width="118" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+                                <Button x:Name="Kopirovat_orvet_palmet" Content="Копировать ответ" Canvas.Left="18" Canvas.Top="226" HorizontalAlignment="Left" VerticalAlignment="Center" Width="102" Click="Kopirovat_orvet_palmet_Click"/>
                             </Canvas>
 
                         </Grid>

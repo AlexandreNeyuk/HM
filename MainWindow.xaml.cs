@@ -1063,18 +1063,44 @@ namespace HM
             RP_Party.Text = null;
             Party.Text = null;
         }
-        #endregion
+
+        private void Kopirovat_otvet_party_Click(object sender, RoutedEventArgs e)
+        {
+            switch (SelectAction_Party.SelectionBoxItem)
+            {
+                case "Ничего":
+                    try { Clipboard.SetText("Здравствуйте! Посылки были удалены из партии возврата."); } catch { };
+                    break;
+                case "Собирается":
+                    try { Clipboard.SetText("Здравствуйте! Статус партии был скорректирован на 'Собирается'."); } catch { };
+                    break;
+                case "Собрана":
+                    try { Clipboard.SetText("Здравствуйте! Статус партии был скорректирован на 'Собрана'."); } catch { };
+                    break;
+                case "Упакована":
+                    try { Clipboard.SetText("Здравствуйте! Статус партии был скорректирован на 'Упакована'."); } catch { };
+                    break;
+                case "Выдана":
+                    try { Clipboard.SetText("Здравствуйте! Статус партии был скорректирован на 'Выдана'."); } catch { };
+                    break;
+                case "Расформирована":
+                    try { Clipboard.SetText("Здравствуйте! Статус партии был скорректирован на 'Расформирована'."); } catch { };
+                    break;
+            }
+
+        }
+            #endregion
 
 
 
-        #region Tools
+            #region Tools
 
-        /// <summary>
-        /// Конвертер в лист строк из содержимого TextEditor
-        /// </summary>
-        /// <param name="tx">Поле для конвертации</param>
-        /// <returns></returns>
-        public List<string> To_List(TextEditor tx)
+            /// <summary>
+            /// Конвертер в лист строк из содержимого TextEditor
+            /// </summary>
+            /// <param name="tx">Поле для конвертации</param>
+            /// <returns></returns>
+            public List<string> To_List(TextEditor tx)
         {
             List<string> str = tx.Text.Split(Environment.NewLine).ToList();
             return str;
@@ -2581,10 +2607,32 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             CheckBox_Otchet_dlya_sebya_CSM.IsChecked = false;
             CheckBox_Otchet_CSM.IsChecked = false;
         }
+
+        /// <summary>
+        /// Кнопка автоответа в вкладке CSM
+        /// </summary>
+        private void kopirovat_otvet_csm_Click(object sender, RoutedEventArgs e)
+        {
+            if ((CheckBox_Prisv_trackCSM.IsChecked == true) && (CheckBox_Snyat_Stop_CSM.IsChecked == false))
+            {
+                try { Clipboard.SetText("Здравствуйте! Трек-номера присвоены."); } catch { };
+            }    
+
+            if (CheckBox_Snyat_Stop_CSM.IsChecked == true)
+            {
+                try { Clipboard.SetText("Здравствуйте! Стоп 'Заказ не создан у партнёра' был снят."); } catch { };
+            }
+
+            if ((CheckBox_Otchet_CSM.IsChecked == true) && (CheckBox_Prisv_trackCSM.IsChecked == false) && (CheckBox_Snyat_Stop_CSM.IsChecked == false))
+            {
+                try { Clipboard.SetText("Здравствуйте! Требуемый отчёт приложен в файле 'Выгрузка'."); } catch { };
+            }    
+            if ((CheckBox_Otchet_CSM.IsChecked == false) && (CheckBox_Prisv_trackCSM.IsChecked == false) && (CheckBox_Snyat_Stop_CSM.IsChecked == false))
+            {
+                try { Clipboard.SetText("Готово!"); } catch { };
+            }
+        }
         #endregion
-
-
-
 
         #region Pallets && Bags
 
@@ -2744,6 +2792,46 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             text_editor_palmet.Text = "";
             //list_palmet.ItemsSource = null;
             Search_palmet.Text = "";
+        }
+        /// <summary>
+        /// Кнопка автоответа для паллет и мешков
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Kopirovat_orvet_palmet_Click(object sender, RoutedEventArgs e)
+        {
+            string palmet_avtootvet = "";
+            switch (Combobox_palmet.SelectionBoxItem)
+            {
+                case "Паллета":
+                    palmet_avtootvet = "паллеты";
+                    try { Clipboard.SetText("Здравствуйте! Посылки были удалены из партии возврата."); } catch { };
+                    break;
+                case "Мешок":
+                    palmet_avtootvet = "мешка";
+                    break;
+            }
+            switch (Combobox_Actions_palmet.SelectionBoxItem)
+            {
+                case "Собирается":
+                    try { Clipboard.SetText("Здравствуйте! Статус "+ palmet_avtootvet + " скорректирован на 'Собирается'."); } catch { };
+                    break;
+                case "Собрана":
+                    try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Собрана'."); } catch { };
+                    break;
+                case "Упакована":
+                    try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Упакована'."); } catch { };
+                    break;
+                case "Отправлен":
+                    try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Отправлено'."); } catch { };
+                    break;
+                case "Доставлен":
+                    try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Выдан'."); } catch { };
+                    break;
+                case "Расформирована":
+                    try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Расформирована'."); } catch { };
+                    break;
+            }
         }
 
         #endregion
@@ -3586,9 +3674,16 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             label_vibran_sklad_dinamik.Content = vibor_sklada.SelectedValue;
         }
 
-        
-
-
+        private void Kopirovat_otver_statusi_Click(object sender, RoutedEventArgs e)
+        {
+            try { 
+                Clipboard.SetText("Здравствуйте! Статус посылок был скорректирован."); 
+            }
+            catch 
+            {
+            
+            }
+        }
         #endregion
 
         /*        #region Kafka_and_Import_Sap_ZApp
