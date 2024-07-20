@@ -509,7 +509,7 @@ namespace HM
                 lines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
                 TextBox.Text = string.Join(Environment.NewLine, lines);
                 List<string> SBC_strings = new List<string>();  //лист с SBC
-                if ((TextBox.Text.Contains("SBC"))  || (TextBox.Text.Contains("SMM")))
+                if ((TextBox.Text.Contains("SBC")) || (TextBox.Text.Contains("SMM")))
                 {
                     List<string> SBCs = To_List(TextBox); // лист разделенный на строки из всего TextBox
                     foreach (var item in SBCs)
@@ -607,7 +607,7 @@ namespace HM
             BFcopy.Text = null;
         }
 
-        
+
 
         /// <summary>
         ///очистка пвсего поля 
@@ -736,7 +736,7 @@ namespace HM
         /// </summary>
         private void Ubrat_zapyatie_RP_spiski_Click(object sender, RoutedEventArgs e)
         {
-            ListOne.Text = ListOne.Text.Replace(",","");
+            ListOne.Text = ListOne.Text.Replace(",", "");
             ListTwo.Text = ListTwo.Text.Replace(",", "");
         }
 
@@ -781,7 +781,7 @@ namespace HM
         private void PartyEx_Click(object sender, RoutedEventArgs e)
         {
             // todo  [Партии]: При добавлении предупреждать о дубликатах если такие посылки уже добавлены и обрабатывать так, чтобы тех которых нет - прокидывать в партию, а дубли - убирать из запроса
-            
+
 
             if (Party.Text != "")
             {
@@ -895,24 +895,24 @@ namespace HM
                                             errorSoundPlayer.Play();
                                         }
                                     }
-                                        
+
 
 
                                 }
                                 else MessageBox.Show($@"Партия не найдена на складе {StockName[0]}!");
                             }
-                                
-                            
+
+
                         }
                         ActionsForParty(StockName, paty);
 
 
                     }
-                    else 
-                        { 
-                            ActionsForParty(StockName, paty);
-                            MessageBox.Show("Поле посылок не заполнено!");
-                        }//поле посылок устое - работаю только с партией
+                    else
+                    {
+                        ActionsForParty(StockName, paty);
+                        MessageBox.Show("Поле посылок не заполнено!");
+                    }//поле посылок устое - работаю только с партией
 
 
 
@@ -1089,18 +1089,18 @@ namespace HM
             }
 
         }
-            #endregion
+        #endregion
 
 
 
-            #region Tools
+        #region Tools
 
-            /// <summary>
-            /// Конвертер в лист строк из содержимого TextEditor
-            /// </summary>
-            /// <param name="tx">Поле для конвертации</param>
-            /// <returns></returns>
-            public List<string> To_List(TextEditor tx)
+        /// <summary>
+        /// Конвертер в лист строк из содержимого TextEditor
+        /// </summary>
+        /// <param name="tx">Поле для конвертации</param>
+        /// <returns></returns>
+        public List<string> To_List(TextEditor tx)
         {
             List<string> str = tx.Text.Split(Environment.NewLine).ToList();
             return str;
@@ -1126,7 +1126,7 @@ namespace HM
 
         }
 
-        
+
 
         #region Settings      
 
@@ -1861,6 +1861,7 @@ namespace HM
         #endregion
 
         #region Store
+        bool active_PalM = false;
 
         /// <summary>
         /// Действия при переключепнии вкладок на Складе: керпка вывода предупреждения при входе во вкладку CSM + подгрузка заппов на вкладке с Паллетами и Мешками 
@@ -1884,6 +1885,7 @@ namespace HM
                     case "Pallet_and_meshok":
                         //Вкладка паллет и мешка
                         loaderL_P_M();
+                        active_PalM = true;
                         break;
                 }
             }
@@ -2187,7 +2189,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                 //Звук уведомление о финале файла
                 using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
                 using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                new SoundPlayer(gzOut).Play();
+                    new SoundPlayer(gzOut).Play();
             }
             else
             {
@@ -2200,7 +2202,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                     errorSoundPlayer.Play();
                 }
                 MessageBox.Show("Не введены номера посылок!");
-            }    
+            }
         }
 
 
@@ -2616,7 +2618,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             if ((CheckBox_Prisv_trackCSM.IsChecked == true) && (CheckBox_Snyat_Stop_CSM.IsChecked == false))
             {
                 try { Clipboard.SetText("Здравствуйте! Трек-номера присвоены."); } catch { };
-            }    
+            }
 
             if (CheckBox_Snyat_Stop_CSM.IsChecked == true)
             {
@@ -2626,7 +2628,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             if ((CheckBox_Otchet_CSM.IsChecked == true) && (CheckBox_Prisv_trackCSM.IsChecked == false) && (CheckBox_Snyat_Stop_CSM.IsChecked == false))
             {
                 try { Clipboard.SetText("Здравствуйте! Требуемый отчёт приложен в файле 'Выгрузка'."); } catch { };
-            }    
+            }
             if ((CheckBox_Otchet_CSM.IsChecked == false) && (CheckBox_Prisv_trackCSM.IsChecked == false) && (CheckBox_Snyat_Stop_CSM.IsChecked == false))
             {
                 try { Clipboard.SetText("Готово!"); } catch { };
@@ -2703,6 +2705,61 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
         }
 
+
+
+        /// <summary>
+        /// Смена возможных статусов взависимости от  мешка или паллета 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Combobox_palmet_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+
+            if (active_PalM == true)
+            {
+                switch (Combobox_palmet.SelectedIndex)
+                {
+                    case 0:// паллет
+                        for (int i = 0; i < Combobox_Actions_palmet.Items.Count; i++)
+                        {
+                            ComboBoxItem itemPall = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(i);
+                            if (itemPall != null)
+                            {
+                                itemPall.IsEnabled = true;
+                            }
+                        }
+                        ComboBoxItem itemBagNew = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(1);
+                        itemBagNew.IsEnabled = false;
+                        ComboBoxItem itemBagTransit = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(2);
+                        itemBagTransit.IsEnabled = false;
+                        ComboBoxItem itemBag12 = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(7); // блок отправлен и доставлен
+                        itemBag12.IsEnabled = false;
+                        ComboBoxItem itemBag22 = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(8);
+                        itemBag22.IsEnabled = false;
+
+
+                        break;
+                    case 1: // мешок
+
+                        ComboBoxItem itemBag1 = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(1);
+                        itemBag1.IsEnabled = true;
+                        ComboBoxItem itemBag11 = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(2);
+                        itemBag11.IsEnabled = true;
+                        ComboBoxItem itemBag111 = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(7);
+                        itemBag111.IsEnabled = false;
+                        ComboBoxItem itemBag2 = (ComboBoxItem)Combobox_Actions_palmet.ItemContainerGenerator.ContainerFromIndex(8);
+                        itemBag2.IsEnabled = false;
+
+
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+        }
+
         /// <summary>
         /// Кнопка "Сделать" в паллетах и мешках. //DB_ZS_Palmet_Name_IS
         /// </summary>
@@ -2714,12 +2771,60 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             {
                 if (text_editor_palmet.Text != "")
                 {
-                    if (Combobox_palmet.SelectedIndex == 0)
+                    switch (Combobox_palmet.SelectedIndex)
                     {
-                        LoadData_FromReg_palmet();
-                        if (DB_ZS_Palmet_Name_IS != null)
-                        {//если найдена инфа по хосту и бд в реестре то идем дальше
-                            if (Combobox_Actions_palmet.SelectedIndex == 0)
+                        #region SelectPallet
+
+                        case 0: //Ввыбрана паллета
+                            LoadData_FromReg_palmet();
+                            if (DB_ZS_Palmet_Name_IS != null)
+                            {//если найдена инфа по хосту и бд в реестре то идем дальше
+                                if (Combobox_Actions_palmet.SelectedIndex == 0)
+                                {
+                                    //прогрывать звук Windows Ошибка error
+                                    string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+                                    // Создание экземпляра SoundPlayer и проигрывание звука
+                                    using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                                    {
+                                        errorSoundPlayer.Play();
+                                    };
+                                    MessageBox.Show("Не выбрано действие!");
+                                }
+                                else
+                                {
+                                    switch (Combobox_Actions_palmet.SelectionBoxItem)
+                                    {
+                                        case "Собирается":
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathering' where id in ({text_editor_palmet.Text});");
+                                            break;
+                                        case "Собрана":
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathered' where id in ({text_editor_palmet.Text});");
+                                            break;
+                                        case "Упакована":
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'packed' where id in ({text_editor_palmet.Text});");
+                                            break;
+                                        case "Расформирована":
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where id in ({text_editor_palmet.Text});");
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
+                                            break;
+                                        case "Ждет транзита":
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_transit' where id in ({text_editor_palmet.Text});");
+                                            break;
+                                        case "Ожидает сборки":
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_gather' where id in ({text_editor_palmet.Text});");
+
+                                            break;
+                                    }
+                                    DB_ZS_Palmet_Name_IS = null;
+                                    Combobox_Actions_palmet.SelectedIndex = 0;
+                                    //• Звук уведомление о финале 
+                                    using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                                    using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                                        new SoundPlayer(gzOut).Play();
+                                }
+
+                            }
+                            else
                             {
                                 //прогрывать звук Windows Ошибка error
                                 string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
@@ -2729,48 +2834,124 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                 {
                                     errorSoundPlayer.Play();
                                 };
-                                MessageBox.Show("Не выбрано действие!");
+                                MessageBox.Show("Не выбран склад!");
+                            }
+                            break;
+                        #endregion
+
+                        #region SelectBag
+
+                        case 1: // выбран мешок
+
+                            LoadData_FromReg_palmet();
+                            if (DB_ZS_Palmet_Name_IS != null)
+                            {//если найдена инфа по хосту и бд в реестре то идем дальше
+                                if (Combobox_Actions_palmet.SelectedIndex == 0)
+                                { //если не выбрано действие над мешком
+                                    //прогрывать звук Windows Ошибка error
+                                    string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+                                    // Создание экземпляра SoundPlayer и проигрывание звука
+                                    using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                                    {
+                                        errorSoundPlayer.Play();
+                                    };
+                                    MessageBox.Show("Не выбрано действие!");
+                                }
+                                else
+                                {
+                                    //переводим список мешков в лист 
+                                    //проверяем каждую строку на наличие MK, по дефолту считаем что там bag_id 
+                                    //MK собираем в один болльшой лист и находим от них Bag ID 
+                                    //соединяем оба листа 
+                                    text_editor_palmet.Text = text_editor_palmet.Text.Replace(",", ""); //писать мешки ТОЛЬКО с новой  строки, без пробелов, как ШК  (запятые удаляю)
+                                    List<string> ListALLBags = To_List(text_editor_palmet); // общий список
+                                    List<string> List_Bags_Id = new List<string>(); // список с ID мешков 
+
+                                    List<string> ListMK = new List<string>(); // отдеольный лист с MK
+                                    foreach (var item in ListALLBags)
+                                    {
+                                        //проверять в каком формате был введент мешок : MK0000222874 или bag_ig напрямую
+                                        if (ListALLBags.Contains("MK"))
+                                        {
+                                            ListMK.Add(item); // сюда мешки с MK
+
+                                        }
+                                        else { List_Bags_Id.Add(item); } //сюда ID записываем
+                                    }
+                                    //создаем запрос:
+                                    string MK_zapros = "";
+                                    if (ListMK.Count >= 0) { MK_zapros = $@"select id from bag b   where  seal_id ilike ('%{ListMK[0]}%')"; }
+                                    if (ListMK.Count >= 1)
+                                    {
+                                        for (int i = 1; i < ListMK.Count; i++)
+                                        {
+                                            MK_zapros += $@" or seal_id ilike ('%{ListMK[i]}%')";
+                                        }
+                                    }
+                                    //находим id мешков по MK,если лист с MK  не пустой
+                                    if (MK_zapros != "")
+                                    {
+                                        List<string> BagsIDSofMK = dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"MK_zapros").AsEnumerable().Select(x => x[0].ToString()).ToList();
+                                    }
+                                    //складываем списки = получаем общий список с ID мешков в теории
+                                    List_Bags_Id.AddRange(ListMK);
+
+                                    string id_bags_complited = "";
+                                    if (List_Bags_Id.Count > 0)
+                                    {
+                                        id_bags_complited = string.Join(", ", List_Bags_Id); //пишем в переменную все элементы листа с id мешков через запятую для запросов
+                                    }
+                                    if (id_bags_complited != "")
+                                    { ///менять статусы и производить какие либо действия будем ТОЛЬКО по bag_id 
+                                        switch (Combobox_Actions_palmet.SelectionBoxItem)
+                                        {
+                                            case "Новая":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update bag set status = 'created' where id in ({id_bags_complited});");
+                                                break;
+                                            case "Собирается":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update bag set status = 'gathering' where id in ({id_bags_complited});");
+                                                break;
+                                            case "Собрана":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update bag set status = 'gathered' where id in ({id_bags_complited});");
+                                                break;
+                                            case "Упакована":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update bag set status = 'packed' where id in ({id_bags_complited});");
+                                                break;
+                                            case "Расформирована":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update bag set status = 'disbanded' where id in ({id_bags_complited});");
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set bag_id = null where bag_id in ({id_bags_complited});");
+                                                break;
+                                        }
+                                        DB_ZS_Palmet_Name_IS = null;
+                                        Combobox_Actions_palmet.SelectedIndex = 0;
+                                        //• Звук уведомление о финале 
+                                        using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                                        using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                                            new SoundPlayer(gzOut).Play();
+
+                                    }
+
+                                }
+
                             }
                             else
                             {
-                                switch (Combobox_Actions_palmet.SelectionBoxItem)
+                                //прогрывать звук Windows Ошибка error
+                                string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+
+                                // Создание экземпляра SoundPlayer и проигрывание звука
+                                using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
                                 {
-                                    case "Собирается":
-                                        dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathering' where id in ({text_editor_palmet.Text});");
-                                        break;
-                                    case "Собрана":
-                                        dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathered' where id in ({text_editor_palmet.Text});");
-                                        break;
-                                    case "Упакована":
-                                        dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'packed' where id in ({text_editor_palmet.Text});");
-                                        break;
-                                    case "Расформирована":
-                                        dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where id in ({text_editor_palmet.Text});");
-                                        dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
-                                        break;
-                                }
-                                DB_ZS_Palmet_Name_IS = null;
-                                Combobox_Actions_palmet.SelectedIndex = 0;
-                                //• Звук уведомление о финале 
-                                using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
-                                using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                                    new SoundPlayer(gzOut).Play();
+                                    errorSoundPlayer.Play();
+                                };
+                                MessageBox.Show("Не выбран склад!");
                             }
 
-                        }
-                        else
-                        {
-                            //прогрывать звук Windows Ошибка error
-                            string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+                            break;
+                            #endregion
 
-                            // Создание экземпляра SoundPlayer и проигрывание звука
-                            using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
-                            {
-                                errorSoundPlayer.Play();
-                            };
-                            MessageBox.Show("Не выбран склад!");
-                        }
                     }
+
                 }
                 else
                 {
@@ -2814,7 +2995,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             switch (Combobox_Actions_palmet.SelectionBoxItem)
             {
                 case "Собирается":
-                    try { Clipboard.SetText("Здравствуйте! Статус "+ palmet_avtootvet + " скорректирован на 'Собирается'."); } catch { };
+                    try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Собирается'."); } catch { };
                     break;
                 case "Собрана":
                     try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Собрана'."); } catch { };
@@ -3560,7 +3741,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                             case "Отправлена":
                                 dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'sent' where package_fid in ({RP_list_Status.Text});");
                                 break;
-                            case "Ожидает решения по возврату":
+                            case "Ждет возврата отправителю":
                                 dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'wait_return_to_sender' where package_fid in ({RP_list_Status.Text});");
                                 break;
                             case "Расформирована":
@@ -3657,7 +3838,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
                 }
             }
-            
+
 
         }
 
@@ -3676,14 +3857,17 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
         private void Kopirovat_otver_statusi_Click(object sender, RoutedEventArgs e)
         {
-            try { 
-                Clipboard.SetText("Здравствуйте! Статус посылок был скорректирован."); 
-            }
-            catch 
+            try
             {
-            
+                Clipboard.SetText("Здравствуйте! Статус посылок был скорректирован.");
+            }
+            catch
+            {
+
             }
         }
+
+
         #endregion
 
         /*        #region Kafka_and_Import_Sap_ZApp

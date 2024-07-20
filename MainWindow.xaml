@@ -361,7 +361,7 @@
                                 <ComboBoxItem Content="Не изменять"/>
                                 <ComboBoxItem Content="На складе"/>
                                 <ComboBoxItem Content="Отправлена"/>
-                                <ComboBoxItem Content="Ожидает решения по возврату"/>
+                                <ComboBoxItem Content="Ждет возврата отправителю"/>
                                 <ComboBoxItem Content="Расформирована"/>
                                 <ComboBoxItem Content="Ожидает сортировки"/>
                                 <ComboBoxItem Content="Возвращена на склад"/>
@@ -443,7 +443,7 @@
                         </Grid>
                     </TabItem>
                     <TabItem x:Name="Pallet_and_meshok" Header="Паллеты/Мешки" BorderThickness="0,0,55,0" Height="30" Margin="-3,-2,0,0" VerticalAlignment="Top" IsSelected="True" HorizontalAlignment="Left" Width="103" >
-                        <Grid Background="White" Height="445" HorizontalAlignment="Left" Width="835">
+                        <Grid Background="White" Height="445" Margin="0,0,-2,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
@@ -457,19 +457,17 @@
                                 SyntaxHighlighting="C#" LineNumbersForeground="#FF2A940E" Background="White" Foreground="Black" WordWrap="True" Margin="307,26,0,23" ShowLineNumbers="True" Padding="1,0,0,0" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left" Width="387"/>
                             <TextBox x:Name="Search_palmet" Margin="6,4,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="72" Height="20" KeyDown="SearchWH_KeyDown" HorizontalAlignment="Left" Width="301" TextChanged="Search_palmet_TextChanged"/>
                             <Label Content="Номера паллет/мешков" Margin="418,4,0,0" VerticalAlignment="Top" Height="28" HorizontalAlignment="Left" Width="190"/>
-                            <ListBox x:Name="list_palmet" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="7,29,528,23" BorderThickness="0,0,0,0" SelectionChanged="list_palmet_SelectionChanged"/>
-                            <Canvas Margin="0,0,2,23" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="139">
+                            <ListBox x:Name="list_palmet" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="7,29,0,23" BorderThickness="0,0,0,0" SelectionChanged="list_palmet_SelectionChanged" HorizontalAlignment="Left" Width="300"/>
+                            <Canvas Margin="0,0,0,23" Background="#FFF3F3F3" HorizontalAlignment="Right" Width="141">
                                 <Label Content="Параметры" Canvas.Left="31" FontWeight="Bold" Canvas.Top="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <Label x:Name="Selected_NameWarh_palmet" Canvas.Left="10" Canvas.Top="67" Width="122" FontWeight="Bold" Height="26" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1,1,1,1" BorderBrush="#FFC3C3C3"/>
                                 <Label Canvas.Left="9" Canvas.Top="41" Width="122" Height="26" Content="Выбран склад" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <Button x:Name="ButtonClear_ImportStrore1" Width="31" Canvas.Left="108" Padding="0,0,0,0" BorderThickness="0,0,0,0" Height="20" Content="X" ToolTip="Очистить поля" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ButtonClear_ImportStrore1_Click"/>
-                                <ComboBox x:Name="Combobox_palmet" Canvas.Left="11" Canvas.Top="98" Width="120" SelectedIndex="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <ComboBoxItem Content="Паллета"/>
-                                    <ComboBoxItem Content="Мешок"/>
-                                </ComboBox>
-                                <Button x:Name="Button_palmet" Content="Сделать!" Canvas.Left="30" Canvas.Top="201" Width="78" Height="20" BorderThickness="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_palmet_Click"/>
                                 <ComboBox x:Name="Combobox_Actions_palmet" Canvas.Left="11" Canvas.Top="156" Width="120" SelectedIndex="0" HorizontalAlignment="Left" VerticalAlignment="Top">
                                     <ComboBoxItem Content="Ничего"/>
+                                    <ComboBoxItem Content="Новая" IsEnabled="False"/>
+                                    <ComboBoxItem Content="Ждет транзита"/>
+                                    <ComboBoxItem Content="Ожидает сборки"/>
                                     <ComboBoxItem Content="Собирается"/>
                                     <ComboBoxItem Content="Собрана"/>
                                     <ComboBoxItem Content="Упакована"/>
@@ -477,6 +475,11 @@
                                     <ComboBoxItem Content="Доставлен" IsEnabled="False"/>
                                     <ComboBoxItem Content="Расформирована"/>
                                 </ComboBox>
+                                <ComboBox x:Name="Combobox_palmet" Canvas.Left="11" Canvas.Top="98" Width="120" SelectedIndex="0" HorizontalAlignment="Center" VerticalAlignment="Center" SelectionChanged="Combobox_palmet_SelectionChanged">
+                                    <ComboBoxItem Content="Паллета"/>
+                                    <ComboBoxItem Content="Мешок"/>
+                                </ComboBox>
+                                <Button x:Name="Button_palmet" Content="Сделать!" Canvas.Left="30" Canvas.Top="201" Width="78" Height="20" BorderThickness="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_palmet_Click"/>
                                 <Label Content="Действия над П/М" Canvas.Left="11" Canvas.Top="125" Width="118" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
                                 <Button x:Name="Kopirovat_orvet_palmet" Content="Копировать ответ" Canvas.Left="18" Canvas.Top="226" HorizontalAlignment="Left" VerticalAlignment="Center" Width="102" Click="Kopirovat_orvet_palmet_Click"/>
                             </Canvas>
