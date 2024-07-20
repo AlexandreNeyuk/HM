@@ -2737,7 +2737,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         itemBag12.IsEnabled = false;
                         ComboBoxItem itemBag22 = (ComboBoxItem)Combobox_Actions_palmet.Items[8]; // ContainerGenerator.ContainerFromIndex(8);
                         itemBag22.IsEnabled = false;
-
+                        Combobox_Actions_palmet.SelectedIndex = 0;
 
                         break;
                     case 1: // мешок
@@ -2750,7 +2750,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         itemBag111.IsEnabled = false;
                         ComboBoxItem itemBag2 = (ComboBoxItem)Combobox_Actions_palmet.Items[8];   //ContainerGenerator.ContainerFromIndex(8);
                         itemBag2.IsEnabled = false;
-
+                        Combobox_Actions_palmet.SelectedIndex = 0;
 
                         break;
                     default:
@@ -2891,7 +2891,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                     //находим id мешков по MK,если лист с MK  не пустой
                                     if (MK_zapros != "")
                                     {
-                                        List<string> BagsIDSofMK = dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"MK_zapros").AsEnumerable().Select(x => x[0].ToString()).ToList();
+                                        List<string> BagsIDSofMK = dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, MK_zapros).AsEnumerable().Select(x => x[0].ToString()).ToList();
                                     }
                                     //складываем списки = получаем общий список с ID мешков в теории
                                     List_Bags_Id.AddRange(ListMK);
