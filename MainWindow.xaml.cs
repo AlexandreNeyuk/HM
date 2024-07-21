@@ -3900,20 +3900,19 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
                     }
                     //Галка снятия стопа "Разрыв ММ"
-                    if ((snyat_stop_smena_statusov.IsChecked == true) && (vibor_sklada.SelectedIndex != -1) && (RP_list_Status.Text != null))
-                    {
-                        dataBases.ConnectDB(DB_Name_IS, $@"delete from package_stop where package_id in (select id from package where package_fid in  ({RP_list_Status.Text})) and code = 'break_multiplace';");
-                        dataBases.ConnectDB(DB_Name_IS, $@"update parent_package pp set is_full = true where pp.fid in ({RP_list_Status.Text});");
-                        snyat_stop_smena_statusov.IsChecked = false;
-                        //• Звук уведомление о финале 
-                        using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
-                        using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                            new SoundPlayer(gzOut).Play();
-                    }
-
-
-
                 }
+                if ((snyat_stop_smena_statusov.IsChecked == true) && (label_vibran_sklad_dinamik.Content != ""))
+                {
+                    LoadData_FromReg_izmenenie_status();
+                    dataBases.ConnectDB(DB_Name_IS, $@"delete from package_stop where package_id in (select id from package where package_fid in  ({RP_list_Status.Text})) and code = 'break_multiplace';");
+                    dataBases.ConnectDB(DB_Name_IS, $@"update parent_package pp set is_full = true where pp.fid in ({RP_list_Status.Text});");
+                    snyat_stop_smena_statusov.IsChecked = false;
+                    //• Звук уведомление о финале 
+                    using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                    using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                        new SoundPlayer(gzOut).Play();
+                }
+
             }
             else
             {
