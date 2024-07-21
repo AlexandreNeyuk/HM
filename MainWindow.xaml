@@ -130,7 +130,7 @@
                 </ComboBox>
                 <Label HorizontalAlignment="Right" Margin="0,191,24,0" VerticalAlignment="Top" Content="Действие над партией" Width="147" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                 <Button x:Name="Clear_Text_Party" Content="X" BorderThickness="0,0,0,0" Margin="0,34,0,420" Click="Clear_Text_Party_Click" HorizontalAlignment="Right" Width="32"/>
-                <Button x:Name="Kopirovat_otvet_party" Content="Копировать ответ" HorizontalAlignment="Left" Margin="665,289,0,0" VerticalAlignment="Top" Width="147" Click="Kopirovat_otvet_party_Click"/>
+                <Button x:Name="Kopirovat_otvet_party" Content="Копировать ответ" HorizontalAlignment="Right" Margin="0,289,24,0" VerticalAlignment="Top" Width="147" Click="Kopirovat_otvet_party_Click"/>
 
 
             </Grid>
@@ -479,9 +479,10 @@
                                     <ComboBoxItem Content="Паллета"/>
                                     <ComboBoxItem Content="Мешок"/>
                                 </ComboBox>
-                                <Button x:Name="Button_palmet" Content="Сделать!" Canvas.Left="30" Canvas.Top="201" Width="78" Height="20" BorderThickness="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_palmet_Click"/>
+                                <Button x:Name="Button_palmet" Content="Сделать!" Canvas.Left="12" Canvas.Top="224" Width="118" Height="20" BorderThickness="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Click="Button_palmet_Click"/>
                                 <Label Content="Действия над П/М" Canvas.Left="11" Canvas.Top="125" Width="118" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
-                                <Button x:Name="Kopirovat_orvet_palmet" Content="Копировать ответ" Canvas.Left="18" Canvas.Top="226" HorizontalAlignment="Left" VerticalAlignment="Center" Width="102" Click="Kopirovat_orvet_palmet_Click"/>
+                                <Button x:Name="Kopirovat_orvet_palmet" Content="Копировать ответ" Canvas.Left="11" Canvas.Top="257" HorizontalAlignment="Center" VerticalAlignment="Top" Width="118" Click="Kopirovat_orvet_palmet_Click" Height="20" BorderThickness="0,0,0,0"/>
+                                <CheckBox x:Name="check_x_dox_palmet" Content="x-dox" Canvas.Left="46" Canvas.Top="194" HorizontalAlignment="Center" VerticalAlignment="Top" Width="50"/>
                             </Canvas>
 
                         </Grid>

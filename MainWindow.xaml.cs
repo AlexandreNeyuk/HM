@@ -775,6 +775,8 @@ namespace HM
 
         #region Party
 
+        string avtootvet_dlya_party = "";
+
         /// <summary>
         /// Кнопка обработки Партий
         /// </summary>
@@ -797,7 +799,7 @@ namespace HM
                     if (Name_War.Content != StockName[0]) if (StockName[0] != null) Name_War.Content = StockName[0]; else MessageBox.Show($@"Склада с id {StockID[0]} не найдено в Шиптор!");//меняем имя склада на то что нашлось
 
                     // если поле посылок заполнено  - работаем и с посылкми и с партией, если нет то только с партией
-                    if (RP_Party.Text != "")
+                    if ((RP_Party.Text != "") && (SelectAction_Party.SelectedIndex != 0))
                     {
                         if (SelectAction_Party.SelectedIndex != 5)
                         {
@@ -840,13 +842,40 @@ namespace HM
                                                 dataBases.ConnectDB(StockName[0], $@"update public.package set status = 'in_package_return' where package_fid in ({RPid})");
 
                                             }
-
-                                            MessageBox.Show($@"В партию добалено!");
+                                            //• Звук уведомление о финале 
+                                            using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                                            using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                                                new SoundPlayer(gzOut).Play();
                                         }
-                                        else MessageBox.Show("Поле для отправлений пусто! Добавьте отправления");
+
+
+
+                                        else
+                                        {
+                                            MessageBox.Show("Поле для отправлений пусто! Добавьте отправления");
+                                            //прогрывать звук Windows Ошибка error
+                                            string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+                                            // Создание экземпляра SoundPlayer и проигрывание звука
+                                            using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                                            {
+                                                errorSoundPlayer.Play();
+                                            };
+
+                                        }
+
                                     }
                                 }
-                                else MessageBox.Show($@"Партия не найдена на складе {StockName[0]}!");
+                                else
+                                {
+                                    MessageBox.Show($@"Партия не найдена на складе {StockName[0]}!");
+                                    //прогрывать звук Windows Ошибка error
+                                    string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+                                    // Создание экземпляра SoundPlayer и проигрывание звука
+                                    using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                                    {
+                                        errorSoundPlayer.Play();
+                                    };
+                                }
 
                             }
 
@@ -875,7 +904,10 @@ namespace HM
                                         //смена статусов в Заппстор после удаления из партии
                                         dataBases.ConnectDB(StockName[0], $@"UPDATE package SET status = 'in_store' where package_fid in ({RPid})");
 
-                                        MessageBox.Show($@"Из партии удалено!");
+                                        //• Звук уведомление о финале 
+                                        using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                                        using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                                            new SoundPlayer(gzOut).Play();
 
 
 
@@ -886,20 +918,20 @@ namespace HM
                                     else
                                     {
                                         MessageBox.Show("Поле для отправлений пусто! Добавьте отправления");
-                                        //прогрывать звук Windows Ошибка error
-                                        string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
-
-                                        // Создание экземпляра SoundPlayer и проигрывание звука
-                                        using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
-                                        {
-                                            errorSoundPlayer.Play();
-                                        }
                                     }
 
 
 
                                 }
                                 else MessageBox.Show($@"Партия не найдена на складе {StockName[0]}!");
+                                //прогрывать звук Windows Ошибка error
+                                string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+
+                                // Создание экземпляра SoundPlayer и проигрывание звука
+                                using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                                {
+                                    errorSoundPlayer.Play();
+                                }
                             }
 
 
@@ -912,17 +944,47 @@ namespace HM
                     {
                         ActionsForParty(StockName, paty);
                         MessageBox.Show("Поле посылок не заполнено!");
+                        //прогрывать звук Windows Ошибка error
+                        string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+
+                        // Создание экземпляра SoundPlayer и проигрывание звука
+                        using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                        {
+                            errorSoundPlayer.Play();
+                        }
                     }//поле посылок устое - работаю только с партией
 
 
 
                 }
-                else MessageBox.Show("Такая партия не одна (!) или ее не существует в Шипторе!");
+                else
+                {
+                    MessageBox.Show("Такая партия не одна (!) или ее не существует в Шипторе!");
+                //прогрывать звук Windows Ошибка error
+                string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
 
+                // Создание экземпляра SoundPlayer и проигрывание звука
+                using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                {
+                    errorSoundPlayer.Play();
+                }
+                }
 
             }
-            else MessageBox.Show("Поле партии не заполнено!");
+            else
+            {
+                MessageBox.Show("Поле партии не заполнено!");
+                //прогрывать звук Windows Ошибка error
+                string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
 
+                // Создание экземпляра SoundPlayer и проигрывание звука
+                using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                {
+                    errorSoundPlayer.Play();
+                }
+            }
+            avtootvet_dlya_party = SelectAction_Party.Text;
+            SelectAction_Party.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -944,22 +1006,22 @@ namespace HM
                     case 1: //выбрано "Собирается"
                         dataBases.ConnectDB(Stock_name[0], $@"UPDATE package_return SET status = 'gathering' where return_fid in ({party})");
                         //dataBases.ConnectDB("Шиптор", $@"UPDATE package_return SET sent_at = NULL, SET delivered_at = NULL, SET cancelled_at = NULL, SET closed_at = NULL where id in ({party})");
-                        MessageBox.Show("Статус партии скорректирован!");
+                        
                         break;
                     case 2: //Выбрано "собрана"
                         dataBases.ConnectDB(Stock_name[0], $@"UPDATE package_return SET status = 'gathered' where return_fid in ({party})");
                         // dataBases.ConnectDB("Шиптор", $@"UPDATE package_return SET sent_at = NULL, SET delivered_at = NULL, SET cancelled_at = NULL, SET closed_at = NULL where id in ({party})");
-                        MessageBox.Show("Статус партии скорректирован!");
+                        
                         break;
                     case 3: //Выбрано "Упакована"
                         dataBases.ConnectDB(Stock_name[0], $@"UPDATE package_return SET status = 'packed'  where return_fid in ({party})");
                         //dataBases.ConnectDB("Шиптор", $@"UPDATE package_return SET sent_at = NULL, SET delivered_at = NULL, SET cancelled_at = NULL, SET closed_at = NULL where id in ({party})");
-                        MessageBox.Show("Статус партии скорректирован!");
+                       
                         break;
                     case 4: //Выдана
                         dataBases.ConnectDB(Stock_name[0], $@"UPDATE package_return SET status = 'delivered'  where return_fid in ({party})");
                         dataBases.ConnectDB("Шиптор", $@"UPDATE package_return SET delivered_at = now() where id in ({party})");
-                        MessageBox.Show("Статус партии скорректирован!");
+                        
                         break;
                     case 5://расформирована
                         dataBases.ConnectDB(Stock_name[0], $@"UPDATE package_return SET status = 'disbanded'  where return_fid in ({party})");
@@ -977,14 +1039,29 @@ namespace HM
                         var RPfromParty = dataBases.ConnectDB("Шиптор", $@"select id, return_id from package p where return_id in ({party})");
                         dataBases.ConnectDB("Шиптор", $@"UPDATE public.package SET return_id = NULL, current_status = 'packed', sent_at = NULL, returned_at = NULL, returning_to_warehouse_at = NULL, packed_since = now()   WHERE return_id in ({party})");
                         dataBases.ConnectDB("Шиптор", $@"UPDATE package_departure SET package_action = NULL  WHERE package_id in ({string.Join(",", RPfromParty.AsEnumerable().Select(x => x["id"].ToString()).ToList())})");
-                        MessageBox.Show("Статус партии скорректирован!");
+                        
                         break;
 
                     default:
                         break;
                 }
+                //• Звук уведомление о финале 
+                using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                new SoundPlayer(gzOut).Play();
             }
-            else MessageBox.Show("Такая партия не одна (!) или ее не существует в Шипторе!");
+            else
+            {
+                MessageBox.Show("Такая партия не одна (!) или ее не существует в Шипторе!");
+            //прогрывать звук Windows Ошибка error
+            string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+
+            // Создание экземпляра SoundPlayer и проигрывание звука
+            using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+            {
+                errorSoundPlayer.Play();
+            }
+            }
         }
 
         /// <summary>
@@ -1066,7 +1143,8 @@ namespace HM
 
         private void Kopirovat_otvet_party_Click(object sender, RoutedEventArgs e)
         {
-            switch (SelectAction_Party.SelectionBoxItem)
+
+            switch (avtootvet_dlya_party)
             {
                 case "Ничего":
                     try { Clipboard.SetText("Здравствуйте! Посылки были удалены из партии возврата."); } catch { };
@@ -2639,6 +2717,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         #region Pallets && Bags
 
         string DB_ZS_Palmet_Name_IS;
+        string palmet_avtootvet = "";
 
         /// <summary>
         /// Загрузчик списка складов в лист list_palmet
@@ -2732,7 +2811,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         ComboBoxItem itemBagNew = (ComboBoxItem)Combobox_Actions_palmet.Items[1];// ContainerGenerator.ContainerFromIndex(1);
                         itemBagNew.IsEnabled = false;
                         ComboBoxItem itemBagTransit = (ComboBoxItem)Combobox_Actions_palmet.Items[2]; // ContainerGenerator.ContainerFromIndex(2);
-                        itemBagTransit.IsEnabled = false;
+                        itemBagTransit.IsEnabled = true;
                         ComboBoxItem itemBag12 = (ComboBoxItem)Combobox_Actions_palmet.Items[7]; // ContainerGenerator.ContainerFromIndex(7); // блок отправлен и доставлен
                         itemBag12.IsEnabled = false;
                         ComboBoxItem itemBag22 = (ComboBoxItem)Combobox_Actions_palmet.Items[8]; // ContainerGenerator.ContainerFromIndex(8);
@@ -2767,6 +2846,44 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         /// <param name="e"></param>
         private void Button_palmet_Click(object sender, RoutedEventArgs e)
         {
+            /// Создание автоответа
+            palmet_avtootvet = "";
+            switch (Combobox_palmet.SelectionBoxItem)
+            {
+                case "Паллета":
+                    palmet_avtootvet = "паллеты";
+                    break;
+                case "Мешок":
+                    palmet_avtootvet = "мешка";
+                    break;
+            }
+            switch (Combobox_Actions_palmet.SelectionBoxItem)
+            {
+                case "Собирается":
+                    palmet_avtootvet = "Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Собирается'.";
+                    break;
+                case "Собрана":
+                    palmet_avtootvet = "Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Собрана'.";
+                    try { Clipboard.SetText(palmet_avtootvet); } catch { };
+                    break;
+                case "Упакована":
+                    palmet_avtootvet = "Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Упакована'.";
+                    try { Clipboard.SetText(palmet_avtootvet); } catch { };
+                    break;
+                case "Отправлен":
+                    palmet_avtootvet = "Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Отправлено'.";
+                    try { Clipboard.SetText(palmet_avtootvet); } catch { };
+                    break;
+                case "Доставлен":
+                    palmet_avtootvet = "Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Выдан'.";
+                    try { Clipboard.SetText(palmet_avtootvet); } catch { };
+                    break;
+                case "Расформирована":
+                    palmet_avtootvet = "Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Расформирована'.";
+                    try { Clipboard.SetText(palmet_avtootvet); } catch { };
+                    break;
+            }
+            //Основной кусок кнопки
             try
             {
                 if (text_editor_palmet.Text != "")
@@ -2792,35 +2909,63 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                 }
                                 else
                                 {
-                                    switch (Combobox_Actions_palmet.SelectionBoxItem)
+                                    if (check_x_dox_palmet.IsEnabled == false)
                                     {
-                                        case "Собирается":
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathering' where id in ({text_editor_palmet.Text});");
+                                        switch (Combobox_Actions_palmet.SelectionBoxItem)
+                                        {
+                                            case "Собирается":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathering' where id in ({text_editor_palmet.Text});");
+                                                break;
+                                            case "Собрана":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathered' where id in ({text_editor_palmet.Text});");
+                                                break;
+                                            case "Упакована":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'packed' where id in ({text_editor_palmet.Text});");
+                                                break;
+                                            case "Расформирована":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where id in ({text_editor_palmet.Text});");
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
+                                                break;
+                                            case "Ждет транзита":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_transit' where id in ({text_editor_palmet.Text});");
+                                                break;
+                                            case "Ожидает сборки":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_gather' where id in ({text_editor_palmet.Text});");
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        switch (Combobox_Actions_palmet.SelectionBoxItem)
+                                        {
+                                            case "Собирается":
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathering' where last_pallet_code in ({text_editor_palmet.Text});");
                                             break;
                                         case "Собрана":
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathered' where id in ({text_editor_palmet.Text});");
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathered' where last_pallet_code in ({text_editor_palmet.Text});");
                                             break;
                                         case "Упакована":
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'packed' where id in ({text_editor_palmet.Text});");
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'packed' where last_pallet_code in ({text_editor_palmet.Text});");
                                             break;
                                         case "Расформирована":
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where id in ({text_editor_palmet.Text});");
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where last_pallet_code in ({text_editor_palmet.Text});");
+                                            //А надо ли удалять посылки из икс собаки? dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
                                             break;
                                         case "Ждет транзита":
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_transit' where id in ({text_editor_palmet.Text});");
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_transit' where last_pallet_code in ({text_editor_palmet.Text});");
                                             break;
                                         case "Ожидает сборки":
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_gather' where id in ({text_editor_palmet.Text});");
-
+                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_gather' where last_pallet_code in ({text_editor_palmet.Text});");
                                             break;
+                                        }
                                     }
+
                                     DB_ZS_Palmet_Name_IS = null;
                                     Combobox_Actions_palmet.SelectedIndex = 0;
                                     //• Звук уведомление о финале 
                                     using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
                                     using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                                        new SoundPlayer(gzOut).Play();
+                                    new SoundPlayer(gzOut).Play();
                                 }
 
                             }
@@ -2828,7 +2973,6 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                             {
                                 //прогрывать звук Windows Ошибка error
                                 string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
-
                                 // Создание экземпляра SoundPlayer и проигрывание звука
                                 using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
                                 {
@@ -2962,6 +3106,8 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             {
                 MessageBox.Show($@"Что-то пошло не так. Скорее всего список паллет/мешков содержит буквы или коннект к выбранному складу устарел. Ошибка: " + ex.ToString());
             }
+
+            
         }
 
         /// <summary>
@@ -2981,37 +3127,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         /// <param name="e"></param>
         private void Kopirovat_orvet_palmet_Click(object sender, RoutedEventArgs e)
         {
-            string palmet_avtootvet = "";
-            switch (Combobox_palmet.SelectionBoxItem)
-            {
-                case "Паллета":
-                    palmet_avtootvet = "паллеты";
-                    break;
-                case "Мешок":
-                    palmet_avtootvet = "мешка";
-                    break;
-            }
-            switch (Combobox_Actions_palmet.SelectionBoxItem)
-            {
-                case "Собирается":
-                    try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Собирается'."); } catch { };
-                    break;
-                case "Собрана":
-                    try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Собрана'."); } catch { };
-                    break;
-                case "Упакована":
-                    try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Упакована'."); } catch { };
-                    break;
-                case "Отправлен":
-                    try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Отправлено'."); } catch { };
-                    break;
-                case "Доставлен":
-                    try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Выдан'."); } catch { };
-                    break;
-                case "Расформирована":
-                    try { Clipboard.SetText("Здравствуйте! Статус " + palmet_avtootvet + " скорректирован на 'Расформирована'."); } catch { };
-                    break;
-            }
+            try { Clipboard.SetText(palmet_avtootvet); } catch { };
         }
 
         #endregion
@@ -3865,6 +3981,8 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
             }
         }
+
+        
 
 
         #endregion
