@@ -2986,7 +2986,6 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             {
                 case "Паллета":
                     palmet_avtootvet = "паллеты";
-                    try { Clipboard.SetText("Здравствуйте! Посылки были удалены из партии возврата."); } catch { };
                     break;
                 case "Мешок":
                     palmet_avtootvet = "мешка";
