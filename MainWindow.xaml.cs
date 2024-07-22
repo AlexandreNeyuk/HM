@@ -3040,43 +3040,6 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                     if (Bags_ID_of_MK.Count > 0)
                                         ID_bags.AddRange(Bags_ID_of_MK);
 
-
-                                    // text_editor_palmet.Text = string.Join(",\r\n", result);
-
-
-                                    /*  //text_editor_palmet.Text = text_editor_palmet.Text.Replace(",", ""); //писать мешки ТОЛЬКО с новой  строки, без пробелов, как ШК  (запятые удаляю)
-                                      List<string> ListALLBags = To_List(text_editor_palmet); // общий список
-                                      List<string> List_Bags_Id = new List<string>(); // список с ID мешков 
-
-                                      List<string> ListMK = new List<string>(); // отдеольный лист с MK
-                                      foreach (var item in ListALLBags)
-                                      {
-                                          //проверять в каком формате был введент мешок : MK0000222874 или bag_ig напрямую
-                                          if (ListALLBags.Contains("MK"))
-                                          {
-                                              ListMK.Add(item); // сюда мешки с MK
-
-                                          }
-                                          else { List_Bags_Id.Add(item); } //сюда ID записываем
-                                      }*/
-                                    //создаем запрос:
-                                    /* string MK_zapros = "";
-                                     if (ListMK.Count >= 0) { MK_zapros = $@"select id from bag b   where  seal_id ilike ('%{ListMK[0]}%')"; }
-                                     if (ListMK.Count >= 1)
-                                     {
-                                         foreach (string MKs in ListMK)
-                                         {
-                                             MK_zapros += $@" or seal_id ilike ('%{ListMK[i]}%')";
-                                         }
-                                     }*/
-                                    //находим id мешков по MK,если лист с MK  не пустой
-                                    /*  if (MK_zapros != "")
-                                      {
-                                          List<string> BagsIDSofMK = dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, MK_zapros).AsEnumerable().Select(x => x[0].ToString()).ToList();
-                                      }*/
-                                    /* //складываем списки = получаем общий список с ID мешков в теории
-                                     List_Bags_Id.AddRange(ListMK);*/
-
                                     string id_bags_complited = "";
                                     if (ID_bags.Count > 0)
                                     {
