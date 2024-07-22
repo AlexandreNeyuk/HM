@@ -799,7 +799,7 @@ namespace HM
                     if (Name_War.Content != StockName[0]) if (StockName[0] != null) Name_War.Content = StockName[0]; else MessageBox.Show($@"Склада с id {StockID[0]} не найдено в Шиптор!");//меняем имя склада на то что нашлось
 
                     // если поле посылок заполнено  - работаем и с посылкми и с партией, если нет то только с партией
-                    if ((RP_Party.Text != "") && (SelectAction_Party.SelectedIndex != 0))
+                    if ((RP_Party.Text != ""))
                     {
                         if (SelectAction_Party.SelectedIndex != 5)
                         {
@@ -917,7 +917,15 @@ namespace HM
 
                                     else
                                     {
+                                        string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+
+                                        // Создание экземпляра SoundPlayer и проигрывание звука
+                                        using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                                        {
+                                            errorSoundPlayer.Play();
+                                        }
                                         MessageBox.Show("Поле для отправлений пусто! Добавьте отправления");
+
                                     }
 
 
@@ -925,13 +933,7 @@ namespace HM
                                 }
                                 else MessageBox.Show($@"Партия не найдена на складе {StockName[0]}!");
                                 //прогрывать звук Windows Ошибка error
-                                string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
 
-                                // Создание экземпляра SoundPlayer и проигрывание звука
-                                using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
-                                {
-                                    errorSoundPlayer.Play();
-                                }
                             }
 
 
@@ -960,14 +962,14 @@ namespace HM
                 else
                 {
                     MessageBox.Show("Такая партия не одна (!) или ее не существует в Шипторе!");
-                //прогрывать звук Windows Ошибка error
-                string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+                    //прогрывать звук Windows Ошибка error
+                    string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
 
-                // Создание экземпляра SoundPlayer и проигрывание звука
-                using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
-                {
-                    errorSoundPlayer.Play();
-                }
+                    // Создание экземпляра SoundPlayer и проигрывание звука
+                    using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                    {
+                        errorSoundPlayer.Play();
+                    }
                 }
 
             }
@@ -1006,22 +1008,22 @@ namespace HM
                     case 1: //выбрано "Собирается"
                         dataBases.ConnectDB(Stock_name[0], $@"UPDATE package_return SET status = 'gathering' where return_fid in ({party})");
                         //dataBases.ConnectDB("Шиптор", $@"UPDATE package_return SET sent_at = NULL, SET delivered_at = NULL, SET cancelled_at = NULL, SET closed_at = NULL where id in ({party})");
-                        
+
                         break;
                     case 2: //Выбрано "собрана"
                         dataBases.ConnectDB(Stock_name[0], $@"UPDATE package_return SET status = 'gathered' where return_fid in ({party})");
                         // dataBases.ConnectDB("Шиптор", $@"UPDATE package_return SET sent_at = NULL, SET delivered_at = NULL, SET cancelled_at = NULL, SET closed_at = NULL where id in ({party})");
-                        
+
                         break;
                     case 3: //Выбрано "Упакована"
                         dataBases.ConnectDB(Stock_name[0], $@"UPDATE package_return SET status = 'packed'  where return_fid in ({party})");
                         //dataBases.ConnectDB("Шиптор", $@"UPDATE package_return SET sent_at = NULL, SET delivered_at = NULL, SET cancelled_at = NULL, SET closed_at = NULL where id in ({party})");
-                       
+
                         break;
                     case 4: //Выдана
                         dataBases.ConnectDB(Stock_name[0], $@"UPDATE package_return SET status = 'delivered'  where return_fid in ({party})");
                         dataBases.ConnectDB("Шиптор", $@"UPDATE package_return SET delivered_at = now() where id in ({party})");
-                        
+
                         break;
                     case 5://расформирована
                         dataBases.ConnectDB(Stock_name[0], $@"UPDATE package_return SET status = 'disbanded'  where return_fid in ({party})");
@@ -1039,7 +1041,7 @@ namespace HM
                         var RPfromParty = dataBases.ConnectDB("Шиптор", $@"select id, return_id from package p where return_id in ({party})");
                         dataBases.ConnectDB("Шиптор", $@"UPDATE public.package SET return_id = NULL, current_status = 'packed', sent_at = NULL, returned_at = NULL, returning_to_warehouse_at = NULL, packed_since = now()   WHERE return_id in ({party})");
                         dataBases.ConnectDB("Шиптор", $@"UPDATE package_departure SET package_action = NULL  WHERE package_id in ({string.Join(",", RPfromParty.AsEnumerable().Select(x => x["id"].ToString()).ToList())})");
-                        
+
                         break;
 
                     default:
@@ -1048,19 +1050,19 @@ namespace HM
                 //• Звук уведомление о финале 
                 using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
                 using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                new SoundPlayer(gzOut).Play();
+                    new SoundPlayer(gzOut).Play();
             }
             else
             {
                 MessageBox.Show("Такая партия не одна (!) или ее не существует в Шипторе!");
-            //прогрывать звук Windows Ошибка error
-            string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+                //прогрывать звук Windows Ошибка error
+                string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
 
-            // Создание экземпляра SoundPlayer и проигрывание звука
-            using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
-            {
-                errorSoundPlayer.Play();
-            }
+                // Создание экземпляра SoundPlayer и проигрывание звука
+                using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                {
+                    errorSoundPlayer.Play();
+                }
             }
         }
 
@@ -2784,8 +2786,6 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
         }
 
-
-
         /// <summary>
         /// Смена возможных статусов взависимости от  мешка или паллета 
         /// </summary>
@@ -2824,7 +2824,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         ComboBoxItem itemBag1 = (ComboBoxItem)Combobox_Actions_palmet.Items[1]; //ContainerGenerator.ContainerFromIndex(1);
                         itemBag1.IsEnabled = true;
                         ComboBoxItem itemBag11 = (ComboBoxItem)Combobox_Actions_palmet.Items[2]; //ContainerGenerator.ContainerFromIndex(2);
-                        itemBag11.IsEnabled = true;
+                        itemBag11.IsEnabled = false;
                         ComboBoxItem itemBag111 = (ComboBoxItem)Combobox_Actions_palmet.Items[7];   //ContainerGenerator.ContainerFromIndex(7);
                         itemBag111.IsEnabled = false;
                         ComboBoxItem itemBag2 = (ComboBoxItem)Combobox_Actions_palmet.Items[8];   //ContainerGenerator.ContainerFromIndex(8);
@@ -2939,24 +2939,24 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                         switch (Combobox_Actions_palmet.SelectionBoxItem)
                                         {
                                             case "Собирается":
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathering' where last_pallet_code in ({text_editor_palmet.Text});");
-                                            break;
-                                        case "Собрана":
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathered' where last_pallet_code in ({text_editor_palmet.Text});");
-                                            break;
-                                        case "Упакована":
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'packed' where last_pallet_code in ({text_editor_palmet.Text});");
-                                            break;
-                                        case "Расформирована":
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where last_pallet_code in ({text_editor_palmet.Text});");
-                                            //А надо ли удалять посылки из икс собаки? dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
-                                            break;
-                                        case "Ждет транзита":
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_transit' where last_pallet_code in ({text_editor_palmet.Text});");
-                                            break;
-                                        case "Ожидает сборки":
-                                            dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_gather' where last_pallet_code in ({text_editor_palmet.Text});");
-                                            break;
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathering' where last_pallet_code in ({text_editor_palmet.Text});");
+                                                break;
+                                            case "Собрана":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathered' where last_pallet_code in ({text_editor_palmet.Text});");
+                                                break;
+                                            case "Упакована":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'packed' where last_pallet_code in ({text_editor_palmet.Text});");
+                                                break;
+                                            case "Расформирована":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where last_pallet_code in ({text_editor_palmet.Text});");
+                                                //А надо ли удалять посылки из икс собаки? dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
+                                                break;
+                                            case "Ждет транзита":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_transit' where last_pallet_code in ({text_editor_palmet.Text});");
+                                                break;
+                                            case "Ожидает сборки":
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_gather' where last_pallet_code in ({text_editor_palmet.Text});");
+                                                break;
                                         }
                                     }
 
@@ -2965,7 +2965,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                     //• Звук уведомление о финале 
                                     using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
                                     using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                                    new SoundPlayer(gzOut).Play();
+                                        new SoundPlayer(gzOut).Play();
                                 }
 
                             }
@@ -3007,43 +3007,78 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                     //проверяем каждую строку на наличие MK, по дефолту считаем что там bag_id 
                                     //MK собираем в один болльшой лист и находим от них Bag ID 
                                     //соединяем оба листа 
-                                    text_editor_palmet.Text = text_editor_palmet.Text.Replace(",", ""); //писать мешки ТОЛЬКО с новой  строки, без пробелов, как ШК  (запятые удаляю)
-                                    List<string> ListALLBags = To_List(text_editor_palmet); // общий список
-                                    List<string> List_Bags_Id = new List<string>(); // список с ID мешков 
+                                    List<string> MK_bags = new List<string>();
+                                    List<string> ID_bags = new List<string>();
+                                    List<string> result_ID_bags = new List<string>();
 
-                                    List<string> ListMK = new List<string>(); // отдеольный лист с MK
-                                    foreach (var item in ListALLBags)
+                                    // Разбиваем текст на строки по разделителю-запятой
+                                    string[] arrStr = text_editor_palmet.Text.Split(new char[] { ',', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+                                    // Преобразуем массив строк в список
+                                    List<string> all_bags_list = new List<string>(arrStr);
+
+                                    foreach (string number in all_bags_list)
                                     {
-                                        //проверять в каком формате был введент мешок : MK0000222874 или bag_ig напрямую
-                                        if (ListALLBags.Contains("MK"))
+                                        if (!string.IsNullOrEmpty(number))
                                         {
-                                            ListMK.Add(item); // сюда мешки с MK
+                                            if (number.Contains("MK"))
+                                                MK_bags.Add("'" + number + "'");
+                                            else
+                                                ID_bags.Add(number);
 
+                                            //all_bags_list.Add("'" + number + "'");
                                         }
-                                        else { List_Bags_Id.Add(item); } //сюда ID записываем
                                     }
+                                    //ищу id от mk в мешках 
+                                    List<string> Bags_ID_of_MK = new List<string>();
+                                    if (MK_bags.Count > 0)
+                                        Bags_ID_of_MK = dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"select id from bag b where seal_id in ({string.Join(",", MK_bags)})").AsEnumerable().Select(x => x[0].ToString()).ToList();
+
+                                    //складываю оба свписка
+                                    if (Bags_ID_of_MK.Count > 0)
+                                        ID_bags.AddRange(Bags_ID_of_MK);
+
+
+                                    // text_editor_palmet.Text = string.Join(",\r\n", result);
+
+
+                                    /*  //text_editor_palmet.Text = text_editor_palmet.Text.Replace(",", ""); //писать мешки ТОЛЬКО с новой  строки, без пробелов, как ШК  (запятые удаляю)
+                                      List<string> ListALLBags = To_List(text_editor_palmet); // общий список
+                                      List<string> List_Bags_Id = new List<string>(); // список с ID мешков 
+
+                                      List<string> ListMK = new List<string>(); // отдеольный лист с MK
+                                      foreach (var item in ListALLBags)
+                                      {
+                                          //проверять в каком формате был введент мешок : MK0000222874 или bag_ig напрямую
+                                          if (ListALLBags.Contains("MK"))
+                                          {
+                                              ListMK.Add(item); // сюда мешки с MK
+
+                                          }
+                                          else { List_Bags_Id.Add(item); } //сюда ID записываем
+                                      }*/
                                     //создаем запрос:
-                                    string MK_zapros = "";
-                                    if (ListMK.Count >= 0) { MK_zapros = $@"select id from bag b   where  seal_id ilike ('%{ListMK[0]}%')"; }
-                                    if (ListMK.Count >= 1)
-                                    {
-                                        for (int i = 1; i < ListMK.Count; i++)
-                                        {
-                                            MK_zapros += $@" or seal_id ilike ('%{ListMK[i]}%')";
-                                        }
-                                    }
+                                    /* string MK_zapros = "";
+                                     if (ListMK.Count >= 0) { MK_zapros = $@"select id from bag b   where  seal_id ilike ('%{ListMK[0]}%')"; }
+                                     if (ListMK.Count >= 1)
+                                     {
+                                         foreach (string MKs in ListMK)
+                                         {
+                                             MK_zapros += $@" or seal_id ilike ('%{ListMK[i]}%')";
+                                         }
+                                     }*/
                                     //находим id мешков по MK,если лист с MK  не пустой
-                                    if (MK_zapros != "")
-                                    {
-                                        List<string> BagsIDSofMK = dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, MK_zapros).AsEnumerable().Select(x => x[0].ToString()).ToList();
-                                    }
-                                    //складываем списки = получаем общий список с ID мешков в теории
-                                    List_Bags_Id.AddRange(ListMK);
+                                    /*  if (MK_zapros != "")
+                                      {
+                                          List<string> BagsIDSofMK = dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, MK_zapros).AsEnumerable().Select(x => x[0].ToString()).ToList();
+                                      }*/
+                                    /* //складываем списки = получаем общий список с ID мешков в теории
+                                     List_Bags_Id.AddRange(ListMK);*/
 
                                     string id_bags_complited = "";
-                                    if (List_Bags_Id.Count > 0)
+                                    if (ID_bags.Count > 0)
                                     {
-                                        id_bags_complited = string.Join(", ", List_Bags_Id); //пишем в переменную все элементы листа с id мешков через запятую для запросов
+                                        id_bags_complited = string.Join(",", ID_bags); //пишем в переменную все элементы листа с id мешков через запятую для запросов
                                     }
                                     if (id_bags_complited != "")
                                     { ///менять статусы и производить какие либо действия будем ТОЛЬКО по bag_id 
@@ -3107,7 +3142,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                 MessageBox.Show($@"Что-то пошло не так. Скорее всего список паллет/мешков содержит буквы или коннект к выбранному складу устарел. Ошибка: " + ex.ToString());
             }
 
-            
+
         }
 
         /// <summary>
@@ -3981,7 +4016,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             }
         }
 
-        
+
 
 
         #endregion
