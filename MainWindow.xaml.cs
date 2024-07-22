@@ -2817,7 +2817,8 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         ComboBoxItem itemBag22 = (ComboBoxItem)Combobox_Actions_palmet.Items[8]; // ContainerGenerator.ContainerFromIndex(8);
                         itemBag22.IsEnabled = false;
                         Combobox_Actions_palmet.SelectedIndex = 0;
-
+                        check_x_dox_palmet.IsEnabled = true;
+                        check_x_dox_palmet.IsChecked = false;
                         break;
                     case 1: // мешок
 
@@ -2830,7 +2831,8 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         ComboBoxItem itemBag2 = (ComboBoxItem)Combobox_Actions_palmet.Items[8];   //ContainerGenerator.ContainerFromIndex(8);
                         itemBag2.IsEnabled = false;
                         Combobox_Actions_palmet.SelectedIndex = 0;
-
+                        check_x_dox_palmet.IsEnabled = false;
+                        check_x_dox_palmet.IsChecked = false;
                         break;
                     default:
                         break;
@@ -2909,7 +2911,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                 }
                                 else
                                 {
-                                    if (check_x_dox_palmet.IsEnabled == false)
+                                    if (check_x_dox_palmet.IsChecked == false)
                                     {
                                         switch (Combobox_Actions_palmet.SelectionBoxItem)
                                         {
@@ -2949,7 +2951,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                                 break;
                                             case "Расформирована":
                                                 dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where last_pallet_code in ({text_editor_palmet.Text});");
-                                                //А надо ли удалять посылки из икс собаки? dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
                                                 break;
                                             case "Ждет транзита":
                                                 dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_transit' where last_pallet_code in ({text_editor_palmet.Text});");
