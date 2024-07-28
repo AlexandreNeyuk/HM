@@ -3847,8 +3847,6 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                     using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
                         new SoundPlayer(gzOut).Play();
                 }
-
-
                 if (ComboBox_ZS_Status.SelectedIndex != 0)
                 { //Если чтото выбрано в поле заппа то дальше уже ищем инфо о бд
                     LoadData_FromReg_izmenenie_status();
@@ -3881,6 +3879,21 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                 break;
                             case "В паллете":
                                 dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'in_pallet' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            case "Ожидает поступления": //
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package set status ='waiting_arrival' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            case "Ждет продуктов":
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set set status ='wait_products' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            case "Ждет повторной подачи":
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status ='waiting_for_resubmission' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            case "В партии":
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status ='in_package_return' where package_fid in ({RP_list_Status.Text});");
+                                break;
+                            case "Ждет сборки":
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status ='wait_gather' where package_fid in ({RP_list_Status.Text});");
                                 break;
                             default:
                                 break;
@@ -3920,7 +3933,6 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                     using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
                         new SoundPlayer(gzOut).Play();
                 }
-
             }
             else
             {

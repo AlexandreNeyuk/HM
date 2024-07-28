@@ -367,11 +367,11 @@
                                 <ComboBoxItem Content="Возвращена на склад"/>
                                 <ComboBoxItem Content="Возвращена отправителю"/>
                                 <ComboBoxItem Content="В паллете"/>
-                                <ComboBoxItem/>
-                                <ComboBoxItem/>
-                                <ComboBoxItem/>
-                                <ComboBoxItem/>
-                                <ComboBoxItem/>
+                                <ComboBoxItem Content="Ожидает поступления"/>
+                                <ComboBoxItem Content="Ждет продуктов"/>
+                                <ComboBoxItem Content="Ждет повторной подачи"/>
+                                <ComboBoxItem Content="В партии"/>
+                                <ComboBoxItem Content="Ждет сборки"/>
                             </ComboBox>
                             <avalonEdit:TextEditor x:Name="RP_list_Status"
                                 FontFamily="Consolas"
