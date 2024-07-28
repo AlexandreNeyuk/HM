@@ -944,16 +944,24 @@ namespace HM
                     }
                     else
                     {
-                        ActionsForParty(StockName, paty);
-                        MessageBox.Show("Поле посылок не заполнено!");
-                        //прогрывать звук Windows Ошибка error
-                        string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
-
-                        // Создание экземпляра SoundPlayer и проигрывание звука
-                        using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                        if (SelectAction_Party.SelectedIndex != 0)
                         {
-                            errorSoundPlayer.Play();
+                            ActionsForParty(StockName, paty);
                         }
+                        else
+                        {
+                            MessageBox.Show("Поле посылок не заполнено!");
+                            //прогрывать звук Windows Ошибка error
+                            string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+
+                            // Создание экземпляра SoundPlayer и проигрывание звука
+                            using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                            {
+                                errorSoundPlayer.Play();
+                            }
+                        }
+
+
                     }//поле посылок устое - работаю только с партией
 
 
