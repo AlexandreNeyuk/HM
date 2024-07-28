@@ -51,7 +51,7 @@
         <Grid x:Name="SwitchPanelCanvas" Margin="0,30,0,0" HorizontalAlignment="Left" Width="162">
 
             <Label x:Name="TitleMenu" HorizontalAlignment="Left" Margin="6,15,0,0" VerticalAlignment="Top" FontFamily="72" Foreground="White" Content="Меню" FontSize="16"/>
-            <Canvas x:Name="PostomatsCanvas"  Width="146" HorizontalAlignment="Left" Margin="0,120,0,0" Height="32" VerticalAlignment="Top" ToolTip="Постоматы">
+            <Canvas x:Name="PostomatsCanvas"  Width="146" HorizontalAlignment="Left" Margin="0,120,0,0" Height="32" VerticalAlignment="Top" ToolTip="Постоматы" IsEnabled="False">
                 <Image HorizontalAlignment="Center" Height="20" VerticalAlignment="Top" Width="20" Canvas.Left="10" Stretch="Fill" Source="/Assets/Postamats.png" Canvas.Top="6">
                     <Image.OpacityMask>
                         <ImageBrush ImageSource="/Assets/Postamats.png"/>
