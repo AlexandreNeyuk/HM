@@ -84,7 +84,7 @@ namespace HM
                 {
                     key?.SetValue("Name_" + Text_NameHost.Text, Text_NameHost.Text);
                     key?.SetValue("Host_" + Text_NameHost.Text, TextHost.Text);
-                    key?.SetValue("Post" + Text_NameHost.Text, Text_Port.Text);
+                    key?.SetValue("Post_" + Text_NameHost.Text, Text_Port.Text);
                     key?.SetValue("DataBase_" + Text_NameHost.Text, Text_DB.Text);
                 }
                 else MessageBox.Show("Необходимо заполнить все поля!");
