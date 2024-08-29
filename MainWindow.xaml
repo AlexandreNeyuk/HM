@@ -610,8 +610,8 @@
                             <Button x:Name="DeleteUserData" Height="20" VerticalAlignment="Top" Margin="402,71,0,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" HorizontalAlignment="Left" Width="104" Content="Удалить данные" ToolTip="Удаление всех данных о пользователе из реестра и зашифрованного ключа" Click="DeleteKeyFolder_method"/>
 
                         </Grid>
-                        <Label Content="Подключенные БД" FontFamily="72" Padding="10,2,0,2" Background="#FFE4E4E4" FontSize="14"/>
-                        <Grid x:Name="Warehouses" Height="44">
+                        <Label Content="Подключенные БД" FontFamily="72" Padding="10,2,0,2" Background="#FFE4E4E4" FontSize="14" IsEnabled="False" Visibility="Collapsed"/>
+                        <Grid x:Name="Warehouses" Height="44" IsEnabled="False" Visibility="Collapsed">
                             <Label  Content="Редактирование" FontFamily="72" Padding="10,0,0,0" Margin="38,10,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="199" VerticalContentAlignment="Center" />
                             <Button x:Name="WarhReg" Content="Клик" Height="20" VerticalAlignment="Top" Margin="242,9,166,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="WarhReg_Click" Width="132" />
 
@@ -623,17 +623,17 @@
 
 
                         </Grid>
-                        <Label FontFamily="72" Padding="10,2,0,2" Background="#FFE4E4E4" Content="Настройки данных для POST-запросов" FontSize="14"/>
-                        <Grid x:Name="PostSettings" Height="119">
+                        <Label FontFamily="72" Padding="10,2,0,2" Background="#FFE4E4E4" Content="Настройки данных для POST-запросов" FontSize="14" Visibility="Collapsed" IsEnabled="False"/>
+                        <Grid x:Name="PostSettings" Height="119" Visibility="Collapsed">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Label x:Name="QstLB_POST" FontFamily="72" Padding="10,0,0,0" Margin="26,22,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="166" Content="X-AUTH-TOKEN* Для PM" Cursor="Help" />
-                            <TextBox x:Name="TokenPost_PM" Margin="197,20,144,0" FontFamily="72" VerticalAlignment="Top" Height="17"/>
-                            <Button Margin="364,88,41,11" Width="90" Height="20" FontFamily="72" Content="Сохранить" BorderThickness="0,0,0,0" Click="SavePostToken"/>
-                            <Label x:Name="Save_indicatorPost" Margin="177,0,164,10" FontFamily="72" Height="22" VerticalAlignment="Bottom"/>
-                            <Label x:Name="QstLB_POST1" FontFamily="72" Padding="10,0,0,0" Margin="26,55,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="166" Content="X-AUTH-TOKEN* Для Engy" Cursor="Help" />
-                            <TextBox x:Name="TokenPost_Engy" Margin="197,53,144,0" FontFamily="72" Height="17" VerticalAlignment="Top"/>
+                            <Label x:Name="QstLB_POST" FontFamily="72" Padding="10,0,0,0" Margin="26,22,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="166" Content="X-AUTH-TOKEN* Для PM" Cursor="Help" Visibility="Collapsed" IsEnabled="False" />
+                            <TextBox x:Name="TokenPost_PM" Margin="197,20,144,0" FontFamily="72" VerticalAlignment="Top" Height="17" Visibility="Collapsed" IsEnabled="False"/>
+                            <Button Margin="364,88,41,11" Width="90" Height="20" FontFamily="72" Content="Сохранить" BorderThickness="0,0,0,0" Click="SavePostToken" Visibility="Collapsed" IsEnabled="False"/>
+                            <Label x:Name="Save_indicatorPost" Margin="177,0,164,10" FontFamily="72" Height="22" VerticalAlignment="Bottom" Visibility="Collapsed"/>
+                            <Label x:Name="QstLB_POST1" FontFamily="72" Padding="10,0,0,0" Margin="26,55,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="166" Content="X-AUTH-TOKEN* Для Engy" Cursor="Help" Visibility="Collapsed" IsEnabled="False" />
+                            <TextBox x:Name="TokenPost_Engy" Margin="197,53,144,0" FontFamily="72" Height="17" VerticalAlignment="Top" Visibility="Collapsed" IsEnabled="False"/>
 
 
                         </Grid>
