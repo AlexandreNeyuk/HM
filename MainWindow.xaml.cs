@@ -895,19 +895,14 @@ namespace HM
                                         string RPid = RP_Party.Text.Replace("\r\n", "");
 
                                         //удаляю из партии в шипторе и корректировка статусов посылок на "УПАКОВАНА"
-                                        if (Check_PackedStatus.IsChecked == true)
-                                        {
-                                            dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now(), return_id=null   WHERE id in ({RPid})");
-                                            //смена статусов в Заппстор после удаления из партии
-                                            dataBases.ConnectDB(StockName[0], $@"UPDATE package SET status = 'in_store' where package_fid in ({RPid})");
-                                        }
-                                        dataBases.ConnectDB("Шиптор", $@"update package set return_id=null  WHERE id in ({RPid})");
+                                        dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now(), return_id=null   WHERE id in ({RPid})");
                                         dataBases.ConnectDB("Шиптор", $@"UPDATE package_departure SET package_action = NULL  WHERE package_id in ({RPid})");
 
                                         //удаление из партии склада 
                                         dataBases.ConnectDB(StockName[0], $@"Delete from package_return_item where package_id in (select id from package p where package_fid in({RPid}))");
 
-
+                                        //смена статусов в Заппстор после удаления из партии
+                                        dataBases.ConnectDB(StockName[0], $@"UPDATE package SET status = 'in_store' where package_fid in ({RPid})");
 
                                         //• Звук уведомление о финале 
                                         using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
@@ -2555,11 +2550,9 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
     ""id"": ""JsonRpcClient.js"",
     ""jsonrpc"": ""2.0"",
     ""method"": ""package.removeStop"",
-    ""params"": [
-        {{{{R}}}},
-        ""creating_partner_order""
-    ]
-}}";
+    ""params"" : [{{""package"":""{{{{R}}}}"",""type"":""creating_partner_order""}}]
+}}
+";
 
             //• Запуск раннеров по колву потоков /Распределитель потоков
             for (int i = 0; i < kol_vo_potokov; i++)
