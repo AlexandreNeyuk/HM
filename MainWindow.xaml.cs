@@ -2904,7 +2904,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
                         case 0: //Ввыбрана паллета
                             LoadData_FromReg_palmet();
-                            if (DB_ZS_Palmet_Name_IS != null)
+                            if (Selected_NameWarh_palmet != null) //
                             {//если найдена инфа по хосту и бд в реестре то идем дальше
                                 if (Combobox_Actions_palmet.SelectedIndex == 0)
                                 {
