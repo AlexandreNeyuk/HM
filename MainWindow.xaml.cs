@@ -2947,23 +2947,23 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                         switch (Combobox_Actions_palmet.SelectionBoxItem)
                                         {
                                             case "Собирается":
-                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathering' where last_pallet_code in ('{text_editor_palmet.Text}');");
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathering' where last_pallet_code in ({text_editor_palmet.Text});");
                                                 break;
                                             case "Собрана":
-                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathered' where last_pallet_code in ('{text_editor_palmet.Text}');");
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'gathered' where last_pallet_code in ({text_editor_palmet.Text});");
                                                 break;
                                             case "Упакована":
-                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'packed' where last_pallet_code in ('{text_editor_palmet.Text}');");
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'packed' where last_pallet_code in ({text_editor_palmet.Text});");
                                                 break;
                                             case "Расформирована":
-                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where last_pallet_code in ('{text_editor_palmet.Text}');");
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where last_pallet_code in ({text_editor_palmet.Text});");
                                                 //dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
                                                 break;
                                             case "Ждет транзита":
-                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_transit' where last_pallet_code in ('{text_editor_palmet.Text}');");
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_transit' where last_pallet_code in ({text_editor_palmet.Text});");
                                                 break;
                                             case "Ожидает сборки":
-                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_gather' where last_pallet_code in ('{text_editor_palmet.Text}');");
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_gather' where last_pallet_code in ({text_editor_palmet.Text});");
                                                 break;
                                         }
                                     }
