@@ -2551,8 +2551,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
     ""jsonrpc"": ""2.0"",
     ""method"": ""package.removeStop"",
     ""params"" : [{{""package"":""{{{{R}}}}"",""type"":""creating_partner_order""}}]
-}}
-";
+}}";
 
             //• Запуск раннеров по колву потоков /Распределитель потоков
             for (int i = 0; i < kol_vo_potokov; i++)

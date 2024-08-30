@@ -100,7 +100,7 @@
                 <Label HorizontalAlignment="Center" VerticalAlignment="Top" Width="116" Foreground="White" FontFamily="72" Canvas.Left="30" FontSize="11" Height="32" Padding="20,10,5,5" Content="Runner" />
             </Canvas>
         </Grid>
-        <Grid x:Name="MajorGrid" Height="478" VerticalAlignment="Bottom" d:IsHidden="True">
+        <Grid x:Name="MajorGrid" Height="478" VerticalAlignment="Bottom">
             <Grid x:Name="PartyGrid" Background="White" d:IsHidden="True">
                 <Label VerticalAlignment="Top" Content="Редактирование посылок в партии склада" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="72" FontSize="16" Background="#FFCCCCCC" Foreground="Black" Height="34"/>
                 <CheckBox x:Name="CheckBox_CorrectStatus_Party" Content="Скорректировать статусы" Margin="0,326,16,0" VerticalAlignment="Top" ToolTip="Если вырано, скорректируются дополнительно статусы на возвратные как на складе, так и в Шиптор у отправлений" HorizontalAlignment="Right" Width="161"/>
@@ -585,7 +585,7 @@
 
         <!--TabControl -->
         <!-- Панель Настроек-->
-        <Grid x:Name="SettingsGrid" Background="#CC000000" >
+        <Grid x:Name="SettingsGrid" Background="#CC000000" d:IsHidden="True" >
 
             <Border x:Name="Settings" Background="White" CornerRadius="5,5,5,5" BorderThickness="1,1,1,1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0,25,0,0" HorizontalAlignment="Center" Width="550" Height="425" VerticalAlignment="Top">
                 <Border.Effect>
