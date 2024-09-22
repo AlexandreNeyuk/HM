@@ -361,36 +361,39 @@ namespace HM
         /// <param name="content">Номера посылок или другие подробности для лога</param>
         public async void WriteLogsToFile(string Action, string content)
         {
-            //путь к сетевому диску
-            string networkPath = @"\\int.sblogistica.ru\sbl\Блок ИT и технологии\Департамент инфраструктуры и поддержки\Направление Service Desk\HM_Logs";
-            //Имя файла
-            string fileName = Decrypt_UserName + ".log";
-            //Редактирование контента
-            content = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time")).ToString() + " - " + Decrypt_UserName + " - " + Action + " - " + content + "\n\r";
-
-            // Проверка доступности сетевого диска
-            if (!Directory.Exists(networkPath))
+            await Task.Run(() =>
             {
-                Console.WriteLine("Сетевой диск недоступен."); //возможный вариант на смену msBox.show
-                return;
-            }
+                //путь к сетевому диску
+                string networkPath = @"\\int.sblogistica.ru\sbl\Блок ИT и технологии\Департамент инфраструктуры и поддержки\Направление Service Desk\HM_Logs";
+                //Имя файла
+                string fileName = Decrypt_UserName + ".log";
+                //Редактирование контента
+                content = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time")).ToString() + " - " + Decrypt_UserName + " - " + Action + " - [" + content + "]";
 
-            // Полный путь к файлу
-            string fullPath = Path.Combine(networkPath, fileName);
-            try
-            {
-                // Открытие файла для записи (создание, если не существует)
-                await using (StreamWriter writer = new StreamWriter(fullPath, true))
+                // Проверка доступности сетевого диска
+                if (!Directory.Exists(networkPath))
                 {
-                    writer.WriteLine(content);
+                    Console.WriteLine("Сетевой диск недоступен."); //возможный вариант на смену msBox.show
+                    return;
                 }
 
-                Console.WriteLine("Запись в файл успешно завершена.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ошибка при записи в файл: {ex.Message}");
-            }
+                // Полный путь к файлу
+                string fullPath = Path.Combine(networkPath, fileName);
+                try
+                {
+                    // Открытие файла для записи (создание, если не существует)
+                    using (StreamWriter writer = new StreamWriter(fullPath, true))
+                    {
+                        writer.WriteLine(content);
+                    }
+
+                    Console.WriteLine("Запись в файл успешно завершена.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка при записи в файл: {ex.Message}");
+                }
+            });
         }
 
         #endregion
