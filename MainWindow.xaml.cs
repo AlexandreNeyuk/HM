@@ -352,6 +352,48 @@ namespace HM
 
         #endregion
 
+        #region Logging - логирование
+
+        /// <summary>
+        ///Функция записи в логи на сетевой диск
+        /// </summary>
+        /// <param name="Action">Действие</param>
+        /// <param name="content">Номера посылок или другие подробности для лога</param>
+        public async void WriteLogsToFile(string Action, string content)
+        {
+            //путь к сетевому диску
+            string networkPath = @"\\int.sblogistica.ru\sbl\Блок ИT и технологии\Департамент инфраструктуры и поддержки\Направление Service Desk\HM_Logs";
+            //Имя файла
+            string fileName = Decrypt_UserName + ".log";
+            //Редактирование контента
+            content = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time")).ToString() + " - " + Decrypt_UserName + " - " + Action + " - " + content + "\n\r";
+
+            // Проверка доступности сетевого диска
+            if (!Directory.Exists(networkPath))
+            {
+                Console.WriteLine("Сетевой диск недоступен."); //возможный вариант на смену msBox.show
+                return;
+            }
+
+            // Полный путь к файлу
+            string fullPath = Path.Combine(networkPath, fileName);
+            try
+            {
+                // Открытие файла для записи (создание, если не существует)
+                await using (StreamWriter writer = new StreamWriter(fullPath, true))
+                {
+                    writer.WriteLine(content);
+                }
+
+                Console.WriteLine("Запись в файл успешно завершена.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при записи в файл: {ex.Message}");
+            }
+        }
+
+        #endregion
 
         #region Переключение пунктов меню метод - Переключение(открытие) Гридов 
 
@@ -605,6 +647,10 @@ namespace HM
             BFcopy.Text = "Результат скопирован в буфер обмена";
             await Task.Delay(1000);
             BFcopy.Text = null;
+
+            //лог
+            WriteLogsToFile("Обработка RP", TextBox.Text.Replace("\n", ""));
+
         }
 
 
@@ -4002,6 +4048,10 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
 
         #endregion
+
+
+
+
 
         /*        #region Kafka_and_Import_Sap_ZApp
         // запрос к кафке по номеру sap_id, поиск сообщений из топика 
