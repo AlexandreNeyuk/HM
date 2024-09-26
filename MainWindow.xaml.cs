@@ -2150,7 +2150,7 @@ namespace HM
 
 
                 //лог
-                WriteLogsToFile("Импорт посылок на склад", $@"Склад: {tekushiy_sklad}, Посылки: {TextBox1_importText.Text.Replace("\n\r", "")}");
+                WriteLogsToFile("Импорт посылок на склад", $@"Склад: {tekushiy_sklad}, Посылки: {TextBox1_importText.Text.Replace("\n", "")}");
 
             }
             else
@@ -3166,7 +3166,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                     }
 
                     //лог
-                    WriteLogsToFile("Взаимодействие с партиями", $@"{palmet_avtootvet} : Партия R_RET{Party.Text}, Посылки: {RP_Party.Text.Replace("\n\r", "")}");
+                    WriteLogsToFile("Взаимодействие с партиями", $@"{palmet_avtootvet} : Партия R_RET{Party.Text}, Посылки: {RP_Party.Text.Replace("\n", "")}");
 
 
                 }
@@ -3915,7 +3915,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         new SoundPlayer(gzOut).Play();
 
                     //лог
-                    WriteLogsToFile("Изменение статуса", $@" Система {systemChanget}, на какой статус изменен: {statusChanget}, Посылки: {RP_list_Status.Text.Replace("\n\r", "")}");
+                    WriteLogsToFile("Изменение статуса", $@" Система {systemChanget}, на какой статус изменен: {statusChanget}, Посылки: {RP_list_Status.Text.Replace("\n", "")}");
 
                 }
                 if (ComboBox_ZS_Status.SelectedIndex != 0)
@@ -3977,7 +3977,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
                             new SoundPlayer(gzOut).Play();
                         //лог
-                        WriteLogsToFile("Изменение статуса", $@" Система {systemChanget}, на какой статус изменен: {statusChanget}, Посылки: {RP_list_Status.Text.Replace("\n\r", "")}");
+                        WriteLogsToFile("Изменение статуса", $@" Система {systemChanget}, на какой статус изменен: {statusChanget}, Посылки: {RP_list_Status.Text.Replace("\n", "")}");
                     }
                     else
                     {
