@@ -241,6 +241,8 @@ namespace HM
             #endregion
 
             OpenGrid(HomeGrid); //открытие начальной страницы
+            //лог
+            WriteLogsToFile("-------------------------------------------\n\r--------------------ВХОД В СИСТЕМУ--------------------", "");
         }
         #region Своя панель окна
 
@@ -326,6 +328,7 @@ namespace HM
 
         #region CheckConnect
 
+
         /// <summary>
         ///Проверка соединения с БД по таймеру 
         /// </summary>
@@ -374,6 +377,9 @@ namespace HM
                 if (!Directory.Exists(networkPath))
                 {
                     Console.WriteLine("Сетевой диск недоступен."); //возможный вариант на смену msBox.show
+
+                    // MessageBox.Show("name");
+
                     return;
                 }
 
@@ -1044,6 +1050,10 @@ namespace HM
             }
             avtootvet_dlya_party = SelectAction_Party.Text;
             SelectAction_Party.SelectedIndex = 0;
+
+            //лог
+            Kopirovat_otvet_party_Click(sender, e);
+            WriteLogsToFile("Взаимодействие с партиями", $@"{avtootvet_dlya_party} : Партия R_RET{Party.Text}, Посылки: {RP_Party.Text.Replace("\n\r", "")}");
         }
 
         /// <summary>
@@ -2137,6 +2147,11 @@ namespace HM
                     Selected_NameWarh.Content = null;
                     WarhausesTable.SelectedItem = null;
                 }
+
+
+                //лог
+                WriteLogsToFile("Импорт посылок на склад", $@"Склад: {tekushiy_sklad}, Посылки: {TextBox1_importText.Text.Replace("\n\r", "")}");
+
             }
             else
             {
@@ -3150,6 +3165,10 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
                     }
 
+                    //лог
+                    WriteLogsToFile("Взаимодействие с партиями", $@"{palmet_avtootvet} : Партия R_RET{Party.Text}, Посылки: {RP_Party.Text.Replace("\n\r", "")}");
+
+
                 }
                 else
                 {
@@ -3845,6 +3864,8 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
         /// <param name="e"></param>
         private void Button_Smeni_Status_Click(object sender, RoutedEventArgs e)
         {
+            string statusChanget = "";
+            string systemChanget = "";
             if (RP_list_Status.Text != "")
             {
                 if (ComboBox_Sh_Status.SelectedIndex != 0)
@@ -3852,34 +3873,34 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                     switch (ComboBox_Sh_Status.SelectedIndex)
                     {
                         case 1:
-                            dataBases.ConnectDB("Шиптор", $@"update public.package set measured_at = null, packed_since = null, prepared_to_send_since = null, in_store_since = null, current_status = 'new' where id in ({RP_list_Status.Text})");
+                            dataBases.ConnectDB("Шиптор", $@"update public.package set measured_at = null, packed_since = null, prepared_to_send_since = null, in_store_since = null, current_status = 'new' where id in ({RP_list_Status.Text})"); systemChanget = "Шиптор"; statusChanget = "new";
                             break;
                         case 2:
-                            dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({RP_list_Status.Text})");
+                            dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now() where id in ({RP_list_Status.Text})"); systemChanget = "Шиптор"; statusChanget = "packed";
                             break;
                         case 3:
-                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'sent', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null where id in ({RP_list_Status.Text})");
+                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'sent', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null where id in ({RP_list_Status.Text})"); systemChanget = "Шиптор"; statusChanget = "sent";
                             break;
                         case 4:
-                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'waiting_on_delivery_point', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = now(), delivered_at = null where id in ({RP_list_Status.Text})");
+                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'waiting_on_delivery_point', sent_at = now(), returned_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = now(), delivered_at = null where id in ({RP_list_Status.Text})"); systemChanget = "Шиптор"; statusChanget = "waiting_on_delivery_point";
                             break;
                         case 5:
-                            dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'delivered', delivered_at = now(), lost_at = null, reported_at = null, returned_at = null, returning_to_warehouse_at = null, sent_at = now(), removed_at = null where id in ({RP_list_Status.Text})");
+                            dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'delivered', delivered_at = now(), lost_at = null, reported_at = null, returned_at = null, returning_to_warehouse_at = null, sent_at = now(), removed_at = null where id in ({RP_list_Status.Text})"); systemChanget = "Шиптор"; statusChanget = "delivered";
                             break;
                         case 6:
-                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned_to_warehouse', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now() where id in ({RP_list_Status.Text})");
+                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned_to_warehouse', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now() where id in ({RP_list_Status.Text})"); systemChanget = "Шиптор"; statusChanget = "returned_to_warehouse";
                             break;
                         case 7:
-                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'to_return', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now() where id in ({RP_list_Status.Text})");
+                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'to_return', returned_at = now(), lost_at = null, removed_at = null, reported_at = null, in_store_since = now(), measured_at = now(), packed_since = now() where id in ({RP_list_Status.Text})"); systemChanget = "Шиптор"; statusChanget = "to_return";
                             break;
                         case 8:
-                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned', returned_at = now(), lost_at = null, removed_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), reported_at = now() where id in ({RP_list_Status.Text})");
+                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned', returned_at = now(), lost_at = null, removed_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), reported_at = now() where id in ({RP_list_Status.Text})"); systemChanget = "Шиптор"; statusChanget = "returned";
                             break;
                         case 9:
-                            dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'removed', removed_at = now() where id in ({RP_list_Status.Text})");
+                            dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'removed', removed_at = now() where id in ({RP_list_Status.Text})"); systemChanget = "Шиптор"; statusChanget = "removed";
                             break;
                         case 10:
-                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'return_to_sender', returned_at = now(), lost_at = null, removed_at = null, reported_at = null where id in ({RP_list_Status.Text})");
+                            dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'return_to_sender', returned_at = now(), lost_at = null, removed_at = null, reported_at = null where id in ({RP_list_Status.Text})"); systemChanget = "Шиптор"; statusChanget = "return_to_sender";
                             break;
                         /*case "":
                             dataBases.ConnectDB("Шиптор", $@"where id in ({RP_list_Status.Text})");
@@ -3892,6 +3913,10 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                     using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
                     using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
                         new SoundPlayer(gzOut).Play();
+
+                    //лог
+                    WriteLogsToFile("Изменение статуса", $@" Система {systemChanget}, на какой статус изменен: {statusChanget}, Посылки: {RP_list_Status.Text.Replace("\n\r", "")}");
+
                 }
                 if (ComboBox_ZS_Status.SelectedIndex != 0)
                 { //Если чтото выбрано в поле заппа то дальше уже ищем инфо о бд
@@ -3903,43 +3928,43 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         {
 
                             case "На складе":
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'in_store' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'in_store' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "in_store";
                                 break;
                             case "Отправлена":
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'sent' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'sent' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "sent";
                                 break;
                             case "Ждет возврата отправителю":
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'wait_return_to_sender' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'wait_return_to_sender' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "wait_return_to_sender";
                                 break;
                             case "Расформирована":
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'disbanded' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'disbanded' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "disbanded";
                                 break;
                             case "Ожидает сортировки":
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'wait_sorting' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'wait_sorting' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "wait_sorting";
                                 break;
                             case "Возвращена на склад":
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'returned' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'returned' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "returned";
                                 break;
                             case "Возвращена отправителю":
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'returned_to_sender' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'returned_to_sender' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "returned_to_sender";
                                 break;
                             case "В паллете":
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'in_pallet' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status = 'in_pallet' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "in_pallet";
                                 break;
                             case "Ожидает поступления": //
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package set status ='waiting_arrival' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package set status ='waiting_arrival' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "waiting_arrival";
                                 break;
                             case "Ждет продуктов":
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set set status ='wait_products' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set set status ='wait_products' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "wait_products";
                                 break;
                             case "Ждет повторной подачи":
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status ='waiting_for_resubmission' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status ='waiting_for_resubmission' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "waiting_for_resubmission";
                                 break;
                             case "В партии":
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status ='in_package_return' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status ='in_package_return' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "in_package_return";
                                 break;
                             case "Ждет сборки":
-                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status ='wait_gather' where package_fid in ({RP_list_Status.Text});");
+                                dataBases.ConnectDB(DB_Name_IS, $@"update package a set status ='wait_gather' where package_fid in ({RP_list_Status.Text});"); systemChanget = DB_Name_IS; statusChanget = "wait_gather";
                                 break;
                             default:
                                 break;
@@ -3951,7 +3976,8 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                         using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
                         using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
                             new SoundPlayer(gzOut).Play();
-
+                        //лог
+                        WriteLogsToFile("Изменение статуса", $@" Система {systemChanget}, на какой статус изменен: {statusChanget}, Посылки: {RP_list_Status.Text.Replace("\n\r", "")}");
                     }
                     else
                     {
