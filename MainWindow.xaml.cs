@@ -938,56 +938,64 @@ namespace HM
                             if (SelectAction.SelectedIndex == 1)
                             {
 
-                                DataTable CurrentStock = dataBases.ConnectDB(StockName[0], $@"select id, status from package_return pr where return_fid = {paty}");//ERROR::Место вылета изза имени БД (точнее его отсутствии в твоих данных)
-                                List<string> ParyStockID = CurrentStock.AsEnumerable().Select(x => x["id"].ToString()).ToList();
-                                List<string> PartyStockStatus = CurrentStock.AsEnumerable().Select(x => x["status"].ToString()).ToList();
-                                if (ParyStockID[0] != null) //если партия существует на складе
+                                DataTable CurrentStock = dataBases?.ConnectDB(StockName[0], $@"select id, status from package_return pr where return_fid = {paty}");//ERROR::Место вылета изза имени БД (точнее его отсутствии в твоих данных)
+                                if (CurrentStock.Rows.Count > 0)
                                 {
-                                    //Удаление из паллеты
+                                    List<string> ParyStockID = CurrentStock.AsEnumerable().Select(x => x["id"].ToString()).ToList();
+                                    List<string> PartyStockStatus = CurrentStock.AsEnumerable().Select(x => x["status"].ToString()).ToList();
 
-                                    if (RP_Party.Text != "")
+                                    if (ParyStockID[0] != null) //если партия существует на складе
                                     {
-                                        string RPid = RP_Party.Text.Replace("\r\n", "");
+                                        //Удаление из паллеты
 
-                                        //удаляю из партии в шипторе и корректировка статусов посылок на "УПАКОВАНА"
-                                        dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now(), return_id=null   WHERE id in ({RPid})");
-                                        dataBases.ConnectDB("Шиптор", $@"UPDATE package_departure SET package_action = NULL  WHERE package_id in ({RPid})");
-
-                                        //удаление из партии склада 
-                                        dataBases.ConnectDB(StockName[0], $@"Delete from package_return_item where package_id in (select id from package p where package_fid in({RPid}))");
-
-                                        //смена статусов в Заппстор после удаления из партии
-                                        dataBases.ConnectDB(StockName[0], $@"UPDATE package SET status = 'in_store' where package_fid in ({RPid})");
-
-                                        //• Звук уведомление о финале 
-                                        using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
-                                        using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
-                                            new SoundPlayer(gzOut).Play();
-
-
-
-
-
-                                    }
-
-                                    else
-                                    {
-                                        string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
-
-                                        // Создание экземпляра SoundPlayer и проигрывание звука
-                                        using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                                        if (RP_Party.Text != "")
                                         {
-                                            errorSoundPlayer.Play();
+                                            string RPid = RP_Party.Text.Replace("\r\n", "");
+
+                                            //удаляю из партии в шипторе и корректировка статусов посылок на "УПАКОВАНА"
+                                            dataBases.ConnectDB("Шиптор", $@"update package set current_status = 'packed', sent_at = NULL, returned_at = null, reported_at = null, returning_to_warehouse_at = null, delivery_point_accepted_at = null, delivered_at = null, removed_at = null, lost_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), prepared_to_send_since = now(), return_id=null   WHERE id in ({RPid})");
+                                            dataBases.ConnectDB("Шиптор", $@"UPDATE package_departure SET package_action = NULL  WHERE package_id in ({RPid})");
+
+                                            //удаление из партии склада 
+                                            dataBases.ConnectDB(StockName[0], $@"Delete from package_return_item where package_id in (select id from package p where package_fid in({RPid}))");
+
+                                            //смена статусов в Заппстор после удаления из партии
+                                            dataBases.ConnectDB(StockName[0], $@"UPDATE package SET status = 'in_store' where package_fid in ({RPid})");
+
+                                            //• Звук уведомление о финале 
+                                            using (MemoryStream fileOut = new MemoryStream(Properties.Resources.untitled))
+                                            using (GZipStream gzOut = new GZipStream(fileOut, CompressionMode.Decompress))
+                                                new SoundPlayer(gzOut).Play();
+
+                                            //лог
+                                            WriteLogsToFile($@"Удаление из партии R_RET{Party.Text}. Посылки: ", RP_Party.Text.Replace("\n", ""));
+
+
+
                                         }
-                                        MessageBox.Show("Поле для отправлений пусто! Добавьте отправления");
+
+                                        else
+                                        {
+                                            string errorSoundPath = @"C:\Windows\Media\Windows Error.wav";
+
+                                            // Создание экземпляра SoundPlayer и проигрывание звука
+                                            using (SoundPlayer errorSoundPlayer = new SoundPlayer(errorSoundPath))
+                                            {
+                                                errorSoundPlayer.Play();
+                                            }
+                                            MessageBox.Show("Поле для отправлений пусто! Добавьте отправления");
+
+                                        }
+
+
 
                                     }
-
-
-
+                                    else MessageBox.Show($@"Партия не найдена на складе {StockName[0]}!");
+                                    //прогрывать звук Windows Ошибка error
                                 }
-                                else MessageBox.Show($@"Партия не найдена на складе {StockName[0]}!");
-                                //прогрывать звук Windows Ошибка error
+                                else MessageBox.Show("Не найдено подключение к Базе данных в реестре");
+
+
 
                             }
 
@@ -1177,7 +1185,7 @@ namespace HM
         }
 
         /// <summary>
-        ////ВЫбор добавления или удаления из партии (для того чтобы выбрать чек бокс со статусами)
+        ///ВЫбор добавления или удаления из партии (для того чтобы выбрать чек бокс со статусами)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2237,10 +2245,15 @@ namespace HM
                     update_shiptor_for_treck_number(TextBox_Nomera_for_CSM); // апдейт для подготовки посылок в шиптор для присвоения трек-номеров
                     csm_createOrder_api(TextBox_Nomera_for_CSM); //прокидываем метод по присвоению трек-номеров
                     perepodgotovka_posilok(TextBox_Nomera_for_CSM);
+
+                    //лог
+                    WriteLogsToFile("CSM - Присвоение Трек-номера посылкам: ", TextBox_Nomera_for_CSM.Text.Replace("\n", ""));
                 }
                 if (CheckBox_Snyat_Stop_CSM.IsChecked == true)
                 {
                     csm_zz_ne_sozdan(TextBox_Nomera_for_CSM);
+                    //лог
+                    WriteLogsToFile("CSM - Снятие стопа 'Заказ не создан у партнера' для посылок: ", TextBox_Nomera_for_CSM.Text.Replace("\n", ""));
                 }
 
                 //если не выьбрано то вывод отчета 
@@ -2356,8 +2369,6 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                 MessageBox.Show("Не введены номера посылок!");
             }
         }
-
-
 
         /// <summary>
         ///    Запуск переподготовки посылок
@@ -2628,7 +2639,6 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             }
         }
 
-
         /// <summary>
         /// Создание отчёта CSM, отображая всю таблицу из селекта (otchet_CSM - сюда селект)
         /// </summary>
@@ -2697,8 +2707,6 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             // Запускаем процесс
             process.Start();
         }
-
-
 
         /// <summary>
         /// Кнопка расположения отчётов CSM
@@ -3591,6 +3599,8 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
 
                         RuunerPost_Postman(listBox, urlP, bodyP, i, chunks);
                     }
+                    //лог
+                    WriteLogsToFile("Запущен раннер для метода:", $@"{bodyP} Посылки:{ListRP_postman.Text.Replace("\n\r", "")}");
                 }
                 else
                 {
@@ -3733,6 +3743,8 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
             RunnerStop.Foreground = new SolidColorBrush(Colors.Black);
             TabPostman.Visibility = Visibility.Visible;
             TabPostman_Responses.Visibility = Visibility.Hidden;
+            //лог
+            WriteLogsToFile("Раннер остановлен!", "");
         }
 
         /// <summary>
