@@ -378,7 +378,7 @@ namespace HM
                 {
                     Console.WriteLine("Сетевой диск недоступен."); //возможный вариант на смену msBox.show
 
-                    // MessageBox.Show("name");
+                    //MessageBox.Show("Сетевой диск недоступен! Функции программы ограничены! СРОЧНО ЗАПРОСИ ДОСТУП!!!!!!!!!!");
 
                     return;
                 }
@@ -394,10 +394,12 @@ namespace HM
                     }
 
                     Console.WriteLine("Запись в файл успешно завершена.");
+                    //MessageBox.Show("Запись в файл успешно завершена.");
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Ошибка при записи в файл: {ex.Message}");
+                    //MessageBox.Show("Сетевой диск недоступен! Функции программы ограничены! СРОЧНО ЗАПРОСИ ДОСТУП!!!!!!!!!!");
                 }
             });
         }
