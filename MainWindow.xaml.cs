@@ -59,6 +59,7 @@ using Window = System.Windows.Window;
 
 namespace HM
 {
+
     public partial class MainWindow : Window
     {
 
@@ -100,6 +101,15 @@ namespace HM
             BronbGrid.IsEnabled = true; Bronirovanie_Canvas.Background = (Brush)new BrushConverter().ConvertFrom("#FF808080"); BronbGrid.Visibility = Visibility.Visible; SyncEngyGrid.Visibility = Visibility.Hidden; SyncEngyGrid.IsEnabled = false; Sync_Canvas.Background = new SolidColorBrush(Colors.Transparent);
 
             #endregion
+
+#if DEBUG
+            Label_COnnectDB_onSettings.Visibility = Visibility.Visible;
+            Warehouses.Visibility = Visibility.Visible;
+
+#elif RELEASE
+            Label_COnnectDB_onSettings.Visibility = Visibility.Collapsed;
+            Warehouses.Visibility = Visibility.Collapsed;
+#endif
 
             #region начальная настройка веток реестра для работы !!!! Regisrty Staff Загрузка Настроек из реестра
             ///Пересоздание корня настроек в реестре + синхрон с реестром настроек--

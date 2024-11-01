@@ -610,7 +610,7 @@
                             <Button x:Name="DeleteUserData" Height="20" VerticalAlignment="Top" Margin="402,71,0,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" HorizontalAlignment="Left" Width="104" Content="Удалить данные" ToolTip="Удаление всех данных о пользователе из реестра и зашифрованного ключа" Click="DeleteKeyFolder_method"/>
 
                         </Grid>
-                        <Label Content="Подключенные БД" FontFamily="72" Padding="10,2,0,2" Background="#FFE4E4E4" FontSize="14"/>
+                        <Label x:Name="Label_COnnectDB_onSettings" Content="Подключенные БД" FontFamily="72" Padding="10,2,0,2" Background="#FFE4E4E4" FontSize="14"/>
                         <Grid x:Name="Warehouses" Height="44">
                             <Label  Content="Редактирование" FontFamily="72" Padding="10,0,0,0" Margin="38,10,0,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" Width="199" VerticalContentAlignment="Center" />
                             <Button x:Name="WarhReg" Content="Клик" Height="20" VerticalAlignment="Top" Margin="242,9,166,0" FontFamily="72" BorderThickness="0,0,0,0" ClipToBounds="True" Click="WarhReg_Click" Width="132" />
