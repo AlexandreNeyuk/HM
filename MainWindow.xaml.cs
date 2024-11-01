@@ -3003,7 +3003,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                             case "Упакована":
                                                 dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'packed' where id in ({text_editor_palmet.Text});");
                                                 break;
-                                            case "Расформирована":
+                                            case "Расформирована": //обновлено 1.11.2024 - убраны state_id
                                                 dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where id in ({text_editor_palmet.Text});");
                                                 dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
                                                 break;

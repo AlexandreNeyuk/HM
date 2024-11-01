@@ -9,7 +9,7 @@
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <SignAssembly>False</SignAssembly>
     <ApplicationIcon>Assets\48_48.ico</ApplicationIcon>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Copyright>NG_L2</Copyright>
     <Authors>$(AssemblyName),NG_L2</Authors>
 
