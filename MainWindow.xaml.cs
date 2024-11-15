@@ -133,7 +133,7 @@ namespace HM
             }
             #endregion
 
-
+            //
 
             #region Дешифровка данных пользователя полученных из реестра с помошью ключа безопасности 
             if ((Encrypt_UserName != null) && (Encrypt_Password != null))
