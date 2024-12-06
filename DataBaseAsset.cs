@@ -42,7 +42,7 @@ namespace HM
             await Task.Run(() =>
            {
                string con = "Host={0};Username={1};Password={2};Database={3}";
-               string Host = "", DataBase = "", User = UserData_D, Pass = Pass_D;
+               string Host = "", DataBase = "", Port = "", User = UserData_D, Pass = Pass_D;
 
                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Hosts"))
                {
@@ -50,12 +50,14 @@ namespace HM
                    {
                        if (item.Contains("Шиптор") && item.Contains("Host_")) Host = key.GetValue(item).ToString();
                        if (item.Contains("Шиптор") && item.Contains("DataBase_")) DataBase = key.GetValue(item).ToString();
+                       if (item.Contains("Шиптор") && item.Contains("Post_")) Port = key.GetValue(item).ToString();
                    }
                }
 
-               if (Host != "" && Pass != "" && DataBase != "" && User != "")
+               if (Host != "" && Pass != "" && DataBase != "" && User != "" && Port != "")
                {
-                   con = String.Format(con, Host, User, Pass, DataBase);
+                   //con = String.Format(con, Host, User, Pass, DataBase);
+                   con = String.Format("Host={0};Port={1};Username={2};Password={3};Database={4}", Host, Port, User, Pass, DataBase);
                    NpgsqlConnection nc = new NpgsqlConnection(con);
                    try
                    {
@@ -96,7 +98,7 @@ namespace HM
             ///загрузка из реестра данных об складе через поиск по переменной db
             ///формирование конечной строки соединений con
             string con = "Host={0};Username={1};Password={2};Database={3}";
-            string Host = "", DataBase = "", User = "", Pass = "";
+            string Host = "", DataBase = "", User = "", Port = "", Pass = "";
 
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\HM\Hosts"))
             {
@@ -105,11 +107,12 @@ namespace HM
                 {
                     if (item.Contains(db))
                     {
-                        string founded = item.Replace(" ", "").Replace("Name_", "").Replace("Host_", "").Replace("Post", "").Replace("DataBase_", "");
+                        string founded = item.Replace(" ", "").Replace("Name_", "").Replace("Host_", "").Replace("Post_", "").Replace("DataBase_", "");
                         if (founded == db.Replace(" ", ""))
                         {
                             if (item.Contains("Host_")) Host = key?.GetValue(item).ToString();
                             if (item.Contains("DataBase_")) DataBase = key?.GetValue(item).ToString();
+                            if (item.Contains("Post_")) Port = key.GetValue(item).ToString();
                         }
 
                     }
@@ -124,7 +127,8 @@ namespace HM
             User = UserData_D;
             Pass = Pass_D;
 
-            con = String.Format(con, Host, User, Pass, DataBase);
+            //con = String.Format(con, Host, User, Pass, DataBase);
+            con = String.Format("Host={0};Port={1};Username={2};Password={3};Database={4}", Host, Port, User, Pass, DataBase);
             DataTable dt = new DataTable();
             if (ConnectBool == false) MessageBox.Show("Нет коннекта! Проверьте FortiClient VPN!\n А затем перезапустите программу. ");
             else
