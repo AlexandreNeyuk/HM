@@ -139,6 +139,7 @@ namespace HM
         /// </summary>
         public void LoadTextB()
         {
+            ClearTextB();
             string ssl = List_Hosts.SelectedItem?.ToString(); // выбраное бд
             if (ssl != null)
             {
