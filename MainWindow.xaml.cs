@@ -104,12 +104,11 @@ namespace HM
             #endregion
 
 #if DEBUG
-            Label_COnnectDB_onSettings.Visibility = Visibility.Visible;
-            Warehouses.Visibility = Visibility.Visible;
+           
 
 #elif RELEASE
-            Label_COnnectDB_onSettings.Visibility = Visibility.Collapsed;
-            Warehouses.Visibility = Visibility.Collapsed;
+            Label_COnnectDB_onSettings.Visibility = Visibility.Visible;
+            Warehouses.Visibility = Visibility.Visible;
 #endif
 
             #region начальная настройка веток реестра для работы !!!! Regisrty Staff Загрузка Настроек из реестра
@@ -3017,7 +3016,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                                             case "Расформирована": //обновлено 1.11.2024 - убраны state_id
                                                 dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'disbanded', last_pallet_packages = null where id in ({text_editor_palmet.Text});");
                                                 dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update package set pallet_id = null where pallet_id in ({text_editor_palmet.Text});");
-                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"UPDATE bag SET pallet_id = NULL, status = 'disbanded' WHERE pallet_id IN ({text_editor_palmet.Text});"); 
+                                                dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"UPDATE bag SET pallet_id = NULL, status = 'disbanded' WHERE pallet_id IN ({text_editor_palmet.Text});");
                                                 break;
                                             case "Ждет транзита":
                                                 dataBases.ConnectDB(DB_ZS_Palmet_Name_IS, $@"update pallet set status = 'wait_transit' where id in ({text_editor_palmet.Text});");
@@ -3935,7 +3934,7 @@ group by ""ШК"", ""Трек-номер"", ""Ошибка"" order by ""Ошиб
                             dataBases.ConnectDB("Шиптор", $@" update public.package_problem set resolved_at = 'now()' where package_id in ({RP_list_Status.Text}) and resolved_at is null"); systemChanget = "Шиптор"; statusChanget = "to_return";
                             dataBases.ConnectDB("Шиптор", $@" update package_departure set package_action = 'to_return' where package_id in ({RP_list_Status.Text})");
                             dataBases.ConnectDB("Шиптор", $@" update package set current_status = 'sent', sent_at = now(), delivery_point_accepted_at = null, delivered_at = null, returning_to_warehouse_at = null, returned_at = null, reported_at = null, lost_at = null, return_id = null, resend_at = null, disband_at = null where id in ({RP_list_Status.Text})");
-                            ustanovka_na_vozvrat (RP_list_Status);
+                            ustanovka_na_vozvrat(RP_list_Status);
                             break;
                         case 8:
                             dataBases.ConnectDB("Шиптор", $@"update package p set current_status = 'returned', returned_at = now(), lost_at = null, removed_at = null, in_store_since = now(), measured_at = now(), packed_since = now(), reported_at = now() where id in ({RP_list_Status.Text})"); systemChanget = "Шиптор"; statusChanget = "returned";
